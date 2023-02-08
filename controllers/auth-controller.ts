@@ -4,7 +4,7 @@ const User = require('../models/user');
 
 // region actions
 exports.login = (req: Request, res: Response) => {
-    const user = req.body.form;
+    const user = req.body;
 
     User.findOne({where: {email: user.email}})
         .then((u: typeof User) => {
@@ -14,7 +14,7 @@ exports.login = (req: Request, res: Response) => {
             if(u.password !== user.password) {
                 throw new Error('wrong password!');
             } else {
-                res.json({message: 'user found', user: {id: u.id, name: u.name, lasName: u.lastName}});
+                res.json({message: 'user found', user: {id: u.id, name: u.name, lastName: u.lastName}});
             }
     })
         .catch((err: Error) => {
@@ -24,7 +24,7 @@ exports.login = (req: Request, res: Response) => {
 }
 
 exports.signup = (req: Request, res: Response) => {
-    const user = req.body.form;
+    const user = req.body;
 
     User.findOne({where: {email: user.email}})
         .then((u: typeof User) => {
