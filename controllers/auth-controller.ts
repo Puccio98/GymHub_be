@@ -25,7 +25,6 @@ exports.login = (req: Request, res: Response) => {
 
 exports.signup = (req: Request, res: Response) => {
     const user = req.body.form;
-    console.log(user.phone);
 
     User.findOne({where: {email: user.email}})
         .then((u: typeof User) => {

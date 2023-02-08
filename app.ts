@@ -10,14 +10,24 @@ const database = require('./database');
 
 const app = express();
 
-const http = require('http');
-const server = http.createServer(app);
+//const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const helmet = require('helmet');
+
+const options = {
+    key: fs.readFileSync('server.key'),
+    cert: fs.readFileSync('server.cert')
+};
+
+const server = https.createServer(options, app);
 
 const authRoutes = require('./routes/auth-routes');
 // endregion
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use(helmet());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
