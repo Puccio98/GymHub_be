@@ -7,9 +7,9 @@ const router = express.Router();
 // endregion
 
 // region post routes
-router.post('/login', authController.login);
+router.post('/auth/login', authController.login);
 
-router.post('/signup', authController.signup);
+router.post('/auth/signup', authController.signup);
 // endregion
 
 module.exports = router;

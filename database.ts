@@ -9,11 +9,11 @@ const cert = fs.readFileSync('server.cert');
  * Online DB
  */
 const database = new Sequelize(
-    'gymhub_test',
-    'crs8jhzmow74jsmpf3ga',
-    'pscale_pw_AjuzO3Pdsi2jTdtcS6TTZXmpx8tVTcqNb1AcpIq4ZQB',
+    process.env.DB_CONNECTION_NAME,
+    process.env.DB_USER_NAME,
+    process.env.DB_PASSWORD,
     {
-        dialect: 'mysql', host: 'eu-central.connect.psdb.cloud', dialectOptions: {
+        dialect: 'mysql', host: process.env.DB_HOST, dialectOptions: {
             ssl: {
                 key: key,
                 cert: cert

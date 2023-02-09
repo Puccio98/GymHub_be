@@ -41,7 +41,7 @@ app.use((req: Request, res: Response) => {
 database.sync()
     .then(() => {
         console.log('server running');
-        server.listen(3000);
+        server.listen(process.env.PORT || 3000);
     })
     .catch((err: Error) => {
         console.log(err);
