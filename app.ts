@@ -1,16 +1,22 @@
 //region imports
 const express = require('express');
 import {Request, Response} from "express";
-
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const database = require('./database');
+const User = require('./models/user');
+const Scheda = require('./models/scheda');
+const Exercise = require('./models/exercise');
+
+User.hasOne(Scheda);
+Scheda.hasMany(Exercise);
+Exercise.belongsTo(Scheda);
+Scheda.belongsTo(User);
 
 const app = express();
 
-//const http = require('http');
 const https = require('https');
 const fs = require('fs');
 const helmet = require('helmet');
