@@ -10,10 +10,10 @@ const User = require('./models/user');
 const Scheda = require('./models/scheda');
 const Exercise = require('./models/exercise');
 
-User.hasOne(Scheda);
+/*User.hasOne(Scheda);
 Scheda.hasMany(Exercise);
 Exercise.belongsTo(Scheda);
-Scheda.belongsTo(User);
+Scheda.belongsTo(User);*/
 
 const app = express();
 
@@ -29,6 +29,7 @@ const options = {
 const server = https.createServer(options, app);
 
 const authRoutes = require('./routes/auth-routes');
+const schedaRoutes = require('./routes/scheda-routes');
 // endregion
 
 app.use(bodyParser.urlencoded({extended: false}));
@@ -39,6 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.use(authRoutes);
+app.use(schedaRoutes);
 
 app.use((req: Request, res: Response) => {
     res.send('<h1>Error 404: page not found!</h1>');

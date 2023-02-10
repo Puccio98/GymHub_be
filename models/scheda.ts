@@ -1,7 +1,7 @@
 const Sequelize = require('@sequelize/core');
 const database = require('../database');
 
-const Scheda = database.define({
+const Scheda = database.define('scheda', {
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,

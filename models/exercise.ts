@@ -1,7 +1,7 @@
 const Sequelize = require('@sequelize/core');
 const database = require('../database');
 
-const Exercise = database.define({
+const Exercise = database.define('exercise', {
     id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -20,7 +20,7 @@ const Exercise = database.define({
         type: Sequelize.STRING,
         allowNull: false
     },
-    subTitle: {
+    subtitle: {
         type: Sequelize.STRING,
         allowNull: false
     },
