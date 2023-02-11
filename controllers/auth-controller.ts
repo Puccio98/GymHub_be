@@ -1,34 +1,38 @@
 import {Request, Response} from "express";
 
+const bcrypt = require('bcryptjs');
+
 const User = require('../models/user');
 
 // region actions
-exports.login = (req: Request, res: Response) => {
+exports.login = async (req: Request, res: Response) => {
     const user = req.body;
 
     User.findOne({where: {email: user.email}})
         .then((u: typeof User) => {
-            if(!u) {
+            if (!u) {
                 throw new Error('user not found!');
             }
-            if(u.password !== user.password) {
-                throw new Error('wrong password!');
-            } else {
+            bcrypt.compare(user.password, u.password).then((result: boolean) => {
+                if (!result) {
+                    throw new Error('wrong password!');
+                }
                 res.json({message: 'user found', user: {id: u.id, name: u.name, lastName: u.lastName}});
-            }
-    })
+            });
+        })
         .catch((err: Error) => {
             res.json({message: err.message});
             console.log(err);
         })
 }
 
-exports.signup = (req: Request, res: Response) => {
+exports.signup = async (req: Request, res: Response) => {
     const user = req.body;
+    user.password = await bcrypt.hash(user.password, 12);
 
     User.findOne({where: {email: user.email}})
         .then((u: typeof User) => {
-            if(u) {
+            if (u) {
                 throw new Error('user already exists!');
             } else {
                 User.create({
