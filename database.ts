@@ -7,6 +7,11 @@ const cert = fs.readFileSync('server.cert');
 
 /**
  * Online DB
+ *
+ * Optional Parameters:
+ *      Query a true di default in modo tale che le query restituiscano un oggetto contenete solo i campi del record del DB.
+ *      Può essere sovrascritto nella singola query attraverso raw: false.
+ *      Nest a true dovrebbe ritornare i record associati ad un record sott oforma di oggetto. Non ne sono sicurissimo.
  */
 const database = new Sequelize(
     process.env.DB_CONNECTION_NAME,
@@ -18,8 +23,10 @@ const database = new Sequelize(
                 key: key,
                 cert: cert
             }
-        }
-    });
+        },
+        query: {raw: true, nest: true}
+    },
+);
 
 /**
  * Local DB nel mio pc
