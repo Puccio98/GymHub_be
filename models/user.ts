@@ -54,6 +54,24 @@ const User = database.define('user', {
     }
 });
 
+export interface UserItem {
+    /**
+     * Id in inserimento è un campo nullo.
+     */
+    id?: number,
+    name: string,
+    lastName: string,
+    email: string,
+    password: string,
+    phoneNumber: number,
+    country: string,
+    region: string,
+    city: string,
+    address: string,
+    cap: number,
+    profilePicture?: string
+}
+
 module.exports = User;
 
 export {}

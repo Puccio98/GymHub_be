@@ -1,6 +1,7 @@
 //region imports
 const express = require('express');
 import {Request, Response} from "express";
+
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -46,13 +47,14 @@ app.use((req: Request, res: Response) => {
     res.send('<h1>Error 404: page not found!</h1>');
 })
 
-database.sync()
-    .then(() => {
-        console.log('server running');
-        server.listen(process.env.PORT || 3000);
-    })
-    .catch((err: Error) => {
-        console.log(err);
-    })
-
-
+/***
+ * Come funziona .sync():
+ * https://stackoverflow.com/questions/21066755/how-does-sequelize-sync-work-specifically-the-force-option
+ * NON CAMBIARE FORCE A TRUE, SE LO CAMBI DISTRUGGI TUTTI I DATI PRESENTI NEL DB
+ */
+database.sync({alter: true, force: false}).then(() => {
+    console.log('server running');
+    server.listen(process.env.PORT || 3000);
+}).catch((err: Error) => {
+    console.log(err);
+})
