@@ -13,13 +13,16 @@ export class AuthController {
             where: {email: user.email}
         }).then((u: UserItem) => {
             if (!u) {
-                throw new Error('user not found!');
+                return res.status(404).json({error: "User not found"});
             }
             bcrypt.compare(user.password, u.password).then((result: boolean) => {
                 if (!result) {
                     throw new Error('wrong password!');
                 }
-                res.json({message: 'user found', user: {id: u.id, name: u.name, lastName: u.lastName}});
+                return res.status(200).json({
+                    message: 'user found',
+                    user: {id: u.id, name: u.name, lastName: u.lastName}
+                });
             });
         })
             .catch((err: Error) => {

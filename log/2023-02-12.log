@@ -1,0 +1,285 @@
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T16:02:58.260Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:07.427Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:07.548Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:07.699Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:07.817Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:07.891Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:07.988Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:08.185Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:08.314Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:08.452Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:08.556Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:08.662Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:08.744Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:08.831Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:08.929Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:09.055Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:09.177Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:09.302Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:09.423Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:09.557Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:09.686Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:09.819Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:09.957Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:10.081Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:10.215Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:10.324Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:10.445Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:04:10.565Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T16:04:10.671Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T16:10:00.312Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T16:10:00.315Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T16:10:36.546Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T16:10:36.560Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:10:48.104Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:10:48.267Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:10:48.662Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:10:57.801Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:10:57.807Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:10:57.844Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:10:57.884Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:13:58.196Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:13:58.355Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:13:58.393Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T16:14:22.772Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T16:14:22.775Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:14:40.351Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:14:40.468Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:14:40.494Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T16:19:03.158Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T16:19:03.166Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:19:05.198Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:19:05.357Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:19:05.394Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:19:08.590Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T16:19:08.885Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T16:21:41.554Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T16:21:41.556Z'
+}
