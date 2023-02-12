@@ -1,7 +1,6 @@
-//region Imports
+//region imports
 import {initRoutes} from "./routes/init-routes";
 import {Request, Response} from "express";
-
 
 const express = require('express');
 const path = require('path');
@@ -17,7 +16,6 @@ const options = {
     key: fs.readFileSync('server.key'),
     cert: fs.readFileSync('server.cert')
 };
-const data = new Date().toISOString().substr(0, 10);
 const app = express();
 const server = https.createServer(options, app);
 
@@ -28,12 +26,6 @@ app.use(helmet());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
-
-// Middleware degli errori
-app.use((err: any, req: Request, res: Response, next: any) => {
-    console.log(JSON.stringify(err));
-    return res.status(err.statusCode).send({error: {...err}});
-});
 
 // import routes into app
 initRoutes(app);
@@ -48,11 +40,8 @@ app.use((req: Request, res: Response) => {
  * NON CAMBIARE FORCE A TRUE, SE LO CAMBI DISTRUGGI TUTTI I DATI PRESENTI NEL DB
  */
 database.sync({alter: true, force: false}).then(() => {
+    console.log('server running');
     server.listen(process.env.PORT || 3000);
 }).catch((err: Error) => {
     console.log(err);
 })
-
-// Prevengo errori non gestiti che possono bloccare l'esecuzione del server
-process.on('uncaughtException', (err) => {
-});
