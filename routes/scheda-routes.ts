@@ -1,16 +1,11 @@
-const express = require('express');
-const schedaController = require ('../controllers/scheda-controller');
+import {SchedaController} from "../controllers/scheda-controller";
 
-const router = express.Router();
+module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
+    const router = require("express").Router();
 
-// region get routes
-// endregion
+    router.post('/fetchExercises', SchedaController.fetchExercises);
 
-// region post routes
-router.post('/scheda/fetchExercises', schedaController.fetchExercises);
-router.post('/scheda/postScheda', schedaController.postNewScheda);
-// endregion
+    router.post('/postScheda', SchedaController.postNewScheda);
 
-module.exports = router;
-
-export {}
+    app.use('/scheda', router);
+};

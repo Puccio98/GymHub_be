@@ -1,16 +1,11 @@
-const express = require('express');
-const authController = require ('../controllers/auth-controller');
+import {AuthController} from "../controllers/auth-controller";
 
-const router = express.Router();
+module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
+    const router = require("express").Router();
 
-// region get routes
-// endregion
+    router.post('/login', AuthController.login);
 
-// region post routes
-router.post('/auth/login', authController.login);
+    router.post('/signup', AuthController.signup);
 
-router.post('/auth/signup', authController.signup);
-// endregion
-
-module.exports = router;
-
+    app.use('/auth', router);
+};
