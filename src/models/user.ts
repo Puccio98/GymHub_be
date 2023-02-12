@@ -1,54 +1,54 @@
 const Sequelize = require('@sequelize/core');
 const database = require('../database');
 
-const User = database.define('user', {
-    id: {
+const User = database.define('User', {
+    UserID: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
-    name: {
+    Name: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    lastName: {
+    LastName: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    email: {
+    Email: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    password: {
+    Password: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    phoneNumber: {
+    PhoneNumber: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    country: {
+    Country: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    region: {
+    Region: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    city: {
+    City: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    address: {
+    Address: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    cap: {
+    CAP: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    profilePicture: {
+    ProfilePicture: {
         type: Sequelize.STRING,
         allowNull: true
     }
@@ -58,18 +58,18 @@ export interface UserItem {
     /**
      * Id in inserimento è un campo nullo.
      */
-    id?: number,
-    name: string,
-    lastName: string,
-    email: string,
-    password: string,
-    phoneNumber: number,
-    country: string,
-    region: string,
-    city: string,
-    address: string,
-    cap: number,
-    profilePicture?: string
+    UserID?: number,
+    Name: string,
+    LastName: string,
+    Email: string,
+    Password: string,
+    PhoneNumber: number,
+    Country: string,
+    Region: string,
+    City: string,
+    Address: string,
+    CAP: number,
+    ProfilePicture?: string
 }
 
 module.exports = User;

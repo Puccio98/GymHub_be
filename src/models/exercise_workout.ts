@@ -1,42 +1,31 @@
 const Sequelize = require('@sequelize/core');
 const database = require('../database');
 
-const Exercise = database.define('exercise', {
-    id: {
+// Nomenclatura tabelle di cross: Nome delle tabelle suddivise da underscore
+const ExerciseWorkout = database.define('Exercises_Workout', {
+    Exercise_WorkoutID: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
     },
-    schedaId: {
+    WorkoutID: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    day: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    title: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    subtitle: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    description: {
-        type: Sequelize.STRING,
-        allowNull: false
-    },
-    set: {
+    ExerciseID: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    weight: {
+    Set: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    rep: {
+    Weight: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    Rep: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
@@ -48,12 +37,12 @@ const Exercise = database.define('exercise', {
         type: Sequelize.INTEGER,
         allowNull: true
     },
-    percentage: {
+    Percentage: {
         type: Sequelize.INTEGER,
         allowNull: true
     }
 })
 
-module.exports = Exercise;
+module.exports = ExerciseWorkout;
 
 export {}

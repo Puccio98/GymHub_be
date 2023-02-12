@@ -15,11 +15,11 @@ export class AuthController {
             if (!u) {
                 throw new Error('user not found!');
             }
-            bcrypt.compare(user.password, u.password).then((result: boolean) => {
+            bcrypt.compare(user.password, u.Password).then((result: boolean) => {
                 if (!result) {
                     throw new Error('wrong password!');
                 }
-                res.json({message: 'user found', user: {id: u.id, name: u.name, lastName: u.lastName}});
+                res.json({message: 'user found', user: {id: u.UserID, name: u.Name, lastName: u.LastName}});
             });
         })
             .catch((err: Error) => {
@@ -38,16 +38,16 @@ export class AuthController {
                     throw new Error('user already exists!');
                 } else {
                     User.create({
-                        name: user.name,
-                        lastName: user.lastName,
-                        email: user.email,
-                        password: user.password,
-                        phoneNumber: user.phone,
-                        country: user.country,
-                        region: user.region,
-                        city: user.city,
-                        address: user.address,
-                        cap: user.cap
+                        Name: user.name,
+                        LastName: user.lastName,
+                        Email: user.email,
+                        Password: user.password,
+                        PhoneNumber: user.phone,
+                        Country: user.country,
+                        Region: user.region,
+                        City: user.city,
+                        Address: user.address,
+                        CAP: user.cap
                     }).then(() => {
                         res.json({message: 'user created successfully!'});
                     })

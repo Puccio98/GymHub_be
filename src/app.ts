@@ -1,6 +1,7 @@
 //region imports
 import {initRoutes} from "./routes/init-routes";
 import {Request, Response} from "express";
+import './db_definitions';
 
 const express = require('express');
 const path = require('path');

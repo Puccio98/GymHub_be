@@ -1,23 +1,27 @@
 const Sequelize = require('@sequelize/core');
 const database = require('../database');
 
-const Scheda = database.define('scheda', {
-    id: {
+const Exercise = database.define('Exercise', {
+    ExerciseID: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
     },
-    userId: {
-        type: Sequelize.INTEGER,
+    Title: {
+        type: Sequelize.STRING,
         allowNull: false
     },
-    creatorId: {
-        type: Sequelize.INTEGER,
+    Subtitle: {
+        type: Sequelize.STRING,
         allowNull: false
+    },
+    Description: {
+        type: Sequelize.STRING,
+        allowNull: true
     }
 })
 
-module.exports = Scheda;
+module.exports = Exercise;
 
 export {}
