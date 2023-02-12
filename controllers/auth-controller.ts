@@ -7,22 +7,24 @@ const User = require('../models/user');
 export class AuthController {
     static login = async (req: Request, res: Response) => {
         const user = req.body;
-        User.findOne({where: {email: user.email}})
-            .then((u: UserItem) => {
-                if (!u) {
-                    return res.status(404).json({error: "User not found"});
+
+        User.findOne({
+            //raw: false,
+            where: {email: user.email}
+        }).then((u: UserItem) => {
+            if (!u) {
+                return res.status(404).json({error: "User not found"});
+            }
+            bcrypt.compare(user.password, u.password).then((result: boolean) => {
+                if (!result) {
+                    throw new Error('wrong password!');
                 }
-                bcrypt.compare(user.password, u.password)
-                    .then((result: boolean) => {
-                        if (!result) {
-                            return res.json({error: "Wrong password :'c"});
-                        }
-                        return res.status(200).json({
-                            message: 'user found',
-                            user: {id: u.id, name: u.name, lastName: u.lastName}
-                        });
-                    });
-            })
+                return res.status(200).json({
+                    message: 'user found',
+                    user: {id: u.id, name: u.name, lastName: u.lastName}
+                });
+            });
+        })
             .catch((err: Error) => {
                 res.json({message: err.message});
                 console.log(err);

@@ -37,8 +37,6 @@ const database = new Sequelize(
     'Alessandro12',
     {dialect: 'mysql', host: 'localhost'});
 */
-
-
 module.exports = database;
 
 

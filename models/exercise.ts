@@ -1,19 +1,31 @@
 const Sequelize = require('@sequelize/core');
 const database = require('../database');
 
-const ExerciseWorkout = database.define('exercise_workout', {
-    ID: {
+const Exercise = database.define('exercise', {
+    id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
     },
-    workoutID: {
+    schedaId: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    exerciseID: {
-        type: Sequelize.INTEGER,
+    day: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    title: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    subtitle: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    description: {
+        type: Sequelize.STRING,
         allowNull: false
     },
     set: {
@@ -42,6 +54,6 @@ const ExerciseWorkout = database.define('exercise_workout', {
     }
 })
 
-module.exports = ExerciseWorkout;
+module.exports = Exercise;
 
 export {}

@@ -2,11 +2,11 @@
   "name": "gymhub_be",
   "version": "1.0.0",
   "description": "",
-  "main": "src/app.ts",
+  "main": "app.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.ts",
-    "start-prod": "node src/app.ts"
+    "start": "nodemon app.ts",
+    "start-prod": "node app.ts"
   },
   "repository": {
     "type": "git",
