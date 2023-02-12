@@ -1,6 +1,6 @@
 /**
  * Naming convention:
- * Singular names for tables -> Peccato che se ci provi sequelize smetta di funzionare
+ * Singular names for tables
  * Singular names for columns
  * Schema name for tables prefix (E.g.: SchemeName.TableName)
  * Pascal casing (a.k.a. upper camel case)

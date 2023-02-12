@@ -1,7 +1,7 @@
 const Sequelize = require('@sequelize/core');
 const database = require('../database');
 
-const ProgramState = database.define('programState', {
+const ProgramState = database.define('ProgramState', {
     ProgramStateID: {
         type: Sequelize.INTEGER,
         allowNull: false,
