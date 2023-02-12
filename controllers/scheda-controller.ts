@@ -6,9 +6,9 @@ const Exercise = require('../models/exercise');
 
 exports.fetchExercises = async (req: Request, res: Response) => {
     const userId = req.body.userId;
-    const scheda = await Scheda.findOne({where: {userId: userId}});
+    const scheda = await Scheda.findOne({raw: false, where: {userId: userId}});
     let schedaId;
-    if(!userId || userId === -1) {
+    if (!userId || userId === -1) {
         throw new Error('User not found!');
     }
     if (!scheda) {
@@ -21,9 +21,9 @@ exports.fetchExercises = async (req: Request, res: Response) => {
             res.json({message: 'La tua scheda:', exercises: e});
         })
         .catch((err: Error) => {
-       console.log(err);
-       res.json({message: err.message});
-    });
+            console.log(err);
+            res.json({message: err.message});
+        });
 }
 
 exports.postNewScheda = (req: Request, res: Response) => {

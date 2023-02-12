@@ -1,4 +1,5 @@
 import {Request, Response} from "express";
+import {UserItem} from "../models/user";
 
 const bcrypt = require('bcryptjs');
 
@@ -8,18 +9,20 @@ const User = require('../models/user');
 exports.login = async (req: Request, res: Response) => {
     const user = req.body;
 
-    User.findOne({where: {email: user.email}})
-        .then((u: typeof User) => {
-            if (!u) {
-                throw new Error('user not found!');
+    User.findOne({
+        //raw: false,
+        where: {email: user.email}
+    }).then((u: UserItem) => {
+        if (!u) {
+            throw new Error('user not found!');
+        }
+        bcrypt.compare(user.password, u.password).then((result: boolean) => {
+            if (!result) {
+                throw new Error('wrong password!');
             }
-            bcrypt.compare(user.password, u.password).then((result: boolean) => {
-                if (!result) {
-                    throw new Error('wrong password!');
-                }
-                res.json({message: 'user found', user: {id: u.id, name: u.name, lastName: u.lastName}});
-            });
-        })
+            res.json({message: 'user found', user: {id: u.id, name: u.name, lastName: u.lastName}});
+        });
+    })
         .catch((err: Error) => {
             res.json({message: err.message});
             console.log(err);
