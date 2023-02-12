@@ -283,3 +283,245 @@
   level: 'error',
   timestamp: '2023-02-12T16:21:41.556Z'
 }
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T17:23:17.231Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T17:23:17.237Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T17:23:29.353Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T17:23:29.357Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T17:23:44.790Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T17:23:44.797Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T18:46:08.433Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T18:46:08.435Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T18:47:08.814Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T18:47:08.816Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T18:49:38.905Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T18:49:38.909Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T18:50:14.214Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T18:50:14.217Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T18:50:28.258Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T18:50:28.261Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T18:54:11.047Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T18:54:11.050Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T19:03:00.032Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T19:03:00.036Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T19:06:46.888Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T19:06:46.891Z'
+}
+{
+  message: "Cannot find module 'C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src/models'\n" +
+    'Require stack:\n' +
+    '- C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src\\app.ts',
+  level: 'error',
+  timestamp: '2023-02-12T19:09:33.679Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T19:09:35.439Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T19:09:35.440Z'
+}
+{
+  message: "Cannot find module 'C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src/models'\n" +
+    'Require stack:\n' +
+    '- C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src\\app.ts',
+  level: 'error',
+  timestamp: '2023-02-12T19:16:36.985Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T19:16:38.896Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T19:16:38.896Z'
+}
+{
+  message: "Cannot find module 'C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src/models'\n" +
+    'Require stack:\n' +
+    '- C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src\\app.ts',
+  level: 'error',
+  timestamp: '2023-02-12T19:16:51.718Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T19:16:52.990Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T19:16:52.991Z'
+}
+{
+  message: "Cannot find module 'C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src/models'\n" +
+    'Require stack:\n' +
+    '- C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src\\app.ts',
+  level: 'error',
+  timestamp: '2023-02-12T19:18:32.220Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T19:18:33.476Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T19:18:33.476Z'
+}
+{
+  message: "Cannot find module 'C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src/models'\n" +
+    'Require stack:\n' +
+    '- C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src\\app.ts',
+  level: 'error',
+  timestamp: '2023-02-12T19:24:04.371Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T19:24:16.455Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T19:24:16.455Z'
+}
+{
+  message: "Cannot find module 'C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src/models'\n" +
+    'Require stack:\n' +
+    '- C:\\Users\\malte\\WebstormProjects\\GymHub_be\\src\\app.ts',
+  level: 'error',
+  timestamp: '2023-02-12T19:29:10.919Z'
+}
+{
+  message: 'server Back-End in ambiente undefined protocollo undefined porta undefined',
+  level: 'info',
+  timestamp: '2023-02-12T19:29:18.738Z'
+}
+{
+  message: 'listen EADDRINUSE: address already in use :::3000',
+  level: 'error',
+  timestamp: '2023-02-12T19:29:18.739Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T19:30:35.159Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T19:30:35.394Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T19:30:35.708Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T19:30:38.664Z'
+}
+{
+  message: 'write EPIPE',
+  level: 'error',
+  timestamp: '2023-02-12T19:30:38.717Z'
+}
+{
+  message: `target: gymhub_test.-.primary: vttablet: rpc error: code = NotFound desc = Table 'gymhub_test.schedas' doesn't exist (errno 1146) (sqlstate 42S02) (CallerID: crs8jhzmow74jsmpf3ga): Sql: "select id, userId, creatorId, createdAt, updatedAt from schedas as scheda where scheda.userId = :scheda_userId limit :vtg1", BindVars: {REDACTED}`,
+  level: 'error',
+  timestamp: '2023-02-12T19:30:38.868Z'
+}

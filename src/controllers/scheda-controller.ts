@@ -1,12 +1,11 @@
 import {Request, Response} from "express";
 
-const Scheda = require('../models/scheda');
-const Exercise = require('../models/exercise');
 
 export class SchedaController {
     static fetchExercises = async (req: Request, res: Response) => {
+        /*
         const userId = req.body.userId;
-        const scheda = await Scheda.findOne({raw: false, where: {userId: userId}});
+        const scheda = await Program.findOne({raw: false, where: {userId: userId}});
         let schedaId;
         if (!userId || userId === -1) {
             throw new Error('User not found!');
@@ -24,11 +23,14 @@ export class SchedaController {
                 console.log(err);
                 res.json({message: err.message});
             });
+       */
+        return res.status(501).json({error: "Method not implemented :'c"});
     }
     static postNewScheda = (req: Request, res: Response) => {
         /**
          * Se l'utente non ha la scheda, creane una nuova e posta gli esercizi,
          * altrimenti aggiorna la scheda.
          */
+        return res.status(501).json({error: "Method not implemented :'c"});
     };
 }

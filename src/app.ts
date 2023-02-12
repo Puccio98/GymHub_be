@@ -2,6 +2,7 @@
 import {initRoutes} from "./routes/init-routes";
 import {Request, Response} from "express";
 import * as winston from "winston";
+import "./db_definitions"
 
 
 const express = require('express');
@@ -9,6 +10,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const database = require('./database');
+
 const https = require('https');
 const fs = require('fs');
 const helmet = require('helmet');
@@ -53,6 +55,8 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 // import routes into app
 initRoutes(app);
 
+// Registrazioni di tutti i modelli nel database
+const Project = import(__dirname + "/models");
 app.use((req: Request, res: Response) => {
     res.send('<h1>Error 404: page not found!</h1>');
 })
