@@ -24,7 +24,8 @@ const database = new Sequelize(
                 cert: cert
             }
         },
-        query: {raw: true}
+        query: {raw: true},
+        define: {freezeTableName: true}
     },
 );
 

@@ -1,23 +1,19 @@
 const Sequelize = require('@sequelize/core');
 const database = require('../database');
 
-const Scheda = database.define('scheda', {
-    id: {
+const ProgramState = database.define('ProgramState', {
+    ProgramStateID: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true
     },
-    userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    creatorId: {
-        type: Sequelize.INTEGER,
+    State: {
+        type: Sequelize.STRING,
         allowNull: false
     }
 })
 
-module.exports = Scheda;
+module.exports = ProgramState;
 
 export {}
