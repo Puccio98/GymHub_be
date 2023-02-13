@@ -25,7 +25,7 @@ const User = database.define('User', {
         allowNull: false
     },
     PhoneNumber: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false
     },
     Country: {
@@ -63,7 +63,7 @@ export interface UserItem {
     LastName: string,
     Email: string,
     Password: string,
-    PhoneNumber: number,
+    PhoneNumber: string,
     Country: string,
     Region: string,
     City: string,
