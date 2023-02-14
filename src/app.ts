@@ -46,3 +46,7 @@ database.sync({alter: true, force: false}).then(() => {
 }).catch((err: Error) => {
     console.log(err);
 })
+
+process.on('uncaughtException', (err) => {
+    console.log(err)
+})
