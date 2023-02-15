@@ -21,11 +21,11 @@ const ExerciseWorkout = database.define('Exercises_Workout', {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    Weight: {
+    Rep: {
         type: Sequelize.INTEGER,
         allowNull: false
     },
-    Rep: {
+    Weight: {
         type: Sequelize.INTEGER,
         allowNull: false
     },

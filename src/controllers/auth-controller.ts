@@ -12,17 +12,16 @@ export class AuthController {
         const user: LoginDto = req.body;
         User.findOne({where: {email: user.email}}).then((u: UserItem) => {
             if (!u) {
-                throw new Error('user not found!');
+                return res.status(404).json({error: "User not found"});
             }
             bcrypt.compare(user.password, u.Password).then((result: boolean) => {
                 if (!result) {
-                    throw new Error('wrong password!');
+                    return res.json({error: "Wrong Password"});
                 }
                 res.json(AuthLib.UserItemToUserDto(u));
             });
         }).catch((err: Error) => {
             res.json({message: err.message});
-            console.log(err);
         })
     }
 
@@ -32,7 +31,7 @@ export class AuthController {
         User.findOne({where: {email: user.email}})
             .then((u: UserItem) => {
                 if (u) {
-                    throw new Error('user already exists!');
+                    return res.json({error: "User not found"});
                 } else {
                     User.create({
                         Name: user.name,
@@ -51,7 +50,6 @@ export class AuthController {
                 }
             })
             .catch((err: Error) => {
-                console.log(err);
                 res.json({message: err.message});
             });
     }
