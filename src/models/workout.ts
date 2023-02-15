@@ -19,6 +19,12 @@ const Workout = database.define('Workout', {
     }
 })
 
+export interface WorkoutItem {
+    WorkoutID?: number,
+    ProgramID: number,
+    IsDone: boolean
+}
+
 module.exports = Workout;
 
 export {}
