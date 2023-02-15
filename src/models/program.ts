@@ -1,3 +1,5 @@
+import {ProgramStateEnum} from "../enums/program-state-enum";
+
 const Sequelize = require('@sequelize/core');
 const database = require('../database');
 
@@ -34,6 +36,15 @@ const Program = database.define('Program', {
         }
     }
 })
+
+export interface ProgramItem {
+    ProgramID?: number,
+    UserID: number,
+    Title: string,
+    Description?: string,
+    ProgramStateID: ProgramStateEnum,
+    NumberOfWorkout?: number
+}
 
 module.exports = Program;
 
