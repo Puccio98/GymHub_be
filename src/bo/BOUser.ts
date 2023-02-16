@@ -24,7 +24,7 @@ export class BOUser {
     constructor(u: { userID?: number, userItem?: UserItem }) {
         if (u.userItem) {
             this.initByEntity(u.userItem);
-        } else if (u.userItem) {
+        } else if (u.userID) {
             User.findOne({where: {userID: u.userID}}).then((userItem: UserItem) => {
                 if (!userItem) {
                     throw  new Error('User not found');
@@ -32,7 +32,7 @@ export class BOUser {
                 return this.initByEntity(userItem);
             }).catch((err: Error) => {
                 throw  new Error(err.message);
-            })
+            });
         }
         throw  new Error('Se non ho l\'ID e non ho l\'entity come pensi che io possa creare l\'utente?');
     }
