@@ -40,20 +40,28 @@ export class AuthService {
 
     static async signup(signupDto: SignupDto): Promise<ServiceResponse<UserDto>> {
         try {
-            const user = await UserDao.createUser(AuthLib.SignupDtoToUserItem(signupDto));
-            if (user.UserID) {
-                return {
-                    data: AuthLib.UserItemToUserDto(user),
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'User found'
-                }
-            } else {
+            const userExists = await UserDao.findUserByEmail(signupDto.email);
+            if (userExists) {
                 return {
                     status: ServiceStatusEnum.ERROR,
-                    message: 'User creation failed :\'c'
-                };
+                    message: 'User exists already!'
+                }
+            } else {
+                signupDto.password = await bcrypt.hash(signupDto.password, 12);
+                const user = await UserDao.createUser(AuthLib.SignupDtoToUserItem(signupDto));
+                if (user.UserID) {
+                    return {
+                        data: AuthLib.UserItemToUserDto(user),
+                        status: ServiceStatusEnum.SUCCESS,
+                        message: 'User found'
+                    }
+                } else {
+                    return {
+                        status: ServiceStatusEnum.ERROR,
+                        message: 'User creation failed :\'c'
+                    };
+                }
             }
-
         } catch {
             return {
                 status: ServiceStatusEnum.ERROR,
