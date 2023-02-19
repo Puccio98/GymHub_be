@@ -1,16 +1,15 @@
 //region imports
 import {initRoutes} from "./routes/init-routes";
-import {Request, Response} from "express";
-import './db_definitions';
 
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const database = require('./database');
+const db = require('./database');
 const https = require('https');
 const fs = require('fs');
 const helmet = require('helmet');
+const apiErrorHandler = require('./errors/apiErrorHandler-error')
 // endregion
 
 const options = {
@@ -31,22 +30,11 @@ app.use(cors());
 // import routes into app
 initRoutes(app);
 
-app.use((req: Request, res: Response) => {
-    res.send('<h1>Error 404: page not found!</h1>');
-})
+app.use(apiErrorHandler);
 
-/***
- * Come funziona .sync():
- * https://stackoverflow.com/questions/21066755/how-does-sequelize-sync-work-specifically-the-force-option
- * NON CAMBIARE FORCE A TRUE, SE LO CAMBI DISTRUGGI TUTTI I DATI PRESENTI NEL DB
- */
-database.sync({alter: true, force: false}).then(() => {
-    console.log('server running');
-    server.listen(process.env.PORT || 3000);
-}).catch((err: Error) => {
-    console.log(err);
-})
 
-process.on('uncaughtException', (err) => {
+server.listen(3000);
+
+server.on('uncaughtException', (err: Error) => {
     console.log(err)
 })
