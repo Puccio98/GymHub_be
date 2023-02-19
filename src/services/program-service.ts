@@ -12,7 +12,7 @@ export class ProgramService {
                 data: ProgramLib.PlainProgramItemListToProgramDtoList(programList),
                 status: ServiceStatusEnum.SUCCESS,
                 message: 'User found'
-            }
+            };
         } else {
             return {
                 status: ServiceStatusEnum.ERROR,

@@ -1,6 +1,7 @@
 import {db} from "../database";
 import {PlainProgramItem} from "../models/plainProgram";
 
+
 export class ProgramDao {
     // region Public Methods
     static async getProgramListByUserID(userID: number): Promise<PlainProgramItem[]> {

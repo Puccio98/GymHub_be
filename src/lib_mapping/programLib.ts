@@ -53,7 +53,7 @@ export class ProgramLib {
         let programList: ProgramDto[] = [];
         let old_programID = 0;
         let old_workoutID = 0;
-        ppList.forEach((pp: PlainProgramItem) => {
+        for (let pp of ppList) {
             if (old_programID !== pp.p.ProgramID) {
                 // Nuovo Programma
                 old_programID = pp.p.ProgramID;
@@ -66,7 +66,7 @@ export class ProgramLib {
             }
             // Nuovo esercizio
             programList.at(-1)?.workoutList.at(-1)?.exerciseList.push(this.ExerciseWorkoutItemToExerciseWorkoutDto(pp.e_w, pp.e));
-        })
+        }
         return programList;
     }
 }
