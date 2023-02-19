@@ -1,4 +1,4 @@
-import {LoginDto} from "./loginDto";
+import {LoginDto} from "./login-dto";
 
 export interface SignupDto extends LoginDto {
     name: string;

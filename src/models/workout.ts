@@ -1,5 +1,5 @@
 export interface WorkoutItem {
-    WorkoutID?: number,
+    WorkoutID: number,
     ProgramID: number,
     IsDone: boolean
 }

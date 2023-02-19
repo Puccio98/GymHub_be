@@ -1,14 +1,14 @@
-import {UserDto} from "../dto/authDto/userDto";
-import {LoginDto} from "../dto/authDto/loginDto";
+import {UserDto} from "../dto/authDto/user-dto";
+import {LoginDto} from "../dto/authDto/login-dto";
 import {UserDao} from "../dao/user-dao";
 import {AuthLib} from "../lib_mapping/authLib";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
-import {SignupDto} from "../dto/authDto/signupDto";
+import {SignupDto} from "../dto/authDto/signup-dto";
 
 const bcrypt = require('bcryptjs');
 
 export class AuthService {
-    static async loginUser(loginDto: LoginDto): Promise<ServiceResponse<UserDto>> {
+    static async login(loginDto: LoginDto): Promise<ServiceResponse<UserDto>> {
         try {
             const user = await UserDao.findUserByEmail(loginDto.email);
             if (user) {
@@ -38,7 +38,7 @@ export class AuthService {
         }
     }
 
-    static async signupUser(signupDto: SignupDto): Promise<ServiceResponse<UserDto>> {
+    static async signup(signupDto: SignupDto): Promise<ServiceResponse<UserDto>> {
         try {
             const user = await UserDao.createUser(AuthLib.SignupDtoToUserItem(signupDto));
             if (user.UserID) {
