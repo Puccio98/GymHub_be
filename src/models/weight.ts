@@ -3,6 +3,8 @@ export interface WeightItem {
     UserID: number;
     Weight: number;
     Date: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 export {}

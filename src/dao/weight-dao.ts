@@ -7,13 +7,12 @@ export class WeightDao {
         return db('Weight').where({userID: userID}).select('*');
     }
 
-    static async findExistingWeight(date: Date): Promise<boolean> {
-        const weight = await db('Weight').where({date: date}).select('*');
+    static async findExistingWeight(date: Date, userID: number): Promise<boolean> {
+        const weight = await db('Weight').where({date: date, userID: userID}).select('*');
         return weight.length !== 0;
     }
 
     static async createNewWeight(weightItem: WeightItem): Promise<boolean> {
-        console.log(weightItem);
         await db('Weight').insert(weightItem);
         return db('Weight').where({userID: weightItem.UserID, date: weightItem.Date});
     }

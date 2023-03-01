@@ -1,0 +1,10 @@
+Come risolvere bug Port già in uso nel terminale
+
+esegui:
+netstat -a -o -n
+
+taskkill /F /PID (PID)
+
+(dove in PID ci vai a mettere il PID rispettivo del port che hai aperto).
+
+

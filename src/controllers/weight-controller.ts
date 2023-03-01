@@ -2,11 +2,12 @@ import {Request, Response} from "express";
 import {WeightDto} from "../dto/weightDto/weight-dto";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {WeightService} from "../services/weight-service";
+import {PlainWeightDto} from "../dto/weightDto/plain-weight-dto";
 
 export class WeightController {
     static fetchWeightHistory = async (req: Request, res: Response) => {
         const userID: number = req.body.userID;
-        const fetchWeightsResult: ServiceResponse<WeightDto[]> = await WeightService.getWeights(userID);
+        const fetchWeightsResult: ServiceResponse<PlainWeightDto> = await WeightService.getWeights(userID);
 
         switch (fetchWeightsResult.status) {
             case ServiceStatusEnum.SUCCESS:
