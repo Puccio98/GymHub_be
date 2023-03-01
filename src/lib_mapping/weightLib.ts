@@ -1,6 +1,7 @@
 import {WeightDto} from "../dto/weightDto/weight-dto";
 import {WeightItem} from "../models/weight";
 import {PlainWeightDto} from "../dto/weightDto/plain-weight-dto";
+import {ChartItem} from "../models/chart-item";
 
 export class WeightLib {
     static WeightItemListToWeightDtoList(weightItems: WeightItem[]): WeightDto[] {
@@ -27,7 +28,7 @@ export class WeightLib {
         } as WeightItem
     }
 
-    static WeightItemToPlainWeightDto(currentMonthWeights: WeightItem[], currentYearWeights: WeightItem[], allWeights: WeightItem[]): PlainWeightDto {
+    static ChartWeightItemToPlainWeightDto(currentMonthWeights: ChartItem[], currentYearWeights: ChartItem[], allWeights: ChartItem[]): PlainWeightDto {
         return {
             currentMonthWeights: currentMonthWeights,
             currentYearWeights: currentYearWeights,

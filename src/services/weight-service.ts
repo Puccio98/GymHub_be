@@ -9,20 +9,21 @@ export class WeightService {
         try {
             const weights = await WeightDao.findAllWeights(userID);
             if (weights) {
+
                 const currentMonth = new Date().getMonth();
                 const currentYear = new Date().getFullYear();
 
                 const currentMonthWeights = weights.filter((w) => {
-                    if (w.Date.getMonth() === currentMonth && w.Date.getFullYear() === currentYear) {
+                    if (w.x.getMonth() === currentMonth && w.x.getFullYear() === currentYear) {
                         return true;
                     }
                 });
 
                 const currentYearWeights = weights.filter((w) => {
-                    return w.Date.getFullYear() === currentYear;
-                })
+                    return w.x.getFullYear() === currentYear;
+                });
 
-                const plainWeightsDto = WeightLib.WeightItemToPlainWeightDto(currentMonthWeights, currentYearWeights, weights);
+                const plainWeightsDto = WeightLib.ChartWeightItemToPlainWeightDto(currentMonthWeights, currentYearWeights, weights);
 
                 return {
                     data: plainWeightsDto,

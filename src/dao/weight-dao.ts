@@ -1,10 +1,14 @@
 import {WeightItem} from "../models/weight";
 import {db} from "../database";
+import {ChartItem} from "../models/chart-item";
 
 export class WeightDao {
     // region Public Methods
-    static async findAllWeights(userID: number): Promise<WeightItem[]> {
-        return db('Weight').where({userID: userID}).select('*');
+    static async findAllWeights(userID: number): Promise<ChartItem[]> {
+        return db('Weight')
+            .where({userID: userID})
+            .select('date AS x', 'weight AS y')
+            .orderBy(['X']);
     }
 
     static async findExistingWeight(date: Date, userID: number): Promise<boolean> {
