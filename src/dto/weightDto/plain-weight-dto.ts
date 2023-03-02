@@ -1,7 +1,7 @@
 import {ChartItem} from "../../models/chart-item";
 
 export interface PlainWeightDto {
-    currentMonthWeights: ChartItem[];
-    currentYearWeights: ChartItem[];
+    lastMonthWeights: ChartItem[];
+    lastYearWeights: ChartItem[];
     allWeights: ChartItem[];
 }

@@ -6,8 +6,7 @@ import {PlainWeightDto} from "../dto/weightDto/plain-weight-dto";
 
 export class WeightController {
     static fetchWeightHistory = async (req: Request, res: Response) => {
-        const userID: number = req.body.userID;
-        const fetchWeightsResult: ServiceResponse<PlainWeightDto> = await WeightService.getWeights(userID);
+        const fetchWeightsResult: ServiceResponse<PlainWeightDto> = await WeightService.getWeights(req.body.userID);
 
         switch (fetchWeightsResult.status) {
             case ServiceStatusEnum.SUCCESS:

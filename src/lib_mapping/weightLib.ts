@@ -28,10 +28,10 @@ export class WeightLib {
         } as WeightItem
     }
 
-    static ChartWeightItemToPlainWeightDto(currentMonthWeights: ChartItem[], currentYearWeights: ChartItem[], allWeights: ChartItem[]): PlainWeightDto {
+    static ChartWeightItemToPlainWeightDto(lastMonthWeights: ChartItem[], lastYearWeights: ChartItem[], allWeights: ChartItem[]): PlainWeightDto {
         return {
-            currentMonthWeights: currentMonthWeights,
-            currentYearWeights: currentYearWeights,
+            lastMonthWeights: lastMonthWeights,
+            lastYearWeights: lastYearWeights,
             allWeights: allWeights
         } as PlainWeightDto
     }

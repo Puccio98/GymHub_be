@@ -9,21 +9,19 @@ export class WeightService {
         try {
             const weights = await WeightDao.findAllWeights(userID);
             if (weights) {
+                const today = new Date();
+                const lastMonth = new Date(new Date().setMonth(today.getMonth() - 1));
+                const lastYear = new Date(new Date().setFullYear(today.getFullYear() - 1));
 
-                const currentMonth = new Date().getMonth();
-                const currentYear = new Date().getFullYear();
-
-                const currentMonthWeights = weights.filter((w) => {
-                    if (w.x.getMonth() === currentMonth && w.x.getFullYear() === currentYear) {
-                        return true;
-                    }
+                const lastMonthWeights = weights.filter((w) => {
+                    return w.x > lastMonth;
                 });
 
-                const currentYearWeights = weights.filter((w) => {
-                    return w.x.getFullYear() === currentYear;
+                const lastYearWeights = weights.filter((w) => {
+                    return w.x > lastYear;
                 });
 
-                const plainWeightsDto = WeightLib.ChartWeightItemToPlainWeightDto(currentMonthWeights, currentYearWeights, weights);
+                const plainWeightsDto = WeightLib.ChartWeightItemToPlainWeightDto(lastMonthWeights, lastYearWeights, weights);
 
                 return {
                     data: plainWeightsDto,
@@ -39,7 +37,7 @@ export class WeightService {
         } catch {
             return {
                 status: ServiceStatusEnum.ERROR,
-                message: 'Data not returned'
+                message: 'Something went wrong'
             }
         }
     }
