@@ -54,6 +54,7 @@ export class WeightService {
                 const result = await WeightDao.createNewWeight(WeightLib.WeightDtoToWeightItem(weightDto));
                 if (result) {
                     return {
+                        data: true,
                         status: ServiceStatusEnum.SUCCESS,
                         message: 'Peso creato con successo!'
                     }
