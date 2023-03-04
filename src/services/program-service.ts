@@ -3,6 +3,7 @@ import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramDao} from "../dao/program-dao";
 import {ProgramLib} from "../lib_mapping/programLib";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
+import {ExerciseItem} from "../models/exercise";
 
 export class ProgramService {
 
@@ -23,10 +24,10 @@ export class ProgramService {
     }
 
     static async getStandardExercises(): Promise<ServiceResponse<ExerciseDto[]>> {
-        const exerciseList: ExerciseDto[] = await ProgramDao.getStandardExercises();
+        const exerciseList: ExerciseItem[] = await ProgramDao.getStandardExercises();
         if (exerciseList.length) {
             return {
-                data: exerciseList,
+                data: ProgramLib.ExerciseItemListToExerciseDtoList(exerciseList),
                 status: ServiceStatusEnum.SUCCESS,
                 message: 'User found'
             }

@@ -1,6 +1,6 @@
 import {db} from "../database";
 import {PlainProgramItem} from "../models/plainProgram";
-import {ExerciseDto} from "../dto/programDto/exercise-dto";
+import {ExerciseItem} from "../models/exercise";
 
 
 export class ProgramDao {
@@ -18,7 +18,7 @@ export class ProgramDao {
         return res;
     }
 
-    static async getStandardExercises(): Promise<ExerciseDto[]> {
+    static async getStandardExercises(): Promise<ExerciseItem[]> {
         return db('Exercise AS e')
             .select('*');
     }

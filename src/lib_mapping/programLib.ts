@@ -6,6 +6,7 @@ import {WorkoutItem} from "../models/workout";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
 import {ExerciseItem} from "../models/exercise";
 import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
+import {ExerciseDto} from "../dto/programDto/exercise-dto";
 
 export class ProgramLib {
     static ProgramItemToProgramDto(programItem: ProgramItem): ProgramDto {
@@ -47,6 +48,24 @@ export class ProgramLib {
             subtitle: e.Subtitle,
             description: e.Description
         } as ExerciseWorkoutDto
+    }
+
+    static ExerciseItemToExerciseDto(e: ExerciseItem): ExerciseDto {
+        return {
+            // ExerciseItem
+            exerciseID: e.ExerciseID,
+            title: e.Title,
+            subtitle: e.Subtitle,
+            description: e.Description
+        } as ExerciseDto
+    }
+
+    static ExerciseItemListToExerciseDtoList(eList: ExerciseItem[]): ExerciseDto[] {
+        let dtoList: ExerciseDto[] = [];
+        for (let e of eList) {
+            dtoList.push(this.ExerciseItemToExerciseDto(e));
+        }
+        return dtoList;
     }
 
     static PlainProgramItemListToProgramDtoList(ppList: PlainProgramItem[]): ProgramDto[] {
