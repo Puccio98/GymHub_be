@@ -11,5 +11,4 @@ export interface ProgramDto {
     workoutList: WorkoutDto[]
 }
 
-
 export {}
