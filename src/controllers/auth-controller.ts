@@ -5,12 +5,6 @@ import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnTyp
 import {AuthService} from "../services/auth-service";
 import {SignupDto} from "../dto/authDto/signup-dto";
 
-
-const db = require("../database");
-
-
-const bcrypt = require('bcryptjs');
-
 export class AuthController {
     static login = async (req: Request, res: Response) => {
         const loginDto: LoginDto = req.body;
@@ -24,7 +18,6 @@ export class AuthController {
             default:
                 return res.json({error: "Internal server error"});
         }
-
     }
 
     static signup = async (req: Request, res: Response) => {

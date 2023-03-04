@@ -4,11 +4,18 @@ const cert = fs.readFileSync('server.cert');
 export const db = require('knex')({
     client: 'mysql',
     connection: {
+        //Luca
         // host: 'localhost',
         // database: 'gymhub_test',
         // user: 'root',
         // password: 'rootpsw',
         // port: 3306,
+        // Ale
+        /*host: 'localhost',
+        database: 'gymhub_local',
+        user: 'root',
+        password: 'Alessandro12',
+        port: 3306*/
         host: process.env.DB_HOST,
         database: process.env.DB_CONNECTION_NAME,
         user: process.env.DB_USER_NAME,

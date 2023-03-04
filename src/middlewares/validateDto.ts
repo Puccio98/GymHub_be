@@ -11,7 +11,6 @@ function validateDto(schema: any) {
         } catch (err: any) {
             next(ApiError.badRequest((err as Error).message));
         }
-
     }
 }
 

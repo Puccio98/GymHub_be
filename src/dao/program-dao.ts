@@ -1,5 +1,6 @@
 import {db} from "../database";
 import {PlainProgramItem} from "../models/plainProgram";
+import {ExerciseDto} from "../dto/programDto/exercise-dto";
 
 
 export class ProgramDao {
@@ -12,10 +13,14 @@ export class ProgramDao {
             .join('Exercise AS e', 'e_w.ExerciseID', 'e.ExerciseID')
             .where({'u.UserID': userID})
             .select(['p.*', 'w.*', 'e_w.*', 'e.*'])
-            // SIIIIIIIIIIIIIIIIIIII TI AMO ISTRUZIONE TI AMO  :')
             .orderBy(['p.ProgramID', 'w.WorkoutID', 'e_w.Exercise_WorkoutID'])
             .options({nestTables: true});
         return res;
+    }
+
+    static async getStandardExercises(): Promise<ExerciseDto[]> {
+        return db('Exercise AS e')
+            .select('*');
     }
 
     //endregion
