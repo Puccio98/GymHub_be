@@ -1,5 +1,6 @@
 import {db} from "../database";
 import {PlainProgramItem} from "../models/plainProgram";
+import {ExerciseDto} from "../dto/programDto/exercise-dto";
 
 
 export class ProgramDao {
@@ -15,6 +16,11 @@ export class ProgramDao {
             .orderBy(['p.ProgramID', 'w.WorkoutID', 'e_w.Exercise_WorkoutID'])
             .options({nestTables: true});
         return res;
+    }
+
+    static async getStandardExercises(): Promise<ExerciseDto[]> {
+        return db('Exercise AS e')
+            .select('*');
     }
 
     //endregion

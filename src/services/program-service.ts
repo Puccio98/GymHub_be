@@ -2,6 +2,7 @@ import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnTyp
 import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramDao} from "../dao/program-dao";
 import {ProgramLib} from "../lib_mapping/programLib";
+import {ExerciseDto} from "../dto/programDto/exercise-dto";
 
 export class ProgramService {
 
@@ -11,7 +12,7 @@ export class ProgramService {
             return {
                 data: ProgramLib.PlainProgramItemListToProgramDtoList(programList),
                 status: ServiceStatusEnum.SUCCESS,
-                message: 'User found'
+                message: 'Program found and returned'
             };
         } else {
             return {
@@ -19,6 +20,21 @@ export class ProgramService {
                 message: 'Programs not found'
             };
         }
+    }
 
+    static async getStandardExercises(): Promise<ServiceResponse<ExerciseDto[]>> {
+        const exerciseList: ExerciseDto[] = await ProgramDao.getStandardExercises();
+        if (exerciseList.length) {
+            return {
+                data: exerciseList,
+                status: ServiceStatusEnum.SUCCESS,
+                message: 'User found'
+            }
+        } else {
+            return {
+                status: ServiceStatusEnum.ERROR,
+                message: 'No exercises found'
+            };
+        }
     }
 }
