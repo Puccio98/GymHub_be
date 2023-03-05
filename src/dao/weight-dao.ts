@@ -11,13 +11,20 @@ export class WeightDao {
             .orderBy(['X']);
     }
 
-    static async findIfWeightExists(date: Date, userID: number): Promise<boolean> {
-        const weight = await db('Weight').where({date: date, userID: userID}).select('*');
-        return weight.length !== 0;
+    static async findIfWeightExists(date: Date, userID: number): Promise<WeightItem> {
+        const exWeight = await db('Weight').where({date: date, userID: userID}).select('*');
+        return exWeight[0];
     }
 
     static async createNewWeight(weightItem: WeightItem): Promise<boolean> {
         await db('Weight').insert(weightItem);
+        return true;
+    }
+
+    static async updateWeight(weightItem: WeightItem, newWeight: number): Promise<boolean> {
+        await db('Weight')
+            .where('WeightID', '=', weightItem.WeightID)
+            .update({Weight: newWeight});
         return true;
     }
 
