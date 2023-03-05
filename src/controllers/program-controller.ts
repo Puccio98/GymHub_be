@@ -3,6 +3,7 @@ import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnTyp
 import {ProgramService} from "../services/program-service";
 import {ProgramDto} from "../dto/programDto/program-dto";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
+import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 
 export class ProgramController {
     static getStandardExercises = async (req: Request, res: Response) => {
@@ -30,4 +31,19 @@ export class ProgramController {
                 return res.json({error: "Internal server error"});
         }
     }
+
+    static create = async (req: Request, res: Response) => {
+        const program: ProgramCreateDTO = req.body;
+        const programList: ServiceResponse<any> = await ProgramService.createProgram(program);
+
+        switch (programList.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.json(programList.data)
+            case ServiceStatusEnum.ERROR:
+                return res.json({error: programList.message});
+            default:
+                return res.json({error: "Internal server error"});
+        }
+    }
 }
+

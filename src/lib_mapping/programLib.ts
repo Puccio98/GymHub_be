@@ -7,6 +7,8 @@ import {ExerciseWorkoutItem} from "../models/exercise_workout";
 import {ExerciseItem} from "../models/exercise";
 import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
+import {ExerciseCreateDTO, ProgramCreateDTO, WorkoutCreateDTO} from "../dto/programDto/program-create-dto";
+import {ProgramStateEnum} from "../enums/program-state-enum";
 
 export class ProgramLib {
     static ProgramItemToProgramDto(programItem: ProgramItem): ProgramDto {
@@ -21,6 +23,17 @@ export class ProgramLib {
         } as ProgramDto
     }
 
+    static ProgramCreateDtoToProgramItem(p: ProgramCreateDTO): ProgramItem {
+        return {
+            UserID: p.userID,
+            Title: p.title,
+            ProgramStateID: ProgramStateEnum.ACTIVE,
+            NumberOfWorkout: p.numberOfWorkout,
+            createdAt: p.createdAt,
+            updatedAt: p.updatedAt,
+        }
+    }
+
     static WorkoutItemToWorkoutDto(workoutItem: WorkoutItem): WorkoutDto {
         return {
             workoutID: workoutItem.WorkoutID,
@@ -28,6 +41,45 @@ export class ProgramLib {
             isDone: workoutItem.IsDone,
             exerciseList: []
         } as WorkoutDto
+    }
+
+    static WorkoutCreateDtoListToWorkoutItemList(wList: WorkoutCreateDTO[], programID: number): WorkoutItem[] {
+        let workoutItemList: WorkoutItem[] = [];
+        for (let w of wList) {
+            workoutItemList.push(ProgramLib.WorkoutCreateDtoToWorkoutItem(w, programID));
+        }
+        return workoutItemList;
+
+    }
+
+    static ExerciseCreateDtoListToExerciseWorkoutItemList(eList: ExerciseCreateDTO[], workoutID: number): ExerciseWorkoutItem[] {
+        let exerciseWorkoutList: ExerciseWorkoutItem[] = [];
+        for (let e of eList) {
+            exerciseWorkoutList.push(ProgramLib.ExerciseCreateDtoToExerciseWorkoutItem(e, workoutID));
+        }
+        return exerciseWorkoutList;
+    }
+
+    static WorkoutCreateDtoToWorkoutItem(w: WorkoutCreateDTO, programID: number): WorkoutItem {
+        return {
+            ProgramID: programID,
+            IsDone: w.isDone,
+            createdAt: w.createdAt,
+            updatedAt: w.updatedAt,
+        }
+    }
+
+    static ExerciseCreateDtoToExerciseWorkoutItem(e: ExerciseCreateDTO, workoutID: number): ExerciseWorkoutItem {
+        return {
+            WorkoutID: workoutID,
+            ExerciseID: e.exerciseID,
+            Set: e.set,
+            Rep: e.rep,
+            Weight: e.weight,
+            RPE: e.RPE,
+            createdAt: e.createdAt,
+            updatedAt: e.updatedAt,
+        }
     }
 
     static ExerciseWorkoutItemToExerciseWorkoutDto(ew: ExerciseWorkoutItem, e: ExerciseItem): ExerciseWorkoutDto {
@@ -73,12 +125,12 @@ export class ProgramLib {
         let old_programID = 0;
         let old_workoutID = 0;
         for (let pp of ppList) {
-            if (old_programID !== pp.p.ProgramID) {
+            if (pp.p.ProgramID && old_programID !== pp.p.ProgramID) {
                 // Nuovo Programma
                 old_programID = pp.p.ProgramID;
                 programList.push(this.ProgramItemToProgramDto(pp.p));
             }
-            if (old_workoutID !== pp.w.WorkoutID) {
+            if (pp.w.WorkoutID && old_workoutID !== pp.w.WorkoutID) {
                 // Nuovo allenamento
                 old_workoutID = pp.w.WorkoutID;
                 programList.at(-1)?.workoutList.push(this.WorkoutItemToWorkoutDto(pp.w));
@@ -88,4 +140,5 @@ export class ProgramLib {
         }
         return programList;
     }
+
 }

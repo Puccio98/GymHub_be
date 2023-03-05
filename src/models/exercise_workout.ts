@@ -7,7 +7,9 @@ export interface ExerciseWorkoutItem {
     Weight: number,
     RPE?: number,
     RM?: number,
-    Percentage?: number
+    Percentage?: number,
+    createdAt?: Date,
+    updatedAt?: Date,
 }
 
 

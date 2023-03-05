@@ -1,6 +1,10 @@
 import {db} from "../database";
 import {PlainProgramItem} from "../models/plainProgram";
 import {ExerciseItem} from "../models/exercise";
+import {ProgramItem} from "../models/program";
+import {WorkoutItem} from "../models/workout";
+import {ExerciseWorkoutItem} from "../models/exercise_workout";
+import {ProgramStateEnum} from "../enums/program-state-enum";
 
 
 export class ProgramDao {
@@ -22,6 +26,41 @@ export class ProgramDao {
         return db('Exercise AS e')
             .select('*');
     }
+
+    /**
+     * Restituisce il ProgramID
+     * @param programItem
+     */
+    static async createProgram(programItem: ProgramItem): Promise<number> {
+        let res: any = await db('Program').insert(programItem);
+        return res[0];
+    }
+
+    /**
+     * Restituisce il WorkoutID
+     * @param workoutItem
+     */
+    static async createWorkout(workoutItem: WorkoutItem): Promise<number> {
+        let res: any = await db('Workout').insert(workoutItem);
+        return res[0];
+    }
+
+    /**
+     * Restituisce l'ID dell'ultimo ExerciseWorkout inserito
+     * @param ewItemList
+     */
+    static async createExerciseWorkout(ewItemList: ExerciseWorkoutItem[]): Promise<number> {
+        let res: any = await db('Exercises_Workout').insert(ewItemList);
+        return res[0];
+    }
+
+    static async setProgramsInactive(userID: number): Promise<void> {
+        await db('Program').where({'UserID': userID})
+            .update({
+                ProgramStateID: ProgramStateEnum.INACTIVE,
+            });
+    }
+
 
     //endregion
 }
