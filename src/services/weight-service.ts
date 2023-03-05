@@ -14,26 +14,8 @@ export class WeightService {
                     message: 'No weights found'
                 }
             } else {
-                const today = new Date();
-                const lastMonth = new Date(new Date().setMonth(today.getMonth() - 1));
-                const lastYear = new Date(new Date().setFullYear(today.getFullYear() - 1));
-
-                const monthIndex = weightList.findIndex((w) => {
-                    return w.x > lastMonth;
-                });
-
-                const yearIndex = weightList.findIndex((w) => {
-                    return w.x > lastYear;
-                });
-
-                const plainWeightsDto = WeightLib.PlainWeightItemToPlainWeightDto({
-                    WeightList: weightList,
-                    MonthIndex: monthIndex,
-                    YearIndex: yearIndex
-                });
-
                 return {
-                    data: plainWeightsDto,
+                    data: WeightLib.ChartItemListToPlainWeightDto(weightList),
                     status: ServiceStatusEnum.SUCCESS,
                     message: 'Data returned'
                 }
@@ -59,7 +41,7 @@ export class WeightService {
                 if (result) {
                     const d = await WeightDao.findAllWeights(weightDto.userID);
                     return {
-                        data: d,
+                        data: WeightLib.ChartItemListToPlainWeightDto(d),
                         status: ServiceStatusEnum.SUCCESS,
                         message: 'Peso creato con successo!'
                     }
