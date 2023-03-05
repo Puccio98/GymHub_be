@@ -34,7 +34,7 @@ export class ProgramController {
 
     static create = async (req: Request, res: Response) => {
         const program: ProgramCreateDTO = req.body;
-        const programList: ServiceResponse<any> = await ProgramService.createProgram(program);
+        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.createProgram(program);
 
         switch (programList.status) {
             case ServiceStatusEnum.SUCCESS:

@@ -1,5 +1,19 @@
 const yup = require('yup');
 
+let exerciseType = yup.object().shape({
+    createdAt: yup.date().default(() => new Date()),
+    updatedAt: yup.date().default(() => new Date())
+})
+
+let workoutType = yup.object().shape({
+    isDone: yup.boolean().required(),
+    createdAt: yup.date().default(() => new Date()),
+    updatedAt: yup.date().default(() => new Date()),
+    exerciseList: yup.array().of(
+        exerciseType
+    ).required().min(1)
+})
+
 module.exports = yup.object().shape({
     userID: yup.number().required(),
     title: yup.string().required().min(1),
@@ -7,20 +21,7 @@ module.exports = yup.object().shape({
     programType: yup.number().required(),
     createdAt: yup.date().default(() => new Date()),
     updatedAt: yup.date().default(() => new Date()),
-    workoutList: yup.array().of(
-        yup.object().shape({
-            isDone: yup.boolean().required(),
-            createdAt: yup.date().default(() => new Date()),
-            updatedAt: yup.date().default(() => new Date()),
-            exerciseList: yup.array().of(
-                yup.object().shape({
-                    createdAt: yup.date().default(() => new Date()),
-                    updatedAt: yup.date().default(() => new Date())
-                })
-            ).required().min(1)
-        })
-    ).required().min(1)
-
+    workoutList: yup.array().of(workoutType).required().min(1)
 });
 
 export {};
