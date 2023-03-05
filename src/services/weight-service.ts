@@ -57,8 +57,9 @@ export class WeightService {
             } else {
                 const result = await WeightDao.createNewWeight(WeightLib.WeightDtoToWeightItem(weightDto));
                 if (result) {
+                    const d = await WeightDao.findAllWeights(weightDto.userID);
                     return {
-                        data: true,
+                        data: d,
                         status: ServiceStatusEnum.SUCCESS,
                         message: 'Peso creato con successo!'
                     }
