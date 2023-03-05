@@ -7,8 +7,8 @@ import {PlainWeightDto} from "../dto/weightDto/plain-weight-dto";
 export class WeightService {
     static async getWeights(userID: number): Promise<ServiceResponse<PlainWeightDto>> {
         try {
-            const weights = await WeightDao.findAllWeights(userID);
-            if (!weights) {
+            const weightList = await WeightDao.findAllWeights(userID);
+            if (!weightList) {
                 return {
                     status: ServiceStatusEnum.ERROR,
                     message: 'No weights found'
@@ -18,15 +18,19 @@ export class WeightService {
                 const lastMonth = new Date(new Date().setMonth(today.getMonth() - 1));
                 const lastYear = new Date(new Date().setFullYear(today.getFullYear() - 1));
 
-                const lastMonthWeights = weights.filter((w) => {
+                const monthIndex = weightList.findIndex((w) => {
                     return w.x > lastMonth;
                 });
 
-                const lastYearWeights = weights.filter((w) => {
+                const yearIndex = weightList.findIndex((w) => {
                     return w.x > lastYear;
                 });
 
-                const plainWeightsDto = WeightLib.ChartWeightItemToPlainWeightDto(lastMonthWeights, lastYearWeights, weights);
+                const plainWeightsDto = WeightLib.PlainWeightItemToPlainWeightDto({
+                    WeightList: weightList,
+                    MonthIndex: monthIndex,
+                    YearIndex: yearIndex
+                });
 
                 return {
                     data: plainWeightsDto,
