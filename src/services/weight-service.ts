@@ -30,11 +30,21 @@ export class WeightService {
 
     static async postNewWeight(weightDto: WeightDto): Promise<ServiceResponse<any>> {
         try {
-            const doesWeightExistAlready = await WeightDao.findIfWeightExists(weightDto.date, weightDto.userID);
-            if (doesWeightExistAlready) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Hai già inserito un peso in questa data!'
+            const existingWeight = await WeightDao.findIfWeightExists(weightDto.date, weightDto.userID);
+            if (existingWeight) {
+                const result = await WeightDao.updateWeight(existingWeight, weightDto.weight);
+                if (result) {
+                    const d = await WeightDao.findAllWeights(weightDto.userID);
+                    return {
+                        data: WeightLib.ChartItemListToPlainWeightDto(d),
+                        status: ServiceStatusEnum.SUCCESS,
+                        message: 'Peso aggiornato con successo!'
+                    }
+                } else {
+                    return {
+                        status: ServiceStatusEnum.ERROR,
+                        message: 'Peso non creato'
+                    }
                 }
             } else {
                 const result = await WeightDao.createNewWeight(WeightLib.WeightDtoToWeightItem(weightDto));
