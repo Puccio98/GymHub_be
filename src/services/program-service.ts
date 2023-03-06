@@ -19,8 +19,9 @@ export class ProgramService {
                 };
             } else {
                 return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Programs not found'
+                    data: [],
+                    status: ServiceStatusEnum.SUCCESS,
+                    message: 'You have 0 programs apparently'
                 };
             }
         } catch {
