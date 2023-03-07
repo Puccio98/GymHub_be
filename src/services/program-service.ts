@@ -13,7 +13,7 @@ export class ProgramService {
             const programList = await ProgramDao.getProgramListByUserID(userID);
             if (programList.length) {
                 return {
-                    data: ProgramLib.PlainProgramItemListToProgramDtoList(programList),
+                    data: ProgramLib.PlainProgramItemListToProgramDtoList(programList.reverse()),
                     status: ServiceStatusEnum.SUCCESS,
                     message: 'Program found and returned'
                 };
