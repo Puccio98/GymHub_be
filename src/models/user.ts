@@ -12,7 +12,7 @@ export interface UserItem {
     Region: string,
     City: string,
     Address: string,
-    CAP: number,
+    CAP: string,
     ProfilePicture?: string,
     createdAt?: Date,
     updatedAt?: Date

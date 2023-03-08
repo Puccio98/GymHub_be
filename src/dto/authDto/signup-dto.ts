@@ -8,7 +8,7 @@ export interface SignupDto extends LoginDto {
     region: string;
     city: string;
     address: string;
-    cap: number | null;
+    cap: string | null;
     createdAt?: Date;
     updatedAt?: Date;
 }

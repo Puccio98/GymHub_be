@@ -12,6 +12,6 @@ export interface UserDto {
     region: string,
     city: string,
     address: string,
-    CAP: number,
+    CAP: string,
     profilePicture?: string
 }

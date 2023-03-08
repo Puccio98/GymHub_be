@@ -10,7 +10,7 @@ module.exports = yup.object().shape({
     region: yup.string().required(),
     city: yup.string().required(),
     address: yup.string().required(),
-    cap: yup.number().required(),
+    cap: yup.string().required(),
     createdAt: yup.date().default(() => new Date()),
     updatedAt: yup.date().default(() => new Date())
 });
