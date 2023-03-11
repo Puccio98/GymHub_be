@@ -20,5 +20,3 @@ WHERE w.ProgramID IN (
 DELETE
 FROM Program AS p
 WHERE p.UserID = @userID;
-
-
