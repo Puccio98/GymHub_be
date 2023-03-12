@@ -6,6 +6,9 @@ import {SignupDto} from "../dto/authDto/signup-dto";
 import {AuthHelper} from "../helpers/AuthHelper";
 import {AuthDto} from "../dto/authDto/auth-dto";
 import {TokenDao} from "../dao/token-dao";
+import {TokenDto} from "../dto/authDto/token-dto";
+import {TokenItem} from "../interfaces/tokenItem-interface";
+import {PayloadJWT} from "../interfaces/payloadJWT";
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -96,6 +99,48 @@ export class AuthService {
                     status: ServiceStatusEnum.ERROR,
                     message: 'Errors :\'c'
                 }
+            }
+        } catch {
+            return {
+                status: ServiceStatusEnum.ERROR,
+                message: 'DB esplode'
+            };
+        }
+    }
+
+    static async refreshToken(userID: number, refreshToken: string): Promise<ServiceResponse<TokenDto>> {
+        try {
+            const dbToken: TokenItem = await TokenDao.getValidToken(userID);
+            if (refreshToken !== dbToken.Token) {
+                //res.sendStatus(403);
+                // Refresh token non presente tra quelli validi in DB
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Refresh token non presente tra quelli validi in DB'
+                }
+            }
+            let tokenDto: TokenDto | null = null;
+            await jwt.verify(refreshToken, process.env.ACCESS_TOKEN_SECRET, async (err: any, userJWT: PayloadJWT) => {
+                if (err) {
+                    //return res.sendStatus(403); // Token di refresh non più valido
+                    return {
+                        status: ServiceStatusEnum.ERROR,
+                        message: 'Refresh token non presente tra quelli validi in DB'
+                    }
+                }
+                tokenDto = await AuthHelper.createTokenDto(userJWT.Email, userJWT.UserID);
+            });
+            if (tokenDto) {
+                return {
+                    data: tokenDto,
+                    status: ServiceStatusEnum.SUCCESS,
+                    message: 'Nuova coppia di token'
+                }
+            } else {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Non è stato possibile generare nuova coppia di token'
+                };
             }
         } catch {
             return {

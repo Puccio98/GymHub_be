@@ -3,11 +3,10 @@ import {LoginDto} from "../dto/authDto/login-dto";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {AuthService} from "../services/auth-service";
 import {SignupDto} from "../dto/authDto/signup-dto";
-import {PayloadJWT} from "../interfaces/payloadJWT";
-import {AuthHelper, IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {AuthDto} from "../dto/authDto/auth-dto";
+import {TokenDto} from "../dto/authDto/token-dto";
 
-let refreshTokens: string | any[] = [];
 const jwt = require('jsonwebtoken');
 
 export class AuthController {
@@ -40,7 +39,7 @@ export class AuthController {
         }
     }
     static logout = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const payloadJWT = req.PayloadJWT;
+        const payloadJWT = req.AccessPayloadJWT;
         const logoutResult: ServiceResponse<boolean> = await AuthService.logout(payloadJWT.UserID);
 
         switch (logoutResult.status) {
@@ -53,20 +52,18 @@ export class AuthController {
         }
     }
 
-    static token = async (req: Request, res: Response) => {
-        const refreshToken: any = req.body.refreshToken;
-        if (!refreshToken) {
-            res.sendStatus(403);
+    static refreshToken = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const accessPayload = req.AccessPayloadJWT;
+        const refreshToken: string = req.body.refreshToken;
+        const refreshTokenResult: ServiceResponse<TokenDto> = await AuthService.refreshToken(accessPayload.UserID, refreshToken);
+
+        switch (refreshTokenResult.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.json(refreshTokenResult.data)
+            case ServiceStatusEnum.ERROR:
+                return res.json({error: refreshTokenResult.message});
+            default:
+                return res.json({error: "Internal server error"});
         }
-        if (!refreshTokens.includes(refreshToken)) {
-            res.sendStatus(403);
-        }
-        jwt.verify(refreshToken(), process.env.ACCESS_TOKEN_SECRET, (err: any, userJWT: PayloadJWT) => {
-            if (err) {
-                return res.sendStatus(403); // no longer valid token
-            }
-            const accessToken = AuthHelper.generateToken(userJWT.Email, userJWT.UserID);
-            res.json({accessToken: accessToken});
-        })
     }
 }

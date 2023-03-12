@@ -17,7 +17,7 @@ interface userGenerationToken {
 }
 
 export interface IGetUserAuthInfoRequest extends Request {
-    PayloadJWT: PayloadJWT
+    AccessPayloadJWT: PayloadJWT
 }
 
 export class AuthHelper {
@@ -54,7 +54,7 @@ export class AuthHelper {
                     if (err) {
                         return res.sendStatus(401); // 403 no longer valid token
                     }
-                    req.PayloadJWT = userJWT;
+                    req.AccessPayloadJWT = userJWT;
                     next();
                 })
             } else {
