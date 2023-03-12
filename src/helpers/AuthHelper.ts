@@ -20,12 +20,15 @@ export class AuthHelper {
         const jwtPayload: UserJWT = {Email: email, UserID: userID, RefreshToken: refreshToken};
         let expiresIn: string = '1h';
         if (!refreshToken) {
+            console.log(process.env.ACCESS_TOKEN_SECRET);
             return jwt.sign(jwtPayload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: expiresIn});
         }
         expiresIn = '1d';
         const _refreshToken = jwt.sign(jwtPayload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: expiresIn});
         const payload = jwt.decode(_refreshToken);
-        //Push refresh token into DB
+        console.log(payload);
+        //crea modello del token usando la stringa e le informazioni date da payload ed expiresIn;
+        //Push refresh token into DB chiamando il Dao
         return _refreshToken;
     }
 
