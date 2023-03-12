@@ -1,4 +1,4 @@
-import {ProgramType} from "../../enums/program-type";
+import {ProgramType} from "../../enums/program-type.enum";
 
 export interface ProgramCreateDTO {
     userID: number;
