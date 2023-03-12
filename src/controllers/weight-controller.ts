@@ -7,7 +7,7 @@ import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 
 export class WeightController {
     static fetchWeightHistory = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const userJWT = req.UserJWT;
+        const userJWT = req.PayloadJWT;
         const fetchWeightsResult: ServiceResponse<PlainWeightDto> = await WeightService.getWeights(userJWT.UserID);
 
         switch (fetchWeightsResult.status) {

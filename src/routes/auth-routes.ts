@@ -12,7 +12,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.post('/token', AuthController.token);
 
-    router.delete('/logout');
+    router.delete('/logout', AuthController.logout);
 
     app.use('/auth', router);
 };
