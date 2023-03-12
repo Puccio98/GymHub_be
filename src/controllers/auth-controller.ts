@@ -13,6 +13,7 @@ const jwt = require('jsonwebtoken');
 
 export class AuthController {
     static login = async (req: Request, res: Response) => {
+
         const loginDto: LoginDto = req.body;
         const loginUserResult: ServiceResponse<TokenDto> = await AuthService.login(loginDto);
 
@@ -39,6 +40,7 @@ export class AuthController {
                 return res.json({error: "Internal server error"});
         }
     }
+
     static token = async (req: Request, res: Response) => {
         const refreshToken: any = req.body.refreshToken;
         if (!refreshToken) {

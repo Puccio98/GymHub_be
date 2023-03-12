@@ -8,6 +8,5 @@ export interface ServiceResponse<T> {
 export enum ServiceStatusEnum {
     SUCCESS = 0,
     ERROR = 1
-
 }
 
