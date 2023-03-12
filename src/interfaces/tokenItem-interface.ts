@@ -5,4 +5,6 @@ export interface TokenItem {
     Token: string;
     issuedAt: string;
     expiresIn: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

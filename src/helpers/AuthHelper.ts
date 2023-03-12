@@ -78,8 +78,10 @@ export class AuthHelper {
             UserID: payload.UserID,
             TokenTypeID: tokenType,
             Token: token,
-            issuedAt: payload.IssuedAt,
-            expiresIn: expiresIn
+            issuedAt: payload.iat,
+            expiresIn: expiresIn,
+            createdAt: new Date(),
+            updatedAt: new Date()
         } as TokenItem;
     }
 }

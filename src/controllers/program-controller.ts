@@ -21,6 +21,7 @@ export class ProgramController {
 
     static getProgramListByUserID = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const userID: number = Number(req.params['user_id']);
+        console.log(userID);
         const programList: ServiceResponse<ProgramDto[]> = await ProgramService.getProgramListByUserID(userID);
 
         switch (programList.status) {

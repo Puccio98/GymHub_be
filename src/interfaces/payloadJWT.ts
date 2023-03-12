@@ -4,5 +4,5 @@ export interface PayloadJWT {
     Email: string;
     UserID: number;
     TokenType: TokenType;
-    IssuedAt?: string;
+    iat?: string;
 }
