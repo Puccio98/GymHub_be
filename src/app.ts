@@ -1,6 +1,5 @@
 //region imports
 import {initRoutes} from "./routes/init-routes";
-import {AuthHelper} from "./helpers/AuthHelper";
 
 require('dotenv').config()
 
@@ -13,6 +12,7 @@ const https = require('https');
 const fs = require('fs');
 const helmet = require('helmet');
 const apiErrorHandler = require('./errors/apiErrorHandler-error')
+const authenticateToken = require('./middlewares/authenticateToken')
 // endregion
 
 const options = {
@@ -27,10 +27,11 @@ app.use(bodyParser.json());
 app.use(helmet());
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+//TODO valutare se aggiungre un url tra quelli accettati da cors invece che accettare chiamate che arrivano da ogni dove
+app.use(cors({origin: ["http://localhost:4200", "http://127.0.0.1:4200"]}));
 
 
-app.use(AuthHelper.authenticateToken)
+app.use(authenticateToken)
 // import routes into app
 initRoutes(app);
 
