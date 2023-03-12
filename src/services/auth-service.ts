@@ -108,9 +108,10 @@ export class AuthService {
         }
     }
 
-    static async refreshToken(userID: number, refreshToken: string): Promise<ServiceResponse<TokenDto>> {
+    static async refreshToken(refreshToken: string): Promise<ServiceResponse<TokenDto>> {
         try {
-            const dbToken: TokenItem = await TokenDao.getValidToken(userID);
+            const payload: PayloadJWT = jwt.decode(refreshToken);
+            const dbToken: TokenItem = await TokenDao.getValidToken(payload.UserID);
             if (refreshToken !== dbToken.Token) {
                 //res.sendStatus(403);
                 // Refresh token non presente tra quelli validi in DB
@@ -120,7 +121,7 @@ export class AuthService {
                 }
             }
             let tokenDto: TokenDto | null = null;
-            await jwt.verify(refreshToken, process.env.ACCESS_TOKEN_SECRET, async (err: any, userJWT: PayloadJWT) => {
+            await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err: any, userJWT: PayloadJWT) => {
                 if (err) {
                     //return res.sendStatus(403); // Token di refresh non più valido
                     return {
