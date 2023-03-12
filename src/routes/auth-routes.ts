@@ -10,5 +10,9 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.post('/signup', validateDto(signupValidator), AuthController.signup);
 
+    router.post('/token', AuthController.token);
+
+    router.delete('/logout');
+
     app.use('/auth', router);
 };

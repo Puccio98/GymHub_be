@@ -4,17 +4,24 @@ import {UserDao} from "../dao/user-dao";
 import {AuthLib} from "../lib_mapping/authLib";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {SignupDto} from "../dto/authDto/signup-dto";
+import {AuthHelper} from "../helpers/AuthHelper";
+import {TokenDto} from "../dto/authDto/token-dto";
 
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 export class AuthService {
-    static async login(loginDto: LoginDto): Promise<ServiceResponse<UserDto>> {
+    static async login(loginDto: LoginDto): Promise<ServiceResponse<TokenDto>> {
         try {
             const user = await UserDao.findUserByEmail(loginDto.email);
-            if (user) {
+            if (user && user.UserID) {
                 if (await bcrypt.compare(loginDto.password, user.Password)) {
+                    const tokenDto = {
+                        accessToken: AuthHelper.generateToken(user.Email, user.UserID, false),
+                        refreshToken: AuthHelper.generateToken(user.Email, user.UserID, true)
+                    }
                     return {
-                        data: AuthLib.UserItemToUserDto(user),
+                        data: tokenDto,//AuthLib.UserItemToUserDto(user),
                         status: ServiceStatusEnum.SUCCESS,
                         message: 'User found'
                     }

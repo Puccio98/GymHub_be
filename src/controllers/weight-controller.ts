@@ -3,10 +3,12 @@ import {WeightDto} from "../dto/weightDto/weight-dto";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {WeightService} from "../services/weight-service";
 import {PlainWeightDto} from "../dto/weightDto/plain-weight-dto";
+import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 
 export class WeightController {
-    static fetchWeightHistory = async (req: Request, res: Response) => {
-        const fetchWeightsResult: ServiceResponse<PlainWeightDto> = await WeightService.getWeights(req.body.userID);
+    static fetchWeightHistory = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const userJWT = req.UserJWT;
+        const fetchWeightsResult: ServiceResponse<PlainWeightDto> = await WeightService.getWeights(userJWT.UserID);
 
         switch (fetchWeightsResult.status) {
             case ServiceStatusEnum.SUCCESS:
