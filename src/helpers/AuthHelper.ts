@@ -27,8 +27,8 @@ export class AuthHelper {
         const _refreshToken = jwt.sign(jwtPayload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: expiresIn});
         const payload = jwt.decode(_refreshToken);
         console.log(payload);
-        //Push refresh token into DB
-        //await TokenDao.create()
+        //crea modello del token usando la stringa e le informazioni date da payload ed expiresIn;
+        //Push refresh token into DB chiamando il Dao
         return _refreshToken;
     }
 

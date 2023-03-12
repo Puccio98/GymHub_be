@@ -5,14 +5,24 @@ export class TokenDao {
     // region Public Methods
     static async create(token: TokenItem): Promise<any> {
         // insert token
-        return;
+        try {
+            await db('Token')
+                .insert(token);
+            return true;
+        } catch (e) {
+            return e;
+        }
     }
 
-    static async delete(UserID: number): Promise<boolean> {
-        await db('Token')
-            .where('UserID', '=', UserID)
-            .delete();
-        return true;
+    static async delete(UserID: number): Promise<any> {
+        try {
+            await db('Token')
+                .where('UserID', '=', UserID)
+                .delete();
+            return true;
+        } catch (e) {
+            return e;
+        }
     }
 
     static async getValidRefreshToken(UserID: number): Promise<TokenItem> {
