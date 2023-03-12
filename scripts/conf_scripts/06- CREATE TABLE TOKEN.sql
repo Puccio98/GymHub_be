@@ -4,7 +4,7 @@ CREATE TABLE `Token` (
   `TokenTypeID` int NOT NULL,
   `Token`  varchar(512) NOT NULL,
   `issuedAt`  varchar(64) NOT NULL,
-  `expiresAt` varchar(64) NULL,
+  `expiresIn` varchar(64) NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`TokenID`)

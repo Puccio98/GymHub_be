@@ -3,6 +3,7 @@ import {UserJWT} from "../interfaces/userJWT";
 
 const jwt = require('jsonwebtoken');
 
+
 const protectedRoutes: string[] = [];
 const unprotectedRoutes: string[] = ['auth'];
 
@@ -15,14 +16,17 @@ export interface IGetUserAuthInfoRequest extends Request {
 }
 
 export class AuthHelper {
-
-    static generateToken(email: string, userID: number, refreshToken: boolean = false) {
+    static generateToken(email: string, userID: number, refreshToken: boolean = false): string {
         const jwtPayload: UserJWT = {Email: email, UserID: userID, RefreshToken: refreshToken};
+        let expiresIn: string = '1h';
         if (!refreshToken) {
-            return jwt.sign(jwtPayload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
+            return jwt.sign(jwtPayload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: expiresIn});
         }
+        expiresIn = '1d';
+        const _refreshToken = jwt.sign(jwtPayload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: expiresIn});
+        const payload = jwt.decode(_refreshToken);
         //Push refresh token into DB
-        return jwt.sign(jwtPayload, process.env.ACCESS_TOKEN_SECRET);
+        return _refreshToken;
     }
 
     static authenticateToken(req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) {
