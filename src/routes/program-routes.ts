@@ -5,7 +5,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
     const validateDto = require('../middlewares/validateDto');
     const programCreateValidator = require('../validators/program-create-validator');
 
-    router.get('/program_get/:user_id', ProgramController.getProgramListByUserID);
+    router.get('/program_get', ProgramController.getProgramListByUserID);
 
     router.get('/program_get_exercises', ProgramController.getStandardExercises);
 

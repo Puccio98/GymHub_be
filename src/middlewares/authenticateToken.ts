@@ -7,10 +7,9 @@ const jwt = require('jsonwebtoken');
 const protectedRoutes: string[] = ['/auth/logout'];// '/auth/refresh'
 const unprotectedRoutes: string[] = ['auth'];
 
-function authenticateToken(req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) {
-    const paths: string[] = req.path.split('/');
+export function authenticateToken(req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) {
     // Salta la verifica del token solamente se l'url completo non si trova nelle rotte protette e l'url di base è presente tra quelle non protette.
-    if (!protectedRoutes.includes(req.path) && unprotectedRoutes.includes(paths[1])) {
+    if (!RouteNeedsToken(req.originalUrl)) {
         next();
     } else {
         const authHeader: any = req.header('authorization');
@@ -32,5 +31,8 @@ function authenticateToken(req: IGetUserAuthInfoRequest, res: Response, next: Ne
     }
 }
 
+export function RouteNeedsToken(url: string) {
+    const paths: string[] = url.split('/');
+    return protectedRoutes.includes(url) || !unprotectedRoutes.includes(paths[1])
+}
 
-module.exports = authenticateToken;

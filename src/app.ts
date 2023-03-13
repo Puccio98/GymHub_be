@@ -1,5 +1,6 @@
 //region imports
 import {initRoutes} from "./routes/init-routes";
+import {authenticateToken} from "./middlewares/authenticateToken";
 
 require('dotenv').config()
 
@@ -7,12 +8,10 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const db = require('./database');
 const https = require('https');
 const fs = require('fs');
 const helmet = require('helmet');
 const apiErrorHandler = require('./errors/apiErrorHandler-error')
-const authenticateToken = require('./middlewares/authenticateToken')
 // endregion
 
 const options = {
@@ -31,7 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({origin: ["http://localhost:4200", "http://127.0.0.1:4200"]}));
 
 
-app.use(authenticateToken)
+app.use(authenticateToken);
 // import routes into app
 initRoutes(app);
 
