@@ -17,11 +17,11 @@ function authenticateToken(req: IGetUserAuthInfoRequest, res: Response, next: Ne
         if (authHeader) {
             const token = authHeader.split(' ')[1]; //token
             if (!token) {
-                res.sendStatus(401); // didn't find the token
+                res.sendStatus(401); // didn't find the token --> qui va fatto il logout nel FE
             }
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err: any, userJWT: PayloadJWT) => {
                 if (err) {
-                    return res.sendStatus(401); // 403 no longer valid token
+                    return res.sendStatus(403); // Qui provo con 403 --> va mandata la refresh
                 }
                 req.AccessPayloadJWT = userJWT;
                 next();
