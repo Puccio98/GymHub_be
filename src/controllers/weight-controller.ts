@@ -1,4 +1,4 @@
-import {Request, Response} from "express";
+import {Response} from "express";
 import {WeightDto} from "../dto/weightDto/weight-dto";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {WeightService} from "../services/weight-service";
@@ -20,7 +20,7 @@ export class WeightController {
         }
     }
 
-    static postNewWeight = async (req: Request, res: Response) => {
+    static postNewWeight = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const weightDto: WeightDto = req.body;
         const postNewWeightResult: ServiceResponse<any> = await WeightService.postNewWeight(weightDto);
 
