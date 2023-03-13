@@ -37,6 +37,7 @@ export class AuthController {
                 return res.json({error: "Internal server error"});
         }
     }
+
     static logout = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const accessPayload = req.AccessPayloadJWT;
         const logoutResult: ServiceResponse<boolean> = await AuthService.logout(accessPayload.UserID);

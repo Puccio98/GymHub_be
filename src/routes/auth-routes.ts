@@ -13,7 +13,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.post('/refresh', validateDto(refreshTokenValidator), AuthController.refreshToken);
 
-    router.delete('/logout', AuthController.logout);
+    router.get('/logout', AuthController.logout);
 
     app.use('/auth', router);
 };
