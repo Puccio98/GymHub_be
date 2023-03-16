@@ -27,11 +27,12 @@ app.use(helmet());
 
 app.use(express.static(path.join(__dirname, 'public')));
 //TODO valutare se aggiungre un url tra quelli accettati da cors invece che accettare chiamate che arrivano da ogni dove
-app.use(cors({origin: ["http://localhost:4200", "http://127.0.0.1:4200"]}));
-
+app.use(cors({
+    origin: ["http://localhost:4200", "http://192.168.1.11:4200"],
+}));
 
 app.use(authenticateToken);
-// import routes into app
+
 initRoutes(app);
 
 app.use(apiErrorHandler);

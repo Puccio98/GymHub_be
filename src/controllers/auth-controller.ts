@@ -10,7 +10,6 @@ import {TokenDto} from "../dto/authDto/token-dto";
 
 export class AuthController {
     static login = async (req: Request, res: Response) => {
-
         const loginDto: LoginDto = req.body;
         const loginUserResult: ServiceResponse<AuthDto> = await AuthService.login(loginDto);
 
