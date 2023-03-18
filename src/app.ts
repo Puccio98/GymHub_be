@@ -43,5 +43,5 @@ server.listen(process.env.PORT || 80, () => {
 });  //3000
 
 server.on('uncaughtException', (err: Error) => {
-    console.log(err)
+    console.log(err);
 })
