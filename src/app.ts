@@ -37,7 +37,7 @@ initRoutes(app);
 
 app.use(apiErrorHandler);
 
-server.listen(3000);
+server.listen(process.env.PORT || 80);  //3000
 
 server.on('uncaughtException', (err: Error) => {
     console.log(err)
