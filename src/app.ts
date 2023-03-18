@@ -38,7 +38,9 @@ initRoutes(app);
 
 app.use(apiErrorHandler);
 
-server.listen(process.env.PORT || 80);  //3000
+server.listen(process.env.PORT || 80, () => {
+    console.log('la tua porta è' + process.env.PORT + '  ' + 80);
+});  //3000
 
 server.on('uncaughtException', (err: Error) => {
     console.log(err)
