@@ -1,9 +1,9 @@
 {
   "env": {
-    "PORT": 3000,
     "DB_CONNECTION_NAME": "gymhub_test",
     "DB_USER_NAME": "crs8jhzmow74jsmpf3ga",
     "DB_PASSWORD": "pscale_pw_AjuzO3Pdsi2jTdtcS6TTZXmpx8tVTcqNb1AcpIq4ZQB",
     "DB_HOST": "eu-central.connect.psdb.cloud"
   }
 }
+
