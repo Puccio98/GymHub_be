@@ -19,7 +19,7 @@ const options = {
     cert: fs.readFileSync('server.cert')
 };
 const app = express();
-const server = https.createServer(options, app);
+//const server = https.createServer(options, app);
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -50,7 +50,7 @@ initRoutes(app);
 
 app.use(apiErrorHandler);
 
-server.listen(process.env.PORT || 80, () => {
+app.listen(process.env.PORT || 80, () => {
     console.log('la tua porta è ' + process.env.PORT + ' ' + 80);
 });  //3000    server, non app
 
