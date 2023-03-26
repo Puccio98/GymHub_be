@@ -1,0 +1,8 @@
+Connessione tra server BE e Database
+
+In package.json sono presenti due script -> start e start-prod. Noi stiamo usando start su heroku e funziona. La differenza tra i due script è che il primo gira il codice a partire dal TS mentre il secondo
+lo converte in js e poi esegue quello. Sarebbe meglio eseguire il secondo script ma non funziona a causa dei Self Signed Certificate che usiamo per connetterci al DB, cosa per altro non sicura perché annulla 
+l'https. Non so perché da TS ci permette di collegarci al DB senza dare problemi, probabilmente esiste qualche opzione del tipo: process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; che invece non viene 
+riportata nel js. Quello che dovremmo fare è usare letsencrypt o altri enti CA per creare un certificato che ci permetta di collegare server e DB in modo sicuro.
+Per ora continuiamo ad usare lo script 'start' in TS che funziona. Consiglio di leggere questo stackoverflow prima di tentare la creazione di certificati CA:
+https://stackoverflow.com/questions/45088006/nodejs-error-self-signed-certificate-in-certificate-chain
