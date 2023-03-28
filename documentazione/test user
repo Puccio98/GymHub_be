@@ -1,0 +1,20 @@
+Credenziali per user su cui fare test
+
+1) Empty User --> questo user dovrà avere solo le informazioni essenziali ad effettuare il login, non mettiamogli
+  schede, pesi o altro, verrà usato per testare la funzionalità dell'app la prima volta che vi si accede, quando si è
+  appunto un utente vuoto.
+
+2) Test User --> questo è l'user da usare per test più generici, va bene creare una scheda, dei pesi e altro per lui,
+  magari potremmo creare degli script apposta per rimuovere i suoi dati dal db se ci serve.
+
+
+------EMPTY USER------
+e-mail: empty@test.com
+password: emptytest
+ID: 15
+
+------TEST USER------
+e-mail: testuser@test.com
+password: testuser
+ID: 16
+
