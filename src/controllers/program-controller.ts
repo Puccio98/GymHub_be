@@ -46,5 +46,31 @@ export class ProgramController {
                 return res.json({error: "Internal server error"});
         }
     }
+
+    /**
+     * Metodo che effettua la cancellazione di una scheda, pulendo anche le tabelle che contengono gli allenamenti e gli esercizi per ogni allenamento.
+     * La cancellazione avviene solamente se l'utente che ha richiesto l'eliminazione della scheda è anche colui che la possiede.
+     * @param req
+     * @param res
+     */
+    static delete = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const programID: number = Number(req.params['program_id']);
+        const userJWT = req.AccessPayloadJWT;
+
+        //TODO creare metodo per verificare i parametri i query params cosi come verifichiamo i DTO tramite YUP
+        //TODO DEVE STARE IN UNA TRANSACTION MADONNA DI DIO SONO DUE MESI CHE DICO DI DOVERLO FARE E ANCORA NON L'HO FATTO
+        const deleteResponse: ServiceResponse<boolean> = await ProgramService.delete(programID, userJWT.UserID);
+
+        switch (deleteResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.json(deleteResponse.message)
+            case ServiceStatusEnum.ERROR:
+                return res.json({error: deleteResponse.message});
+            default:
+                return res.json({error: "Internal server error"});
+            //response.status(code).send(new Error('description'));
+
+        }
+    }
 }
 
