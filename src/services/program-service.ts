@@ -83,4 +83,26 @@ export class ProgramService {
             }
         }
     }
+
+    static async delete(programID: number, userID: number): Promise<ServiceResponse<boolean>> {
+        try {
+            if (await ProgramDao.delete(programID, userID)) {
+                return {
+                    data: true,
+                    status: ServiceStatusEnum.SUCCESS,
+                    message: 'Program deleted'
+                };
+            } else {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'User can\'t delete the requested program'
+                };
+            }
+        } catch {
+            return {
+                status: ServiceStatusEnum.ERROR,
+                message: 'Something went wrong'
+            }
+        }
+    }
 }

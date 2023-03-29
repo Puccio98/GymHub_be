@@ -11,5 +11,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.post('/program_create', validateDto(programCreateValidator), ProgramController.create)
 
+    router.delete('/:program_id', ProgramController.delete)
+
     app.use('/program', router);
 };

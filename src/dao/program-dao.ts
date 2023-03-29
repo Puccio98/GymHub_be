@@ -61,6 +61,37 @@ export class ProgramDao {
             });
     }
 
+    static async delete(programID: number, userID: number): Promise<boolean> {
+        // Verifico che l'utente possieda la scheda che vuole eliminare
+        const schedaList: ProgramItem[] = await db('Program as p')
+            .where({'p.UserID': userID, 'p.ProgramID': programID})
+            .select()
+
+        // Se non ho trovato la scheda da eliminare dall'utente che l'ha richiesta non elimino nulla.
+        if (schedaList.length !== 1) {
+            return false;
+        }
+
+        // Elimino esercizi degli allenamenti della scheda richiesta se l'utente coincide
+        await db('Exercises_Workout')
+            .join('Workout AS w', 'w.WorkoutID', 'Exercises_Workout.WorkoutID')
+            .where('w.ProgramID', programID)
+            .delete();
+
+        // Elimino tutti gli allenamenti della scheda
+        await db('Workout')
+            .join('Program AS p', 'Workout.ProgramID', 'p.ProgramID')
+            .where('p.ProgramID', programID)
+            .delete();
+
+        // Elimino la scheda
+        await db('Program')
+            .where('ProgramID', programID)
+            .delete();
+
+        return true;
+    }
+
 
     //endregion
 }
