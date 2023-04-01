@@ -12,11 +12,11 @@ export class WeightController {
 
         switch (fetchWeightsResult.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(fetchWeightsResult.data)
+                return res.status(200).send(fetchWeightsResult.data);
             case ServiceStatusEnum.ERROR:
-                return res.json({error: fetchWeightsResult.message});
+                return res.status(400).send({error: fetchWeightsResult.message});
             default:
-                return res.json({error: "Internal server error"});
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 
@@ -26,11 +26,11 @@ export class WeightController {
 
         switch (postNewWeightResult.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(postNewWeightResult.data)
+                return res.status(200).send(postNewWeightResult.data);
             case ServiceStatusEnum.ERROR:
-                return res.json({error: postNewWeightResult.message});
+                return res.status(400).send({error: postNewWeightResult.message});
             default:
-                return res.json({error: "Internal server error"});
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 }
