@@ -15,11 +15,11 @@ export class AuthController {
 
         switch (loginUserResult.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(loginUserResult.data)
+                return res.status(200).send(loginUserResult.data)
             case ServiceStatusEnum.ERROR:
-                return res.json({error: loginUserResult.message});
+                return res.status(400).send({error: loginUserResult.message});
             default:
-                return res.json({error: "Internal server error"});
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 
@@ -29,11 +29,11 @@ export class AuthController {
 
         switch (signupResult.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(signupResult.data)
+                return res.status(200).send(signupResult.data);
             case ServiceStatusEnum.ERROR:
-                return res.json({error: signupResult.message});
+                return res.status(400).send({error: signupResult.message});
             default:
-                return res.json({error: "Internal server error"});
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 
@@ -42,16 +42,16 @@ export class AuthController {
         const logoutResult: ServiceResponse<boolean> = await AuthService.logout(accessPayload.UserID);
         // Praticamente impossibile che entri qui
         if (!accessPayload) {
-            return res.json({error: 'AccessToken not found'});
+            return res.status(400).send({error: 'AccessToken not found'});
         }
 
         switch (logoutResult.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(logoutResult.data)
+                return res.status(200).send(logoutResult.data);
             case ServiceStatusEnum.ERROR:
-                return res.json({error: logoutResult.message});
+                return res.status(400).send({error: logoutResult.message});
             default:
-                return res.json({error: "Internal server error"});
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 
@@ -61,11 +61,11 @@ export class AuthController {
 
         switch (refreshTokenResult.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(refreshTokenResult.data)
+                return res.status(200).send(refreshTokenResult.data);
             case ServiceStatusEnum.ERROR:
-                return res.json({error: refreshTokenResult.message});
+                return res.status(400).send({error: refreshTokenResult.message});
             default:
-                return res.json({error: "Internal server error"});
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 }
