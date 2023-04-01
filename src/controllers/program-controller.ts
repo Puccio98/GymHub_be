@@ -11,11 +11,11 @@ export class ProgramController {
         const exerciseList: ServiceResponse<ExerciseDto[]> = await ProgramService.getStandardExercises();
         switch (exerciseList.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(exerciseList.data)
+                return res.status(200).send(exerciseList.data);
             case ServiceStatusEnum.ERROR:
-                return res.json({error: exerciseList.message});
+                return res.status(400).send({error: exerciseList.message});
             default:
-                return res.json({error: "Internal server error"});
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 
@@ -25,11 +25,11 @@ export class ProgramController {
 
         switch (programList.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(programList.data)
+                return res.status(200).send(programList.data);
             case ServiceStatusEnum.ERROR:
-                return res.json({error: programList.message});
+                return res.status(400).send({error: programList.message});
             default:
-                return res.json({error: "Internal server error"});
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 
@@ -39,11 +39,11 @@ export class ProgramController {
 
         switch (programList.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(programList.data)
+                return res.status(200).send(programList.data);
             case ServiceStatusEnum.ERROR:
-                return res.json({error: programList.message});
+                return res.status(400).send({error: programList.message});
             default:
-                return res.json({error: "Internal server error"});
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 
@@ -63,13 +63,11 @@ export class ProgramController {
 
         switch (deleteResponse.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.json(deleteResponse.message)
+                return res.status(200).send(deleteResponse.data);
             case ServiceStatusEnum.ERROR:
-                return res.json({error: deleteResponse.message});
+                return res.status(400).send({error: deleteResponse.message});
             default:
-                return res.json({error: "Internal server error"});
-            //response.status(code).send(new Error('description'));
-
+                return res.status(500).send({error: "Internal server error"});
         }
     }
 }
