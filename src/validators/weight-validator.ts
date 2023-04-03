@@ -8,7 +8,9 @@ module.exports = yup.object().shape({
         console.log('data settata a 0: ' + data);
         console.log('data corrente server: ' + new Date());
 
-        console.log('data è minore di new Date()? ' + data < new Date());
+        const result: boolean = data < new Date();
+
+        console.log('data è minore di new Date()? ' + result.toString());
 
         return data;
     }).max(new Date(), "Cannot use future date"),
