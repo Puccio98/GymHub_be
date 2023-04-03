@@ -129,6 +129,8 @@ export class AuthService {
                         message: 'Refresh token non presente tra quelli validi in DB'
                     }
                 }
+                //TODO Luca: controlla questo codice
+                await TokenDao.delete(userJWT.UserID);
                 tokenDto = await AuthHelper.createTokenDto(userJWT.Email, userJWT.UserID);
             });
             if (tokenDto) {
