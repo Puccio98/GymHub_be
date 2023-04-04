@@ -14,8 +14,8 @@ module.exports = yup.object().shape({
             console.log('data è minore di new Date()? ' + result.toString());
 
             return data;
-        })
-    }).max(new Date(), "Cannot use future date"),
+        }).max(new Date(), "Cannot use future date")
+    }),
     createdAt: yup.date().default(() => new Date()),
     updatedAt: yup.date().default(() => new Date())
 });
