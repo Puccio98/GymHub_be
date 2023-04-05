@@ -17,7 +17,9 @@ export class ProgramDao {
             .join('Exercise AS e', 'e_w.ExerciseID', 'e.ExerciseID')
             .where({'u.UserID': userID})
             .select(['p.*', 'w.*', 'e_w.*', 'e.*'])
-            .orderBy([{column: 'p.ProgramID', order: 'desc'}])
+            .orderBy([{column: 'p.ProgramID', order: 'desc'},
+                {column: 'w.WorkoutID', order: 'asc'},
+                {column: 'e_w.Exercise_WorkoutID', order: 'asc'}])
             .options({nestTables: true});
         return res;
     }
