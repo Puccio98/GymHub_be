@@ -1,4 +1,4 @@
 export enum ExpirationTime {
-    ACCESS = '1h',
+    ACCESS = '3m',
     REFRESH = '48h'
 }
