@@ -4,10 +4,11 @@
   "description": "",
   "main": "src/app.ts",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/app.ts",
     "start-prod": "tsc && node dist/app.js",
-    "build": "tsc"
+    "update_production": "tsc && git push heroku master"
   },
   "repository": {
     "type": "git",
@@ -15,10 +16,6 @@
   },
   "author": "Luca Maltempo",
   "license": "ISC",
-  "engines": {
-    "node": "16.x",
-    "npm": "9.x"
-  },
   "dependencies": {
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",
