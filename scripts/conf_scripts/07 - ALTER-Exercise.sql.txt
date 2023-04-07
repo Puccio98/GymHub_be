@@ -1,0 +1,78 @@
+ALTER TABLE Exercise
+ADD Name varchar(255) NULL;
+
+UPDATE Exercise
+SET Name = 'Back Squat'
+WHERE ExerciseID = 1;
+
+UPDATE Exercise
+SET Name = 'Front Squat'
+WHERE ExerciseID = 2;
+
+UPDATE Exercise
+SET Name = 'Sumo Squat'
+WHERE ExerciseID = 3;
+
+UPDATE Exercise
+SET Name = 'Bench Press'
+WHERE ExerciseID = 4;
+
+UPDATE Exercise
+SET Name = 'Incline Bench Press'
+WHERE ExerciseID = 5;
+
+UPDATE Exercise
+SET Name = 'Larsen Press'
+WHERE ExerciseID = 6;
+
+UPDATE Exercise
+SET Name = 'Spoto Press'
+WHERE ExerciseID = 7;
+
+UPDATE Exercise
+SET Name = 'Conventional Deadlift'
+WHERE ExerciseID = 8;
+
+UPDATE Exercise
+SET Name = 'Sumo Deadlift'
+WHERE ExerciseID = 9;
+
+UPDATE Exercise
+SET Name = 'Trap Bar Deadlift'
+WHERE ExerciseID = 10;
+
+UPDATE Exercise
+SET Name = 'Lat Pulldown'
+WHERE ExerciseID = 11;
+
+UPDATE Exercise
+SET Name = 'Hack Squat'
+WHERE ExerciseID = 12;
+
+UPDATE Exercise
+SET Name = 'Pulley'
+WHERE ExerciseID = 13;
+
+UPDATE Exercise
+SET Name = 'Leg Raises'
+WHERE ExerciseID = 14;
+
+UPDATE Exercise
+SET Name = 'Pull Up'
+WHERE ExerciseID = 15;
+
+ALTER TABLE Exercise
+DROP COLUMN Title;
+
+ALTER TABLE Exercise
+DROP COLUMN Subtitle;
+
+ALTER TABLE Exercise
+DROP COLUMN Description;
+
+ALTER TABLE Exercise 
+CHANGE Name
+Name VARCHAR(255) NOT NULL;
+
+ALTER TABLE Exercise
+ADD CONSTRAINT UC_Exercise_Name UNIQUE (Name);
