@@ -73,6 +73,7 @@ export class ProgramLib {
         return {
             WorkoutID: workoutID,
             ExerciseID: e.exerciseID,
+            Description: e.description,
             Set: e.set,
             Rep: e.rep,
             Weight: e.weight,
@@ -87,6 +88,7 @@ export class ProgramLib {
             // ExerciseWorkoutItem
             exercise_WorkoutID: ew.Exercise_WorkoutID,
             workoutID: ew.WorkoutID,
+            description: ew.Description,
             set: ew.Set,
             rep: ew.Rep,
             weight: ew.Weight,
@@ -96,9 +98,7 @@ export class ProgramLib {
 
             // ExerciseItem
             exerciseID: e.ExerciseID,
-            title: e.Title,
-            subtitle: e.Subtitle,
-            description: e.Description
+            name: e.Name
         } as ExerciseWorkoutDto
     }
 
@@ -106,9 +106,7 @@ export class ProgramLib {
         return {
             // ExerciseItem
             exerciseID: e.ExerciseID,
-            title: e.Title,
-            subtitle: e.Subtitle,
-            description: e.Description
+            name: e.Name
         } as ExerciseDto
     }
 

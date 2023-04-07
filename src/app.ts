@@ -25,7 +25,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(helmet());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static!(path.join(__dirname, 'public')));
 //TODO valutare se aggiungre un url tra quelli accettati da cors invece che accettare chiamate che arrivano da ogni dove
 app.use(cors());
 // {

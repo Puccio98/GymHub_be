@@ -19,6 +19,7 @@ export interface WorkoutCreateDTO {
 
 export interface ExerciseCreateDTO {
     exerciseID: number;
+    description: string;
     set: number;
     rep: number;
     weight: number;
