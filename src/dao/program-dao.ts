@@ -91,13 +91,13 @@ export class ProgramDao {
             .where('ProgramID', programID)
             .delete();
 
-        if (schedaList[0].ProgramStateID === 2) {
+        if (schedaList[0].ProgramStateID === ProgramStateEnum.ACTIVE) {
             //Se la scheda era una scheda attiva, devo poi settare la vecchia scheda più recente come nuova scheda attiva
             await db('Program')
                 .where('userID', userID)
                 .orderBy('ProgramID', 'desc')
                 .limit(1)
-                .update('ProgramStateID', 2);
+                .update('ProgramStateID', ProgramStateEnum.ACTIVE);
         }
         return true;
     }
