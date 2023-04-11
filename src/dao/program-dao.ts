@@ -104,7 +104,24 @@ export class ProgramDao {
     }
 
     static async completeExercise(exercise: ExerciseWorkoutDto, userID: number):Promise<boolean> {
-        //TODO: check che l'esercizio appartenga all'utente che manda la richiesta
+        //Verifico che l'esercizio che deve essere completato appartenga all'utente
+        const userPrograms: any[] = await db('User AS u')
+            .join('Program AS p', 'u.UserID', 'p.UserID')
+            .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
+            .where({'u.UserID': userID})
+            .select();
+
+        const workoutID = userPrograms.map(w => {
+            return w.WorkoutID;
+        }).filter(w => {
+            return w === exercise.workoutID;
+        });
+
+        //Se l'esercizio non era dell'utente giusto, ritorno false e non faccio l'update
+        if(workoutID.length < 1) {
+            return false;
+        }
+
         await db('Exercises_Workout')
             .where({'Exercise_WorkoutID': exercise.exercise_WorkoutID})
             .update({
