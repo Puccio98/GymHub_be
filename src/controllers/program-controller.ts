@@ -5,6 +5,7 @@ import {ProgramDto} from "../dto/programDto/program-dto";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 
 export class ProgramController {
     static getStandardExercises = async (req: Request, res: Response) => {
@@ -69,6 +70,28 @@ export class ProgramController {
             default:
                 return res.status(500).send({error: "Internal server error"});
         }
+    }
+
+    static completeExercise = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const exercise: ExerciseWorkoutDto = req.body;
+        const userJWT = req.AccessPayloadJWT;
+        const completeExerciseResponse: ServiceResponse<boolean> = await ProgramService.completeExercise(exercise, userJWT.UserID);
+        switch (completeExerciseResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(completeExerciseResponse.data);
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: completeExerciseResponse.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
+    }
+
+    static completeWorkout = async (req: IGetUserAuthInfoRequest, res: Response) => {
+
+    }
+
+    static completeProgram = async (req: IGetUserAuthInfoRequest, res: Response) => {
+
     }
 }
 
