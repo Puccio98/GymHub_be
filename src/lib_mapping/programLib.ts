@@ -19,7 +19,8 @@ export class ProgramLib {
             description: programItem.Description,
             programStateID: programItem.ProgramStateID,
             numberOfWorkout: programItem.NumberOfWorkout,
-            workoutList: []
+            workoutList: [],
+            statusID: programItem.StatusID
         } as ProgramDto
     }
 
@@ -39,7 +40,8 @@ export class ProgramLib {
             workoutID: workoutItem.WorkoutID,
             programID: workoutItem.ProgramID,
             isDone: workoutItem.IsDone,
-            exerciseList: []
+            exerciseList: [],
+            statusID: workoutItem.StatusID
         } as WorkoutDto
     }
 
@@ -79,7 +81,7 @@ export class ProgramLib {
             Weight: e.weight,
             RPE: e.RPE,
             createdAt: e.createdAt,
-            updatedAt: e.updatedAt,
+            updatedAt: e.updatedAt
         }
     }
 
@@ -95,6 +97,7 @@ export class ProgramLib {
             RPE: ew.RPE,
             RM: ew.RM,
             percentage: ew.Percentage,
+            statusID: ew.StatusID,
 
             // ExerciseItem
             exerciseID: e.ExerciseID,

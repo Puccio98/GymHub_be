@@ -9,7 +9,8 @@ export interface ExerciseWorkoutDto extends ExerciseDto {
     weight: number,
     RPE?: number,
     RM?: number,
-    percentage?: number
+    percentage?: number,
+    statusID: number
 }
 
 

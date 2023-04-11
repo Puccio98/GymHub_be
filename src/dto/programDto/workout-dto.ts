@@ -4,7 +4,8 @@ export interface WorkoutDto {
     workoutID?: number,
     programID: number,
     isDone: boolean,
-    exerciseList: ExerciseWorkoutDto[]
+    exerciseList: ExerciseWorkoutDto[],
+    statusID: number
 }
 
 

@@ -8,7 +8,8 @@ export interface ProgramDto {
     description?: string,
     programStateID: ProgramStateEnum,
     numberOfWorkout?: number
-    workoutList: WorkoutDto[]
+    workoutList: WorkoutDto[],
+    statusID: number
 }
 
 export {}

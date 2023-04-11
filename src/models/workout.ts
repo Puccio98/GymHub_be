@@ -4,6 +4,7 @@ export interface WorkoutItem {
     IsDone: boolean,
     createdAt?: Date,
     updatedAt?: Date
+    StatusID?: number
 }
 
 
