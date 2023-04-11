@@ -5,6 +5,7 @@ import {ProgramItem} from "../models/program";
 import {WorkoutItem} from "../models/workout";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
 import {ProgramStateEnum} from "../enums/program-state-enum";
+import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 
 
 export class ProgramDao {
@@ -99,6 +100,22 @@ export class ProgramDao {
                 .limit(1)
                 .update('ProgramStateID', ProgramStateEnum.ACTIVE);
         }
+        return true;
+    }
+
+    static async completeExercise(exercise: ExerciseWorkoutDto, userID: number):Promise<boolean> {
+        //TODO: check che l'esercizio appartenga all'utente che manda la richiesta
+        await db('Exercises_Workout')
+            .where({'Exercise_WorkoutID': exercise.exercise_WorkoutID})
+            .update({
+                set: exercise.set,
+                rep: exercise.rep,
+                weight: exercise.weight,
+                RPE: exercise.RPE,
+                RM: exercise.RM,
+                percentage: exercise.percentage,
+                statusID: exercise.statusID
+            });
         return true;
     }
     //endregion

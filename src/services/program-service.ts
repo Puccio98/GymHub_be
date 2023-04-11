@@ -5,6 +5,7 @@ import {ProgramLib} from "../lib_mapping/programLib";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
 import {ExerciseItem} from "../models/exercise";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
+import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 
 export class ProgramService {
 
@@ -98,6 +99,60 @@ export class ProgramService {
                     message: 'User can\'t delete the requested program'
                 };
             }
+        } catch {
+            return {
+                status: ServiceStatusEnum.ERROR,
+                message: 'Something went wrong'
+            }
+        }
+    }
+
+    static async completeExercise(exercise: ExerciseWorkoutDto, userID: number): Promise<ServiceResponse<boolean>> {
+        try {
+            if (await ProgramDao.completeExercise(exercise, userID)) {
+                return {
+                    data: true,
+                    status: ServiceStatusEnum.SUCCESS,
+                    message: 'Exercise completed'
+                };
+            } else {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'User can\'t update the requested exercise'
+                };
+            }
+        } catch {
+            return {
+                status: ServiceStatusEnum.ERROR,
+                message: 'Something went wrong'
+            }
+        }
+    }
+
+    static async completeWorkout(workoutID: number): Promise<ServiceResponse<boolean>> {
+        try {
+            //TODO: fai la funzione
+            return {
+                data: true,
+                status: ServiceStatusEnum.SUCCESS,
+                message: 'messaggio provvisorio'
+            };
+        } catch {
+            return {
+                status: ServiceStatusEnum.ERROR,
+                message: 'Something went wrong'
+            }
+        }
+    }
+
+    static async completeProgram(programID: number): Promise<ServiceResponse<boolean>> {
+        try {
+            //TODO: fai la funzione
+            return {
+                data: true,
+                status: ServiceStatusEnum.SUCCESS,
+                message: 'messaggio provvisorio'
+            };
         } catch {
             return {
                 status: ServiceStatusEnum.ERROR,

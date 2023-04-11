@@ -9,9 +9,15 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.get('/program_get_exercises', ProgramController.getStandardExercises);
 
-    router.post('/program_create', validateDto(programCreateValidator), ProgramController.create)
+    router.post('/program_create', validateDto(programCreateValidator), ProgramController.create);
 
-    router.delete('/:program_id', ProgramController.delete)
+    router.delete('/:program_id', ProgramController.delete);
+
+    router.post('/program_complete_exercise', ProgramController.completeExercise);
+
+    router.post('/program_complete_workout', ProgramController.completeWorkout);
+
+    router.post('/program_complete_program', ProgramController.completeProgram);
 
     app.use('/program', router);
 };
