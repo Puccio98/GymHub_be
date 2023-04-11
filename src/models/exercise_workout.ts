@@ -11,6 +11,7 @@ export interface ExerciseWorkoutItem {
     Percentage?: number,
     createdAt?: Date,
     updatedAt?: Date,
+    StatusID?: number
 }
 
 
