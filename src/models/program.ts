@@ -1,4 +1,5 @@
 import {ProgramStateEnum} from "../enums/program-state-enum";
+import {ExerciseStatus} from "../enums/exercise-status.enum";
 
 export interface ProgramItem {
     ProgramID?: number,
@@ -9,7 +10,7 @@ export interface ProgramItem {
     NumberOfWorkout?: number,
     createdAt?: Date,
     updatedAt?: Date,
-    StatusID?: number
+    StatusID?: ExerciseStatus
 }
 
 

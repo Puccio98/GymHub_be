@@ -6,6 +6,7 @@ import {WorkoutItem} from "../models/workout";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
 import {ProgramStateEnum} from "../enums/program-state-enum";
 import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
+import {ExerciseStatus} from "../enums/exercise-status.enum";
 
 
 export class ProgramDao {
@@ -148,7 +149,7 @@ export class ProgramDao {
         }
 
         const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
-            .where({'WorkoutID': workoutID, 'StatusID': 1});
+            .where({'WorkoutID': workoutID, 'StatusID': ExerciseStatus.INCOMPLETE});
 
         if (uncompletedExercises.length > 0) {
             return false;
@@ -158,7 +159,7 @@ export class ProgramDao {
         await db('Workout')
             .where({'WorkoutID': workoutID})
             .update({
-                StatusID: 2
+                StatusID: ExerciseStatus.COMPLETE
             });
 
         return true;
@@ -175,7 +176,7 @@ export class ProgramDao {
         }
 
         const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
-            .where({'ProgramID': programID, 'StatusID': 1});
+            .where({'ProgramID': programID, 'StatusID': ExerciseStatus.INCOMPLETE});
 
         if (uncompletedWorkouts.length > 0) {
             return false;
@@ -185,7 +186,7 @@ export class ProgramDao {
         await db('Program')
             .where({'ProgramID': programID})
             .update({
-                StatusID: 2
+                StatusID: ExerciseStatus.COMPLETE
             })
 
         return true;
