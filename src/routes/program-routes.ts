@@ -15,9 +15,9 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.post('/program_complete_exercise', ProgramController.completeExercise);
 
-    router.post('/program_complete_workout', ProgramController.completeWorkout);
+    router.get('/program_complete_workout/:workout_id', ProgramController.completeWorkout);
 
-    router.post('/program_complete_program', ProgramController.completeProgram);
+    router.get('/program_complete_program/:program_id', ProgramController.completeProgram);
 
     app.use('/program', router);
 };

@@ -87,11 +87,32 @@ export class ProgramController {
     }
 
     static completeWorkout = async (req: IGetUserAuthInfoRequest, res: Response) => {
-
+        const workoutID: number = Number(req.params['workout_id']);
+        console.log(workoutID);
+        const userJWT = req.AccessPayloadJWT;
+        const completeWorkoutResponse: ServiceResponse<boolean> = await ProgramService.completeWorkout(workoutID, userJWT.UserID);
+        switch (completeWorkoutResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(completeWorkoutResponse.data);
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: completeWorkoutResponse.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
     }
 
     static completeProgram = async (req: IGetUserAuthInfoRequest, res: Response) => {
-
+        const programID: number = Number(req.params['program_id']);
+        const userJWT = req.AccessPayloadJWT;
+        const completeProgramResponse: ServiceResponse<boolean> = await ProgramService.completeProgram(programID, userJWT.UserID);
+        switch (completeProgramResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(completeProgramResponse.data);
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: completeProgramResponse.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
     }
 }
 
