@@ -147,7 +147,14 @@ export class ProgramDao {
             return false;
         }
 
-        //Se il controllo passa si fa l'update dello status
+        const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
+            .where({'WorkoutID': workoutID, 'StatusID': 1});
+
+        if (uncompletedExercises.length > 0) {
+            return false;
+        }
+
+        //Se i controlli passano si fa l'update dello status
         await db('Workout')
             .where({'WorkoutID': workoutID})
             .update({
@@ -167,7 +174,14 @@ export class ProgramDao {
             return false;
         }
 
-        //Se il controllo passa si fa l'update della scheda
+        const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
+            .where({'ProgramID': programID, 'StatusID': 1});
+
+        if (uncompletedWorkouts.length > 0) {
+            return false;
+        }
+
+        //Se i controlli passano si fa l'update della scheda
         await db('Program')
             .where({'ProgramID': programID})
             .update({
