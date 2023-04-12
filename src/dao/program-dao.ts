@@ -135,5 +135,47 @@ export class ProgramDao {
             });
         return true;
     }
+
+    static async completeWorkout (workoutID: number, userID: number): Promise<boolean> {
+        //verifica che l'utente possegga l'allenamento
+        const userWorkout: any[] = await db('Program AS p')
+            .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
+            .where({'p.UserID': userID, 'w.WorkoutID': workoutID})
+            .select();
+
+        if(userWorkout.length < 1) {
+            return false;
+        }
+
+        //Se il controllo passa si fa l'update dello status
+        await db('Workout')
+            .where({'WorkoutID': workoutID})
+            .update({
+                StatusID: 2
+            });
+
+        return true;
+    }
+
+    static async completeProgram (programID: number, userID: number): Promise<boolean> {
+        //verifica che l'utente possegga la scheda
+        const userProgram: any[] = await db('Program')
+            .where({'UserID': userID, 'ProgramID': programID})
+            .select();
+
+        if(userProgram.length < 1) {
+            return false;
+        }
+
+        //Se il controllo passa si fa l'update della scheda
+        await db('Program')
+            .where({'ProgramID': programID})
+            .update({
+                StatusID: 2
+            })
+
+        return true;
+    }
+
     //endregion
 }

@@ -129,14 +129,20 @@ export class ProgramService {
         }
     }
 
-    static async completeWorkout(workoutID: number): Promise<ServiceResponse<boolean>> {
+    static async completeWorkout(workoutID: number, userID: number): Promise<ServiceResponse<boolean>> {
         try {
-            //TODO: fai la funzione
-            return {
-                data: true,
-                status: ServiceStatusEnum.SUCCESS,
-                message: 'messaggio provvisorio'
-            };
+            if (await ProgramDao.completeWorkout(workoutID, userID)) {
+                return {
+                    data: true,
+                    status: ServiceStatusEnum.SUCCESS,
+                    message: 'Workout completed'
+                };
+            } else {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'User can\'t update the requested workout'
+                };
+            }
         } catch {
             return {
                 status: ServiceStatusEnum.ERROR,
@@ -145,14 +151,20 @@ export class ProgramService {
         }
     }
 
-    static async completeProgram(programID: number): Promise<ServiceResponse<boolean>> {
+    static async completeProgram(programID: number, userID: number): Promise<ServiceResponse<boolean>> {
         try {
-            //TODO: fai la funzione
-            return {
-                data: true,
-                status: ServiceStatusEnum.SUCCESS,
-                message: 'messaggio provvisorio'
-            };
+            if (await ProgramDao.completeProgram(programID, userID)) {
+                return {
+                    data: true,
+                    status: ServiceStatusEnum.SUCCESS,
+                    message: 'Program completed'
+                };
+            } else {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'User can\'t update the requested program'
+                };
+            }
         } catch {
             return {
                 status: ServiceStatusEnum.ERROR,
