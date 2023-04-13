@@ -109,7 +109,7 @@ export class ProgramDao {
         const query: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
             .join('Exercises_Workout AS ew', 'w.WorkoutID', 'ew.WorkoutID')
-            .where({'u.UserID': userID, 'w.WorkoutID': exercise.workoutID, 'ew.Exercise_WorkoutID': exercise.exercise_WorkoutID})
+            .where({'p.UserID': userID, 'w.WorkoutID': exercise.workoutID, 'ew.Exercise_WorkoutID': exercise.exercise_WorkoutID})
             .select();
 
         //Se l'esercizio non era dell'utente giusto, ritorno false e non faccio l'update
@@ -128,6 +128,7 @@ export class ProgramDao {
                 percentage: exercise.percentage,
                 statusID: exercise.statusID
             });
+
         return true;
     }
 
