@@ -5,7 +5,8 @@ import {ProgramLib} from "../lib_mapping/programLib";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
 import {ExerciseItem} from "../models/exercise";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
-import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
+import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
+import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
 
 export class ProgramService {
 
@@ -107,7 +108,7 @@ export class ProgramService {
         }
     }
 
-    static async completeExercise(exercise: ExerciseWorkoutDto, userID: number): Promise<ServiceResponse<boolean>> {
+    static async completeExercise(exercise: UpdateExerciseDto, userID: number): Promise<ServiceResponse<boolean>> {
         try {
             if (await ProgramDao.completeExercise(exercise, userID)) {
                 return {
@@ -129,9 +130,9 @@ export class ProgramService {
         }
     }
 
-    static async completeWorkout(workoutID: number, userID: number): Promise<ServiceResponse<boolean>> {
+    static async completeWorkout(workoutDto: UpdateWorkoutDto, userID: number): Promise<ServiceResponse<boolean>> {
         try {
-            if (await ProgramDao.completeWorkout(workoutID, userID)) {
+            if (await ProgramDao.completeWorkout(workoutDto, userID)) {
                 return {
                     data: true,
                     status: ServiceStatusEnum.SUCCESS,

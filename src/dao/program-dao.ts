@@ -5,8 +5,9 @@ import {ProgramItem} from "../models/program";
 import {WorkoutItem} from "../models/workout";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
 import {ProgramStateEnum} from "../enums/program-state-enum";
-import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 import {ExerciseStatus} from "../enums/exercise-status.enum";
+import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
+import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
 
 
 export class ProgramDao {
@@ -104,12 +105,16 @@ export class ProgramDao {
         return true;
     }
 
-    static async completeExercise(exercise: ExerciseWorkoutDto, userID: number):Promise<boolean> {
+    static async completeExercise(exercise: UpdateExerciseDto, userID: number):Promise<boolean> {
         //Verifico che l'esercizio che deve essere completato appartenga all'utente
         const query: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
             .join('Exercises_Workout AS ew', 'w.WorkoutID', 'ew.WorkoutID')
-            .where({'p.UserID': userID, 'w.WorkoutID': exercise.workoutID, 'ew.Exercise_WorkoutID': exercise.exercise_WorkoutID})
+            .where({
+                'p.UserID': userID,
+                'w.WorkoutID': exercise.workoutID,
+                'ew.Exercise_WorkoutID': exercise.exercise_WorkoutID,
+                'p.ProgramID': exercise.programID})
             .select();
 
         //Se l'esercizio non era dell'utente giusto, ritorno false e non faccio l'update
@@ -132,11 +137,11 @@ export class ProgramDao {
         return true;
     }
 
-    static async completeWorkout (workoutID: number, userID: number): Promise<boolean> {
+    static async completeWorkout (workoutDto: UpdateWorkoutDto, userID: number): Promise<boolean> {
         //verifica che l'utente possegga l'allenamento
         const userWorkout: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
-            .where({'p.UserID': userID, 'w.WorkoutID': workoutID})
+            .where({'p.UserID': userID, 'w.WorkoutID': workoutDto.workoutID, 'p.ProgramID': workoutDto.programID})
             .select();
 
         if(userWorkout.length < 1) {
@@ -144,7 +149,7 @@ export class ProgramDao {
         }
 
         const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
-            .where({'WorkoutID': workoutID, 'StatusID': ExerciseStatus.INCOMPLETE});
+            .where({'WorkoutID': workoutDto.workoutID, 'StatusID': ExerciseStatus.INCOMPLETE});
 
         if (uncompletedExercises.length > 0) {
             return false;
@@ -152,7 +157,7 @@ export class ProgramDao {
 
         //Se i controlli passano si fa l'update dello status
         await db('Workout')
-            .where({'WorkoutID': workoutID})
+            .where({'WorkoutID': workoutDto.workoutID})
             .update({
                 StatusID: ExerciseStatus.COMPLETE
             });
