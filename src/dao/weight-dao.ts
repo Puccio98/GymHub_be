@@ -12,12 +12,13 @@ export class WeightDao {
     }
 
     static async findIfWeightExists(date: Date, userID: number): Promise<WeightItem> {
-        const exWeight = await db('Weight').where({date: new Date(date.setHours(0,0,0,0)), userID: userID}).select('*');
+        date.setHours(0,0,0,0);
+        const exWeight = await db('Weight').where({date: date, userID: userID}).select('*');
         return exWeight[0];
     }
 
     static async createNewWeight(weightItem: WeightItem): Promise<boolean> {
-        weightItem.Date = new Date(weightItem.Date.setHours(0, 0, 0, 0));
+        weightItem.Date.setHours(0, 0, 0, 0);
         await db('Weight').insert(weightItem);
         return true;
     }
