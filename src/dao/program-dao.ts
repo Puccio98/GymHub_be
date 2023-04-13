@@ -105,7 +105,7 @@ export class ProgramDao {
         return true;
     }
 
-    static async completeExercise(exercise: UpdateExerciseDto, userID: number):Promise<boolean> {
+    static async updateExercise(exercise: UpdateExerciseDto, userID: number):Promise<boolean> {
         //Verifico che l'esercizio che deve essere completato appartenga all'utente
         const query: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
@@ -137,7 +137,7 @@ export class ProgramDao {
         return true;
     }
 
-    static async completeWorkout (workoutDto: UpdateWorkoutDto, userID: number): Promise<boolean> {
+    static async updateWorkout (workoutDto: UpdateWorkoutDto, userID: number): Promise<boolean> {
         //verifica che l'utente possegga l'allenamento
         const userWorkout: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
@@ -165,7 +165,7 @@ export class ProgramDao {
         return true;
     }
 
-    static async completeProgram (programID: number, userID: number): Promise<boolean> {
+    static async updateProgram (programID: number, userID: number): Promise<boolean> {
         //verifica che l'utente possegga la scheda
         const userProgram: any[] = await db('Program')
             .where({'UserID': userID, 'ProgramID': programID})
