@@ -108,9 +108,9 @@ export class ProgramService {
         }
     }
 
-    static async completeExercise(exercise: UpdateExerciseDto, userID: number): Promise<ServiceResponse<boolean>> {
+    static async updateExercise(exercise: UpdateExerciseDto, userID: number): Promise<ServiceResponse<boolean>> {
         try {
-            if (await ProgramDao.completeExercise(exercise, userID)) {
+            if (await ProgramDao.updateExercise(exercise, userID)) {
                 return {
                     data: true,
                     status: ServiceStatusEnum.SUCCESS,
@@ -130,9 +130,9 @@ export class ProgramService {
         }
     }
 
-    static async completeWorkout(workoutDto: UpdateWorkoutDto, userID: number): Promise<ServiceResponse<boolean>> {
+    static async updateWorkout(workoutDto: UpdateWorkoutDto, userID: number): Promise<ServiceResponse<boolean>> {
         try {
-            if (await ProgramDao.completeWorkout(workoutDto, userID)) {
+            if (await ProgramDao.updateWorkout(workoutDto, userID)) {
                 return {
                     data: true,
                     status: ServiceStatusEnum.SUCCESS,
@@ -152,9 +152,9 @@ export class ProgramService {
         }
     }
 
-    static async completeProgram(programID: number, userID: number): Promise<ServiceResponse<boolean>> {
+    static async updateProgram(programID: number, userID: number): Promise<ServiceResponse<boolean>> {
         try {
-            if (await ProgramDao.completeProgram(programID, userID)) {
+            if (await ProgramDao.updateProgram(programID, userID)) {
                 return {
                     data: true,
                     status: ServiceStatusEnum.SUCCESS,

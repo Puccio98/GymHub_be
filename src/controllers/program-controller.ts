@@ -73,10 +73,10 @@ export class ProgramController {
         }
     }
 
-    static completeExercise = async (req: IGetUserAuthInfoRequest, res: Response) => {
+    static updateExercise = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const exercise: UpdateExerciseDto = req.body;
         const userJWT = req.AccessPayloadJWT;
-        const completeExerciseResponse: ServiceResponse<boolean> = await ProgramService.completeExercise(exercise, userJWT.UserID);
+        const completeExerciseResponse: ServiceResponse<boolean> = await ProgramService.updateExercise(exercise, userJWT.UserID);
         switch (completeExerciseResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(completeExerciseResponse.data);
@@ -87,10 +87,10 @@ export class ProgramController {
         }
     }
 
-    static completeWorkout = async (req: IGetUserAuthInfoRequest, res: Response) => {
+    static updateWorkout = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const workoutDto: UpdateWorkoutDto = req.body;
         const userJWT = req.AccessPayloadJWT;
-        const completeWorkoutResponse: ServiceResponse<boolean> = await ProgramService.completeWorkout(workoutDto, userJWT.UserID);
+        const completeWorkoutResponse: ServiceResponse<boolean> = await ProgramService.updateWorkout(workoutDto, userJWT.UserID);
         switch (completeWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(completeWorkoutResponse.data);
@@ -101,10 +101,10 @@ export class ProgramController {
         }
     }
 
-    static completeProgram = async (req: IGetUserAuthInfoRequest, res: Response) => {
+    static updateProgram = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const programID: number = req.body.programID;
         const userJWT = req.AccessPayloadJWT;
-        const completeProgramResponse: ServiceResponse<boolean> = await ProgramService.completeProgram(programID, userJWT.UserID);
+        const completeProgramResponse: ServiceResponse<boolean> = await ProgramService.updateProgram(programID, userJWT.UserID);
         switch (completeProgramResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(completeProgramResponse.data);

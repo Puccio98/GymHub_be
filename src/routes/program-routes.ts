@@ -16,11 +16,11 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.delete('/:program_id', ProgramController.delete);
 
-    router.post('/program_complete_exercise', validateDto(updateExerciseValidator), ProgramController.completeExercise);
+    router.post('/program_update_exercise', validateDto(updateExerciseValidator), ProgramController.updateExercise);
 
-    router.post('/program_complete_workout', validateDto(updateWorkoutValidator), ProgramController.completeWorkout);
+    router.post('/program_update_workout', validateDto(updateWorkoutValidator), ProgramController.updateWorkout);
 
-    router.post('/program_complete_program', validateDto(updateProgramValidator), ProgramController.completeProgram);
+    router.post('/program_update_program', validateDto(updateProgramValidator), ProgramController.updateProgram);
 
     app.use('/program', router);
 };
