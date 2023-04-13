@@ -5,7 +5,8 @@ import {ProgramDto} from "../dto/programDto/program-dto";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
-import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
+import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
+import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
 
 export class ProgramController {
     static getStandardExercises = async (req: Request, res: Response) => {
@@ -73,7 +74,7 @@ export class ProgramController {
     }
 
     static completeExercise = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const exercise: ExerciseWorkoutDto = req.body;
+        const exercise: UpdateExerciseDto = req.body;
         const userJWT = req.AccessPayloadJWT;
         const completeExerciseResponse: ServiceResponse<boolean> = await ProgramService.completeExercise(exercise, userJWT.UserID);
         switch (completeExerciseResponse.status) {
@@ -87,10 +88,9 @@ export class ProgramController {
     }
 
     static completeWorkout = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const workoutID: number = Number(req.params['workout_id']);
-        console.log(workoutID);
+        const workoutDto: UpdateWorkoutDto = req.body;
         const userJWT = req.AccessPayloadJWT;
-        const completeWorkoutResponse: ServiceResponse<boolean> = await ProgramService.completeWorkout(workoutID, userJWT.UserID);
+        const completeWorkoutResponse: ServiceResponse<boolean> = await ProgramService.completeWorkout(workoutDto, userJWT.UserID);
         switch (completeWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(completeWorkoutResponse.data);
@@ -102,7 +102,7 @@ export class ProgramController {
     }
 
     static completeProgram = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const programID: number = Number(req.params['program_id']);
+        const programID: number = req.body.programID;
         const userJWT = req.AccessPayloadJWT;
         const completeProgramResponse: ServiceResponse<boolean> = await ProgramService.completeProgram(programID, userJWT.UserID);
         switch (completeProgramResponse.status) {
