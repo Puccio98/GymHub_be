@@ -6,7 +6,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
     const programCreateValidator = require('../validators/program-create-validator');
     const updateExerciseValidator = require('../validators/update-exercise-validator');
     const updateWorkoutValidator = require('../validators/update-workout-validator');
-    const updateProgramValidator = require('../validators/update-program-validator');
+    const refreshProgramValidator = require('../validators/update-program-validator');
 
     router.get('/program_get', ProgramController.getProgramListByUserID);
 
@@ -20,7 +20,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.post('/program_update_workout', validateDto(updateWorkoutValidator), ProgramController.updateWorkout);
 
-    router.post('/program_update_program', validateDto(updateProgramValidator), ProgramController.updateProgram);
+    router.post('/program_refresh_program', validateDto(refreshProgramValidator), ProgramController.refreshProgram);
 
     app.use('/program', router);
 };

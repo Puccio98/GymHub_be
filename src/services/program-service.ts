@@ -152,9 +152,9 @@ export class ProgramService {
         }
     }
 
-    static async updateProgram(programID: number, userID: number): Promise<ServiceResponse<boolean>> {
+    static async refreshProgram(programID: number, userID: number): Promise<ServiceResponse<boolean>> {
         try {
-            if (await ProgramDao.updateProgram(programID, userID)) {
+            if (await ProgramDao.refreshProgram(programID, userID)) {
                 return {
                     data: true,
                     status: ServiceStatusEnum.SUCCESS,

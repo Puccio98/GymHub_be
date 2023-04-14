@@ -20,7 +20,6 @@ export class ProgramLib {
             programStateID: programItem.ProgramStateID,
             numberOfWorkout: programItem.NumberOfWorkout,
             workoutList: [],
-            statusID: programItem.StatusID
         } as ProgramDto
     }
 
