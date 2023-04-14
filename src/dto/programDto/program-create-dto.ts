@@ -11,7 +11,6 @@ export interface ProgramCreateDTO {
 }
 
 export interface WorkoutCreateDTO {
-    isDone: boolean;
     exerciseList: ExerciseCreateDTO[];
     createdAt?: Date;
     updatedAt?: Date;

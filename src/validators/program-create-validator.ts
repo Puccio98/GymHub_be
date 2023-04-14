@@ -6,7 +6,6 @@ let exerciseType = yup.object().shape({
 })
 
 let workoutType = yup.object().shape({
-    isDone: yup.boolean().required(),
     createdAt: yup.date().default(() => new Date()),
     updatedAt: yup.date().default(() => new Date()),
     exerciseList: yup.array().of(
