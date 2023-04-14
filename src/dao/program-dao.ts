@@ -165,7 +165,7 @@ export class ProgramDao {
         return true;
     }
 
-    static async updateProgram (programID: number, userID: number): Promise<boolean> {
+    static async refreshProgram (programID: number, userID: number): Promise<boolean> {
         //verifica che l'utente possegga la scheda
         const userProgram: any[] = await db('Program')
             .where({'UserID': userID, 'ProgramID': programID})
@@ -183,10 +183,12 @@ export class ProgramDao {
         }
 
         //Se i controlli passano si fa l'update della scheda
-        await db('Program')
-            .where({'ProgramID': programID})
+        await db('Workout as w')
+            .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
+            .where({'w.ProgramID': programID})
             .update({
-                StatusID: ExerciseStatus.COMPLETE
+                'w.StatusID': ExerciseStatus.INCOMPLETE,
+                'ew.StatusID': ExerciseStatus.INCOMPLETE
             })
 
         return true;

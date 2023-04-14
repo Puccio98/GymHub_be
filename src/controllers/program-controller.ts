@@ -101,15 +101,15 @@ export class ProgramController {
         }
     }
 
-    static updateProgram = async (req: IGetUserAuthInfoRequest, res: Response) => {
+    static refreshProgram = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const programID: number = req.body.programID;
         const userJWT = req.AccessPayloadJWT;
-        const completeProgramResponse: ServiceResponse<boolean> = await ProgramService.updateProgram(programID, userJWT.UserID);
-        switch (completeProgramResponse.status) {
+        const refreshProgramResponse: ServiceResponse<boolean> = await ProgramService.refreshProgram(programID, userJWT.UserID);
+        switch (refreshProgramResponse.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.status(200).send(completeProgramResponse.data);
+                return res.status(200).send(refreshProgramResponse.data);
             case ServiceStatusEnum.ERROR:
-                return res.status(400).send({error: completeProgramResponse.message});
+                return res.status(400).send({error: refreshProgramResponse.message});
             default:
                 return res.status(500).send({error: "Internal server error"});
         }
