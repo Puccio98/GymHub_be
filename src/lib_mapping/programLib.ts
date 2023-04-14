@@ -39,7 +39,6 @@ export class ProgramLib {
         return {
             workoutID: workoutItem.WorkoutID,
             programID: workoutItem.ProgramID,
-            isDone: workoutItem.IsDone,
             exerciseList: [],
             statusID: workoutItem.StatusID
         } as WorkoutDto
@@ -65,7 +64,6 @@ export class ProgramLib {
     static WorkoutCreateDtoToWorkoutItem(w: WorkoutCreateDTO, programID: number): WorkoutItem {
         return {
             ProgramID: programID,
-            IsDone: w.isDone,
             createdAt: w.createdAt,
             updatedAt: w.updatedAt,
         }
