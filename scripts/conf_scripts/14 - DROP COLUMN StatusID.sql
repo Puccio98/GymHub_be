@@ -1,0 +1,2 @@
+ALTER TABLE Program
+DROP COLUMN StatusID;
