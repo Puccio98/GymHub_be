@@ -2,7 +2,7 @@ import {ExerciseDto} from "./exercise-dto";
 import {ExerciseStatus} from "../../enums/exercise-status.enum";
 
 export interface ExerciseWorkoutDto extends ExerciseDto {
-    exercise_WorkoutID?: number,
+    exercise_WorkoutID: number,
     workoutID: number,
     description: string,
     set: number,

@@ -7,6 +7,7 @@ import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
 import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
+import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 
 export class ProgramController {
     static getStandardExercises = async (req: Request, res: Response) => {
@@ -76,7 +77,7 @@ export class ProgramController {
     static updateExercise = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const exercise: UpdateExerciseDto = req.body;
         const userJWT = req.AccessPayloadJWT;
-        const completeExerciseResponse: ServiceResponse<boolean> = await ProgramService.updateExercise(exercise, userJWT.UserID);
+        const completeExerciseResponse: ServiceResponse<ExerciseWorkoutDto> = await ProgramService.updateExercise(exercise, userJWT.UserID);
         switch (completeExerciseResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(completeExerciseResponse.data);

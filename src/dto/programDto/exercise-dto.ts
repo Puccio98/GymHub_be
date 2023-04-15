@@ -3,5 +3,4 @@ export interface ExerciseDto {
     name: string
 }
 
-
 export {}
