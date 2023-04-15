@@ -8,6 +8,7 @@ import {ProgramStateEnum} from "../enums/program-state-enum";
 import {ExerciseStatus} from "../enums/exercise-status.enum";
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
 import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
+import {PlainExerciseItem} from "../models/plainExercise";
 
 
 export class ProgramDao {
@@ -105,23 +106,7 @@ export class ProgramDao {
         return true;
     }
 
-    static async updateExercise(exercise: UpdateExerciseDto, userID: number):Promise<boolean> {
-        //Verifico che l'esercizio che deve essere completato appartenga all'utente
-        const query: any[] = await db('Program AS p')
-            .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
-            .join('Exercises_Workout AS ew', 'w.WorkoutID', 'ew.WorkoutID')
-            .where({
-                'p.UserID': userID,
-                'w.WorkoutID': exercise.workoutID,
-                'ew.Exercise_WorkoutID': exercise.exercise_WorkoutID,
-                'p.ProgramID': exercise.programID})
-            .select();
-
-        //Se l'esercizio non era dell'utente giusto, ritorno false e non faccio l'update
-        if(query.length < 1) {
-            return false;
-        }
-
+    static async updateExercise(exercise: UpdateExerciseDto):Promise<PlainExerciseItem> {
         await db('Exercises_Workout')
             .where({'Exercise_WorkoutID': exercise.exercise_WorkoutID})
             .update({
@@ -134,7 +119,13 @@ export class ProgramDao {
                 statusID: exercise.statusID
             });
 
-        return true;
+        const updatedExercise = await db('Exercises_Workout as e_w')
+            .join('Exercise as e', 'e.ExerciseID', 'e_w.ExerciseID')
+            .where({'Exercise_WorkoutID': exercise.exercise_WorkoutID})
+            .select(['e_w.*', 'e.*'])
+            .options({nestTables: true});
+
+        return updatedExercise[0];
     }
 
     static async updateWorkout (workoutDto: UpdateWorkoutDto, userID: number): Promise<boolean> {
@@ -192,6 +183,22 @@ export class ProgramDao {
             })
 
         return true;
+    }
+
+    static async exerciseBelongsToUser(userID: number, programID: number, workoutID: number, exercise_WorkoutID: number) {
+        const query: any[] = await db('Program AS p')
+            .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
+            .join('Exercises_Workout AS ew', 'w.WorkoutID', 'ew.WorkoutID')
+            .where({
+                'p.UserID': userID,
+                'w.WorkoutID': workoutID,
+                'ew.Exercise_WorkoutID': exercise_WorkoutID,
+                'p.ProgramID': programID
+            })
+            .select();
+
+        //Se l'esercizio non era dell'utente giusto, ritorno false e non faccio l'update
+        return query.length >= 1;
     }
 
     //endregion

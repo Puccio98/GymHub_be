@@ -7,6 +7,7 @@ import {ExerciseItem} from "../models/exercise";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
 import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
+import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 
 export class ProgramService {
 
@@ -108,18 +109,26 @@ export class ProgramService {
         }
     }
 
-    static async updateExercise(exercise: UpdateExerciseDto, userID: number): Promise<ServiceResponse<boolean>> {
+    static async updateExercise(exercise: UpdateExerciseDto, userID: number): Promise<ServiceResponse<ExerciseWorkoutDto>> {
         try {
-            if (await ProgramDao.updateExercise(exercise, userID)) {
+            //Verifico che l'esercizio che deve essere completato appartenga all'utente
+            if(!await ProgramDao.exerciseBelongsToUser(userID, exercise.programID, exercise.workoutID, exercise.exercise_WorkoutID)) {
                 return {
-                    data: true,
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Exercise does not belong to user'
+                };
+            }
+            const updatedExercise = await ProgramDao.updateExercise(exercise);
+            if (updatedExercise) {
+                return {
+                    data: ProgramLib.ExerciseWorkoutItemToExerciseWorkoutDto(updatedExercise.e_w, updatedExercise.e),
                     status: ServiceStatusEnum.SUCCESS,
                     message: 'Exercise completed'
                 };
             } else {
                 return {
                     status: ServiceStatusEnum.ERROR,
-                    message: 'User can\'t update the requested exercise'
+                    message: 'Internal server error'
                 };
             }
         } catch {
