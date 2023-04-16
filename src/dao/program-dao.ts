@@ -9,17 +9,32 @@ import {ExerciseStatus} from "../enums/exercise-status.enum";
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
 import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
 import {PlainExerciseItem} from "../models/plainExercise";
-
+import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
 
 export class ProgramDao {
     // region Public Methods
-    static async getProgramListByUserID(userID: number): Promise<PlainProgramItem[]> {
+    static async getProgramList(userID: number): Promise<PlainProgramItem[]> {
         const res: PlainProgramItem[] = await db('User AS u')
             .join('Program AS p', 'u.UserID', 'p.UserID')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
             .join('Exercises_Workout AS e_w', 'w.WorkoutID', 'e_w.WorkoutID')
             .join('Exercise AS e', 'e_w.ExerciseID', 'e.ExerciseID')
             .where({'u.UserID': userID})
+            .select(['p.*', 'w.*', 'e_w.*', 'e.*'])
+            .orderBy([{column: 'p.ProgramID', order: 'desc'},
+                {column: 'w.WorkoutID', order: 'asc'},
+                {column: 'e_w.Exercise_WorkoutID', order: 'asc'}])
+            .options({nestTables: true});
+        return res;
+    }
+
+    static async getProgramByProgramID(userID: number, programID: number): Promise<PlainProgramItem[]> {
+        const res: PlainProgramItem[] = await db('User AS u')
+            .join('Program AS p', 'u.UserID', 'p.UserID')
+            .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
+            .join('Exercises_Workout AS e_w', 'w.WorkoutID', 'e_w.WorkoutID')
+            .join('Exercise AS e', 'e_w.ExerciseID', 'e.ExerciseID')
+            .where({'u.UserID': userID, 'p.ProgramID': programID})
             .select(['p.*', 'w.*', 'e_w.*', 'e.*'])
             .orderBy([{column: 'p.ProgramID', order: 'desc'},
                 {column: 'w.WorkoutID', order: 'asc'},
@@ -81,13 +96,13 @@ export class ProgramDao {
         // Elimino esercizi degli allenamenti della scheda richiesta se l'utente coincide
         await db('Exercises_Workout')
             .join('Workout AS w', 'w.WorkoutID', 'Exercises_Workout.WorkoutID')
-            .where('w.ProgramID', programID)
+            .where({'w.ProgramID': programID})
             .delete();
 
         // Elimino tutti gli allenamenti della scheda
         await db('Workout')
             .join('Program AS p', 'Workout.ProgramID', 'p.ProgramID')
-            .where('p.ProgramID', programID)
+            .where({'p.ProgramID': programID})
             .delete();
 
         // Elimino la scheda
@@ -128,65 +143,33 @@ export class ProgramDao {
         return updatedExercise[0];
     }
 
-    static async updateWorkout (workoutDto: UpdateWorkoutDto, userID: number): Promise<boolean> {
-        //verifica che l'utente possegga l'allenamento
-        const userWorkout: any[] = await db('Program AS p')
-            .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
-            .where({'p.UserID': userID, 'w.WorkoutID': workoutDto.workoutID, 'p.ProgramID': workoutDto.programID})
-            .select();
-
-        if(userWorkout.length < 1) {
-            return false;
-        }
-
-        const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
-            .where({'WorkoutID': workoutDto.workoutID, 'StatusID': ExerciseStatus.INCOMPLETE});
-
-        if (uncompletedExercises.length > 0) {
-            return false;
-        }
-
-        //Se i controlli passano si fa l'update dello status
+    static async updateWorkout (workoutDto: UpdateWorkoutDto): Promise<CompleteWorkoutDto> {
         await db('Workout')
             .where({'WorkoutID': workoutDto.workoutID})
             .update({
                 StatusID: ExerciseStatus.COMPLETE
             });
 
-        return true;
-    }
-
-    static async refreshProgram (programID: number, userID: number): Promise<boolean> {
-        //verifica che l'utente possegga la scheda
-        const userProgram: any[] = await db('Program')
-            .where({'UserID': userID, 'ProgramID': programID})
+        const updatedWorkout = await db('Workout')
+            .where({'WorkoutID': workoutDto.workoutID})
             .select();
 
-        if(userProgram.length < 1) {
-            return false;
-        }
+        return updatedWorkout[0];
+    }
 
-        const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
-            .where({'ProgramID': programID, 'StatusID': ExerciseStatus.INCOMPLETE});
-
-        if (uncompletedWorkouts.length > 0) {
-            return false;
-        }
-
-        //Se i controlli passano si fa l'update della scheda
+    static async refreshProgram (programID: number): Promise<boolean> {
         await db('Workout as w')
             .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({'w.ProgramID': programID})
             .update({
                 'w.StatusID': ExerciseStatus.INCOMPLETE,
                 'ew.StatusID': ExerciseStatus.INCOMPLETE
-            })
-
+            });
         return true;
     }
 
-    static async exerciseBelongsToUser(userID: number, programID: number, workoutID: number, exercise_WorkoutID: number) {
-        const query: any[] = await db('Program AS p')
+    static async exerciseBelongsToUser(userID: number, programID: number, workoutID: number, exercise_WorkoutID: number): Promise<boolean> {
+        const userExercise: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
             .join('Exercises_Workout AS ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({
@@ -198,7 +181,39 @@ export class ProgramDao {
             .select();
 
         //Se l'esercizio non era dell'utente giusto, ritorno false e non faccio l'update
-        return query.length >= 1;
+        return userExercise.length >= 1;
+    }
+
+    static async workoutBelongsToUser(userID: number, programID: number, workoutID: number): Promise<boolean> {
+        //verifica che l'utente possegga l'allenamento
+        const userWorkout: any[] = await db('Program AS p')
+            .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
+            .where({'p.UserID': userID, 'w.WorkoutID': workoutID, 'p.ProgramID': programID})
+            .select();
+
+        if(userWorkout.length < 1) {
+            return false;
+        }
+
+        const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
+            .where({'WorkoutID': workoutID, 'StatusID': ExerciseStatus.INCOMPLETE});
+
+        return uncompletedExercises.length <= 0;
+    }
+
+    static async programBelongsToUser (userID: number, programID: number): Promise<boolean> {
+        const userProgram: any[] = await db('Program')
+            .where({'UserID': userID, 'ProgramID': programID})
+            .select();
+
+        if(userProgram.length < 1) {
+            return false;
+        }
+
+        const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
+            .where({'ProgramID': programID, 'StatusID': ExerciseStatus.INCOMPLETE});
+
+        return uncompletedWorkouts.length <= 0;
     }
 
     //endregion
