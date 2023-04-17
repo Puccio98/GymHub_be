@@ -148,6 +148,12 @@ export class ProgramService {
                     message: 'Workout does not belong to user'
                 };
             }
+            if(!await ProgramDao.isWorkoutComplete(workoutDto.workoutID)) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Workout is not complete'
+                }
+            }
             const updatedWorkout = await ProgramDao.updateWorkout(workoutDto);
             if (updatedWorkout) {
                 return {
@@ -177,7 +183,12 @@ export class ProgramService {
                     message: 'Program does not belong to user'
                 };
             }
-
+            if(!await ProgramDao.isProgramComplete(programID)) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Program is not complete'
+                }
+            }
             if(!await ProgramDao.refreshProgram(programID)) {
                 return {
                     status: ServiceStatusEnum.ERROR,
