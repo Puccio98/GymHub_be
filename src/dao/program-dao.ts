@@ -43,6 +43,14 @@ export class ProgramDao {
         return res;
     }
 
+    static async getActiveProgram(userID: number): Promise<number> {
+        const res = await db('Program')
+            .where({'UserID': userID, 'ProgramStateID': ProgramStateEnum.ACTIVE})
+            .select();
+
+        return res[0].ProgramID;
+    }
+
     static async getStandardExercises(): Promise<ExerciseItem[]> {
         return db('Exercise AS e')
             .select('*');
@@ -215,18 +223,12 @@ export class ProgramDao {
         const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
             .where({'WorkoutID': workoutID, 'StatusID': ExerciseStatus.INCOMPLETE});
 
-        const abba = uncompletedExercises.length <= 0;
-        console.log(abba);
-
         return uncompletedExercises.length <= 0;
     }
 
     static async isProgramComplete(programID: number) {
         const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
             .where({'ProgramID': programID, 'StatusID': ExerciseStatus.INCOMPLETE});
-
-        const abba = uncompletedWorkouts.length <= 0;
-        console.log(abba);
 
         return uncompletedWorkouts.length <= 0;
     }

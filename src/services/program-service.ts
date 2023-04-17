@@ -61,6 +61,10 @@ export class ProgramService {
 
     static async createProgram(program: ProgramCreateDTO): Promise<ServiceResponse<ProgramDto[]>> {
         try {
+            //Per prima cosa, metto StatusID = 1 a tutti gli allenamenti ed esercizi della scheda attiva.
+            const activeProgramID = await ProgramDao.getActiveProgram(program.userID);
+            await ProgramDao.refreshProgram(activeProgramID);
+
             // Mette inattivi tutti i programmi
             await ProgramDao.setProgramsInactive(program.userID);
             const programItem = ProgramLib.ProgramCreateDtoToProgramItem(program);
