@@ -173,6 +173,7 @@ export class ProgramDao {
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
             .join('Exercises_Workout AS ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({
+                'p.ProgramStateID': ProgramStateEnum.ACTIVE,
                 'p.UserID': userID,
                 'w.WorkoutID': workoutID,
                 'ew.Exercise_WorkoutID': exercise_WorkoutID,
@@ -188,30 +189,44 @@ export class ProgramDao {
         //verifica che l'utente possegga l'allenamento
         const userWorkout: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
-            .where({'p.UserID': userID, 'w.WorkoutID': workoutID, 'p.ProgramID': programID})
+            .where({
+                'p.ProgramStateID': ProgramStateEnum.ACTIVE,
+                'p.UserID': userID,
+                'w.WorkoutID': workoutID,
+                'p.ProgramID': programID
+            })
             .select();
 
-        if(userWorkout.length < 1) {
-            return false;
-        }
-
-        const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
-            .where({'WorkoutID': workoutID, 'StatusID': ExerciseStatus.INCOMPLETE});
-
-        return uncompletedExercises.length <= 0;
+        return userWorkout.length >= 1;
     }
 
     static async programBelongsToUser (userID: number, programID: number): Promise<boolean> {
         const userProgram: any[] = await db('Program')
-            .where({'UserID': userID, 'ProgramID': programID})
+            .where({
+                'ProgramStateID': ProgramStateEnum.ACTIVE,
+                'UserID': userID, 'ProgramID': programID
+            })
             .select();
 
-        if(userProgram.length < 1) {
-            return false;
-        }
+        return userProgram.length >= 1;
+    }
 
+    static async isWorkoutComplete(workoutID: number) {
+        const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
+            .where({'WorkoutID': workoutID, 'StatusID': ExerciseStatus.INCOMPLETE});
+
+        const abba = uncompletedExercises.length <= 0;
+        console.log(abba);
+
+        return uncompletedExercises.length <= 0;
+    }
+
+    static async isProgramComplete(programID: number) {
         const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
             .where({'ProgramID': programID, 'StatusID': ExerciseStatus.INCOMPLETE});
+
+        const abba = uncompletedWorkouts.length <= 0;
+        console.log(abba);
 
         return uncompletedWorkouts.length <= 0;
     }
