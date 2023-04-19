@@ -44,11 +44,14 @@ export class ProgramDao {
     }
 
     static async getActiveProgram(userID: number): Promise<number> {
-        const res = await db('Program')
+        const res: any[] = await db('Program')
             .where({'UserID': userID, 'ProgramStateID': ProgramStateEnum.ACTIVE})
             .select();
 
-        return res[0].ProgramID;
+        if(res.length) {
+            return res[0].ProgramID;
+        }
+        return -1;
     }
 
     static async getStandardExercises(): Promise<ExerciseItem[]> {
@@ -176,6 +179,21 @@ export class ProgramDao {
         return true;
     }
 
+    static async deleteWorkout(workoutID: number): Promise<number> {
+        // Elimino esercizi dell'allenamento
+        await db('Exercises_Workout')
+            .join('Workout AS w', 'w.WorkoutID', 'Exercises_Workout.WorkoutID')
+            .where({'w.WorkoutID': workoutID})
+            .delete();
+
+        // Elimino l'allenamento
+        await db('Workout')
+            .where({'WorkoutID': workoutID})
+            .delete();
+
+        return workoutID;
+    }
+
     static async exerciseBelongsToUser(userID: number, programID: number, workoutID: number, exercise_WorkoutID: number): Promise<boolean> {
         const userExercise: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
@@ -226,11 +244,18 @@ export class ProgramDao {
         return uncompletedExercises.length <= 0;
     }
 
-    static async isProgramComplete(programID: number) {
+    static async isProgramComplete(programID: number):Promise<boolean> {
         const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
             .where({'ProgramID': programID, 'StatusID': ExerciseStatus.INCOMPLETE});
 
         return uncompletedWorkouts.length <= 0;
+    }
+
+    static async isLastWorkout(programID: number):Promise<boolean> {
+        const workouts: WorkoutItem[] = await db('Workout')
+            .where({'ProgramID': programID});
+
+        return workouts.length < 2;
     }
 
     //endregion
