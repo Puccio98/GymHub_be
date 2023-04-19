@@ -116,5 +116,20 @@ export class ProgramController {
                 return res.status(500).send({error: "Internal server error"});
         }
     }
+
+    static deleteWorkout = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const userJWT = req.AccessPayloadJWT;
+        const workoutDto: UpdateWorkoutDto = req.body;
+
+        const deleteWorkoutResponse: ServiceResponse<number> = await ProgramService.deleteWorkout(workoutDto, userJWT.UserID);
+        switch (deleteWorkoutResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(deleteWorkoutResponse.data!.toString());
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: deleteWorkoutResponse.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
+    }
 }
 

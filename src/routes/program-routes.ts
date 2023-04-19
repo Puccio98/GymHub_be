@@ -22,5 +22,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.post('/program_refresh_program', validateDto(refreshProgramValidator), ProgramController.refreshProgram);
 
+    router.post('/program_delete_workout', validateDto(updateWorkoutValidator), ProgramController.deleteWorkout);
+
     app.use('/program', router);
 };

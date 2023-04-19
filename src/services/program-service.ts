@@ -63,7 +63,9 @@ export class ProgramService {
         try {
             //Per prima cosa, metto StatusID = 1 a tutti gli allenamenti ed esercizi della scheda attiva.
             const activeProgramID = await ProgramDao.getActiveProgram(program.userID);
-            await ProgramDao.refreshProgram(activeProgramID);
+            if(activeProgramID !== -1) {
+                await ProgramDao.refreshProgram(activeProgramID);
+            }
 
             // Mette inattivi tutti i programmi
             await ProgramDao.setProgramsInactive(program.userID);
@@ -218,6 +220,57 @@ export class ProgramService {
                     status: ServiceStatusEnum.ERROR,
                     message: 'Multiple programs found'
                 };
+            }
+        } catch {
+            return {
+                status: ServiceStatusEnum.ERROR,
+                message: 'Something went wrong'
+            }
+        }
+    }
+
+    static async deleteWorkout(workoutDto: UpdateWorkoutDto, userID: number): Promise<ServiceResponse<number>> {
+        try {
+            if(!await ProgramDao.workoutBelongsToUser(userID, workoutDto.programID, workoutDto.workoutID)) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Workout does not belong to user'
+                };
+            }
+            if(await ProgramDao.isWorkoutComplete(workoutDto.workoutID)) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Workout is complete'
+                }
+            }
+            // controllo che l'allenamento non sia l'ultimo della scheda, in caso delete della scheda direttamente
+            if(await ProgramDao.isLastWorkout(workoutDto.programID)) {
+                if (await ProgramDao.delete(workoutDto.programID, userID)) {
+                    return {
+                        data: workoutDto.workoutID,
+                        status: ServiceStatusEnum.SUCCESS,
+                        message: 'Entire program deleted'
+                    };
+                } else {
+                    return {
+                        status: ServiceStatusEnum.ERROR,
+                        message: 'User can\'t delete the requested program'
+                    };
+                }
+            } else {
+                const deletedWorkout = await ProgramDao.deleteWorkout(workoutDto.workoutID);
+                if (deletedWorkout) {
+                    return {
+                        data: deletedWorkout,
+                        status: ServiceStatusEnum.SUCCESS,
+                        message: 'Workout deleted'
+                    };
+                } else {
+                    return {
+                        status: ServiceStatusEnum.ERROR,
+                        message: 'User can\'t delete the requested workout'
+                    };
+                }
             }
         } catch {
             return {
