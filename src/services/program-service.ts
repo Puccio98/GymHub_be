@@ -260,6 +260,10 @@ export class ProgramService {
             } else {
                 const deletedWorkout = await ProgramDao.deleteWorkout(workoutDto.workoutID);
                 if (deletedWorkout) {
+                    //CHECK CHE LA SCHEDA SIA COMPLETATA
+                    if(await ProgramDao.isProgramComplete(workoutDto.programID)) {
+                        await ProgramDao.refreshProgram(workoutDto.programID);
+                    }
                     return {
                         data: deletedWorkout,
                         status: ServiceStatusEnum.SUCCESS,
