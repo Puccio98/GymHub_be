@@ -10,6 +10,7 @@ import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
 import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
 import {PlainExerciseItem} from "../models/plainExercise";
 import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
+import {PlainWorkoutItem} from "../models/plainWorkout";
 
 export class ProgramDao {
     // region Public Methods
@@ -43,12 +44,23 @@ export class ProgramDao {
         return res;
     }
 
+    static async getPlainWorkout(workoutID: number): Promise<PlainWorkoutItem[]> {
+        const res: PlainWorkoutItem[] = await db('Workout AS w')
+            .join('Exercises_Workout AS e_w', 'w.WorkoutID', 'e_w.WorkoutID')
+            .join('Exercise AS e', 'e_w.ExerciseID', 'e.ExerciseID')
+            .where({'w.WorkoutID': workoutID})
+            .select(['w.*', 'e_w.*', 'e.*'])
+            .orderBy([{column: 'e_w.Exercise_WorkoutID', order: 'asc'}])
+            .options({nestTables: true});
+        return res;
+    }
+
     static async getActiveProgram(userID: number): Promise<number> {
         const res: any[] = await db('Program')
             .where({'UserID': userID, 'ProgramStateID': ProgramStateEnum.ACTIVE})
             .select();
 
-        if(res.length) {
+        if (res.length) {
             return res[0].ProgramID;
         }
         return -1;
@@ -132,7 +144,7 @@ export class ProgramDao {
         return true;
     }
 
-    static async updateExercise(exercise: UpdateExerciseDto):Promise<PlainExerciseItem> {
+    static async updateExercise(exercise: UpdateExerciseDto): Promise<PlainExerciseItem> {
         await db('Exercises_Workout')
             .where({'Exercise_WorkoutID': exercise.exercise_WorkoutID})
             .update({
@@ -154,21 +166,23 @@ export class ProgramDao {
         return updatedExercise[0];
     }
 
-    static async updateWorkout (workoutDto: UpdateWorkoutDto): Promise<CompleteWorkoutDto> {
+    static async updateWorkout(workoutDto: UpdateWorkoutDto): Promise<CompleteWorkoutDto> {
         await db('Workout')
             .where({'WorkoutID': workoutDto.workoutID})
             .update({
                 StatusID: ExerciseStatus.COMPLETE
             });
-
-        const updatedWorkout = await db('Workout')
-            .where({'WorkoutID': workoutDto.workoutID})
-            .select();
-
-        return updatedWorkout[0];
+        return ProgramDao.getWorkout(workoutDto.workoutID);
     }
 
-    static async refreshProgram (programID: number): Promise<boolean> {
+    static async getWorkout(workoutID: number): Promise<CompleteWorkoutDto> {
+        const workout = await db('Workout')
+            .where({'WorkoutID': workoutID})
+            .select();
+        return workout[0]
+    }
+
+    static async refreshProgram(programID: number): Promise<boolean> {
         await db('Workout as w')
             .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({'w.ProgramID': programID})
@@ -226,7 +240,7 @@ export class ProgramDao {
         return userWorkout.length >= 1;
     }
 
-    static async programBelongsToUser (userID: number, programID: number): Promise<boolean> {
+    static async programBelongsToUser(userID: number, programID: number): Promise<boolean> {
         const userProgram: any[] = await db('Program')
             .where({
                 'ProgramStateID': ProgramStateEnum.ACTIVE,
@@ -244,14 +258,14 @@ export class ProgramDao {
         return uncompletedExercises.length <= 0;
     }
 
-    static async isProgramComplete(programID: number):Promise<boolean> {
+    static async isProgramComplete(programID: number): Promise<boolean> {
         const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
             .where({'ProgramID': programID, 'StatusID': ExerciseStatus.INCOMPLETE});
 
         return uncompletedWorkouts.length <= 0;
     }
 
-    static async isLastWorkout(programID: number):Promise<boolean> {
+    static async isLastWorkout(programID: number): Promise<boolean> {
         const workouts: WorkoutItem[] = await db('Workout')
             .where({'ProgramID': programID});
 

@@ -9,6 +9,7 @@ import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
 import {ExerciseCreateDTO, ProgramCreateDTO, WorkoutCreateDTO} from "../dto/programDto/program-create-dto";
 import {ProgramStateEnum} from "../enums/program-state-enum";
+import {PlainWorkoutItem} from "../models/plainWorkout";
 
 export class ProgramLib {
     static ProgramItemToProgramDto(programItem: ProgramItem): ProgramDto {
@@ -139,4 +140,18 @@ export class ProgramLib {
         return programList;
     }
 
+    static PlainWorkoutItemToWorkoutDtoList(pwList: PlainWorkoutItem[]): WorkoutDto[] {
+        let old_workoutID = 0;
+        let wList: WorkoutDto[] = [];
+        for (let pw of pwList) {
+            if (pw.w.WorkoutID && old_workoutID !== pw.w.WorkoutID) {
+                // Nuovo allenamento
+                old_workoutID = pw.w.WorkoutID;
+                wList.push(this.WorkoutItemToWorkoutDto(pw.w));
+            }
+            // Nuovo esercizio
+            wList.at(-1)?.exerciseList.push(this.ExerciseWorkoutItemToExerciseWorkoutDto(pw.e_w, pw.e));
+        }
+        return wList;
+    }
 }
