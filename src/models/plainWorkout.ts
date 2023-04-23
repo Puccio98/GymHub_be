@@ -1,12 +1,8 @@
-import {ProgramItem} from "./program";
 import {WorkoutItem} from "./workout";
 import {ExerciseWorkoutItem} from "./exercise_workout";
 import {ExerciseItem} from "./exercise";
 
-export interface PlainProgramItem {
-    //  Program Properties
-    p: ProgramItem,
-
+export interface PlainWorkoutItem {
     // Workout Properties
     w: WorkoutItem,
 
@@ -16,6 +12,3 @@ export interface PlainProgramItem {
     // Exercise Properties
     e: ExerciseItem
 }
-
-
-export {}
