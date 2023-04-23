@@ -157,13 +157,16 @@ export class ProgramDao {
                 statusID: exercise.statusID
             });
 
-        const updatedExercise = await db('Exercises_Workout as e_w')
+        return this.getExercise(exercise.exercise_WorkoutID);
+    }
+
+    static async getExercise(exercise_WorkoutID: number): Promise<PlainExerciseItem> {
+        const exercise = await db('Exercises_Workout as e_w')
             .join('Exercise as e', 'e.ExerciseID', 'e_w.ExerciseID')
-            .where({'Exercise_WorkoutID': exercise.exercise_WorkoutID})
+            .where({'Exercise_WorkoutID': exercise_WorkoutID})
             .select(['e_w.*', 'e.*'])
             .options({nestTables: true});
-
-        return updatedExercise[0];
+        return exercise[0];
     }
 
     static async updateWorkout(workoutDto: UpdateWorkoutDto): Promise<CompleteWorkoutDto> {
@@ -213,7 +216,6 @@ export class ProgramDao {
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
             .join('Exercises_Workout AS ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({
-                'p.ProgramStateID': ProgramStateEnum.ACTIVE,
                 'p.UserID': userID,
                 'w.WorkoutID': workoutID,
                 'ew.Exercise_WorkoutID': exercise_WorkoutID,
@@ -230,7 +232,6 @@ export class ProgramDao {
         const userWorkout: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
             .where({
-                'p.ProgramStateID': ProgramStateEnum.ACTIVE,
                 'p.UserID': userID,
                 'w.WorkoutID': workoutID,
                 'p.ProgramID': programID

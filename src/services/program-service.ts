@@ -11,6 +11,7 @@ import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
 import {WorkoutAddDTO} from "../dto/programDto/add-workout.dto";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
+import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
 
 export class ProgramService {
 
@@ -215,6 +216,44 @@ export class ProgramService {
                 return {
                     status: ServiceStatusEnum.ERROR,
                     message: 'Errore durante l\'inserimento dell\'allenamento.'
+                };
+            }
+        } catch {
+            return {
+                status: ServiceStatusEnum.ERROR,
+                message: 'Something went wrong'
+            }
+        }
+    }
+
+    static async addExercise(exerciseDto: AddExerciseDto, userID: number): Promise<ServiceResponse<ExerciseWorkoutDto>> {
+        try {
+            if (!await ProgramDao.workoutBelongsToUser(userID, exerciseDto.programID, exerciseDto.workoutID)) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Workout does not belong to user'
+                };
+            }
+            const exerciseItem = ProgramLib.ExerciseCreateDtoToExerciseWorkoutItem(exerciseDto.exercise, exerciseDto.workoutID);
+            const exercise_workoutID = await ProgramDao.createExerciseWorkout([exerciseItem]);
+            if (exercise_workoutID) {
+                const exercise = await ProgramDao.getExercise(exercise_workoutID);
+                if (exercise) {
+                    return {
+                        data: ProgramLib.ExerciseWorkoutItemToExerciseWorkoutDto(exercise.e_w, exercise.e),
+                        status: ServiceStatusEnum.SUCCESS,
+                        message: 'Exercise added'
+                    };
+                } else {
+                    return {
+                        status: ServiceStatusEnum.ERROR,
+                        message: 'Errore durante la creazione dell\'esercizio.'
+                    };
+                }
+            } else {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: `Impossibile recuperare l\'esercizio.`
                 };
             }
         } catch {
