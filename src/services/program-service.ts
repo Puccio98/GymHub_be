@@ -12,6 +12,7 @@ import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
 import {WorkoutAddDTO} from "../dto/programDto/add-workout.dto";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
+import {DeleteExerciseDto} from "../dto/programDto/delete-exercise.dto";
 
 export class ProgramService {
 
@@ -365,6 +366,43 @@ export class ProgramService {
                         message: 'User can\'t delete the requested workout'
                     };
                 }
+            }
+        } catch {
+            return {
+                status: ServiceStatusEnum.ERROR,
+                message: 'Something went wrong'
+            }
+        }
+    }
+
+    static async deleteExercise(deleteExerciseDto: DeleteExerciseDto, userID: number):Promise<ServiceResponse<number>> {
+        try {
+            if (!await ProgramDao.exerciseBelongsToUser(userID, deleteExerciseDto.programID, deleteExerciseDto.workoutID, deleteExerciseDto.exerciseID)) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Exercise does not belong to user'
+                };
+            }
+            if(!await ProgramDao.isExerciseUncompleted(deleteExerciseDto.exerciseID)) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Exercise is either completed or skipped'
+                }
+            }
+            //TODO: CHECK IF LAST EXERCISE, IF SO DELETE ENTIRE WORKOUT;
+            const deletedExercise = await ProgramDao.deleteExercise(deleteExerciseDto.exerciseID);
+            if(deletedExercise) {
+                //TODO: CHECK IF WORKOUT COMPLETED, IF SO COMPLETE AND CHECK IF SCHEDA COMPLETED, IF SO REFRESH
+                return {
+                    data: deletedExercise,
+                    status: ServiceStatusEnum.SUCCESS,
+                    message: 'Workout deleted'
+                };
+            } else {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'User can\'t delete the requested exercise'
+                };
             }
         } catch {
             return {

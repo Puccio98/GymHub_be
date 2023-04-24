@@ -12,6 +12,7 @@ import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
 import {WorkoutAddDTO} from "../dto/programDto/add-workout.dto";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
+import {DeleteExerciseDto} from "../dto/programDto/delete-exercise.dto";
 
 export class ProgramController {
     static getStandardExercises = async (req: Request, res: Response) => {
@@ -149,6 +150,22 @@ export class ProgramController {
                 return res.status(500).send({error: "Internal server error"});
         }
     }
+
+    static deleteExercise = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const userJWT = req.AccessPayloadJWT;
+        const deleteExerciseDto: DeleteExerciseDto = req.body;
+        
+        const deleteExerciseResponse: ServiceResponse<number> = await ProgramService.deleteExercise(deleteExerciseDto, userJWT.UserID);
+        switch (deleteExerciseResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(deleteExerciseResponse.data!.toString());
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: deleteExerciseResponse.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
+    }
+
     static addExercise = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const userJWT = req.AccessPayloadJWT;
         const exerciseDto: AddExerciseDto = req.body;

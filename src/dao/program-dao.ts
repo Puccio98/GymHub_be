@@ -211,6 +211,15 @@ export class ProgramDao {
         return workoutID;
     }
 
+    static async deleteExercise(exerciseID: number): Promise<number> {
+        console.log('delete');
+        await db('Exercises_Workout')
+            .where({'Exercise_WorkoutID': exerciseID})
+            .delete();
+
+        return exerciseID;
+    }
+
     static async exerciseBelongsToUser(userID: number, programID: number, workoutID: number, exercise_WorkoutID: number): Promise<boolean> {
         const userExercise: any[] = await db('Program AS p')
             .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
@@ -250,6 +259,12 @@ export class ProgramDao {
             .select();
 
         return userProgram.length >= 1;
+    }
+
+    static async isExerciseUncompleted(exerciseID: number) {
+        const exerciseWorkout: ExerciseWorkoutItem[] = await db('Exercises_Workout')
+            .where({'Exercise_WorkoutID': exerciseID});
+        return exerciseWorkout[0].StatusID === 1;
     }
 
     static async isWorkoutComplete(workoutID: number) {
