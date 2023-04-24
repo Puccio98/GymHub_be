@@ -186,6 +186,13 @@ export class ProgramService {
 
     static async addWorkout(workoutDto: WorkoutAddDTO, userID: number): Promise<ServiceResponse<WorkoutDto>> {
         try {
+            const maxNumberOfWorkouts = 7;
+            if (await ProgramDao.programWorkoutNumber(workoutDto.programID) >= maxNumberOfWorkouts) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Program has reached maximum number of workouts'
+                }
+            }
             if (!await ProgramDao.programBelongsToUser(userID, workoutDto.programID)) {
                 return {
                     status: ServiceStatusEnum.ERROR,
