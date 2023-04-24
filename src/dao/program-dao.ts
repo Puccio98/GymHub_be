@@ -273,5 +273,15 @@ export class ProgramDao {
         return workouts.length < 2;
     }
 
+    /**
+     * ritorna il numero di allenamenti di una scheda
+     * @param programID
+     */
+    static async programWorkoutNumber(programID: number): Promise<number> {
+        const workouts: WorkoutItem[] = await db('Workout')
+            .where({'ProgramID': programID});
+
+        return workouts.length;
+    }
     //endregion
 }
