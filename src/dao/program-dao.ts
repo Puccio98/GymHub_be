@@ -212,7 +212,6 @@ export class ProgramDao {
     }
 
     static async deleteExercise(exerciseID: number): Promise<number> {
-        console.log('delete');
         await db('Exercises_Workout')
             .where({'Exercise_WorkoutID': exerciseID})
             .delete();
@@ -286,6 +285,13 @@ export class ProgramDao {
             .where({'ProgramID': programID});
 
         return workouts.length < 2;
+    }
+
+    static async isLastExercise(workoutID: number): Promise<boolean> {
+        const exercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
+            .where({'WorkoutID': workoutID});
+
+        return exercises.length < 2;
     }
 
     /**
