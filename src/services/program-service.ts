@@ -389,20 +389,67 @@ export class ProgramService {
                     message: 'Exercise is either completed or skipped'
                 }
             }
-            //TODO: CHECK IF LAST EXERCISE, IF SO DELETE ENTIRE WORKOUT;
-            const deletedExercise = await ProgramDao.deleteExercise(deleteExerciseDto.exerciseID);
-            if(deletedExercise) {
-                //TODO: CHECK IF WORKOUT COMPLETED, IF SO COMPLETE AND CHECK IF SCHEDA COMPLETED, IF SO REFRESH
-                return {
-                    data: deletedExercise,
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Workout deleted'
-                };
+
+            // controllo che l'esercizio non sia l'ultimo dell'allenamento, in caso delete dell'allenamento direttamente
+            if(await ProgramDao.isLastExercise(deleteExerciseDto.workoutID)) {
+                //controllo che l'allenamento non sia l'ultimo rimasto della scheda, e in caso delete scheda
+                if(await ProgramDao.isLastWorkout(deleteExerciseDto.programID)) {
+                    if (await ProgramDao.delete(deleteExerciseDto.programID, userID)) {
+                        //ELIMINO SCHEDA
+                        return {
+                            data: deleteExerciseDto.workoutID,
+                            status: ServiceStatusEnum.SUCCESS,
+                            message: 'Entire program deleted'
+                        };
+                    } else {
+                        return {
+                            status: ServiceStatusEnum.ERROR,
+                            message: 'User can\'t delete the requested program'
+                        };
+                    }
+                } else {
+                    //ELIMINO ALLENAMENTO
+                    const deletedWorkout = await ProgramDao.deleteWorkout(deleteExerciseDto.workoutID);
+                    if (deletedWorkout) {
+                        //CHECK CHE LA SCHEDA SIA COMPLETATA
+                        if (await ProgramDao.isProgramComplete(deleteExerciseDto.programID)) {
+                            await ProgramDao.refreshProgram(deleteExerciseDto.programID);
+                        }
+                        return {
+                            data: deletedWorkout,
+                            status: ServiceStatusEnum.SUCCESS,
+                            message: 'Workout deleted'
+                        };
+                    } else {
+                        return {
+                            status: ServiceStatusEnum.ERROR,
+                            message: 'User can\'t delete the requested workout'
+                        };
+                    }
+                }
             } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'User can\'t delete the requested exercise'
-                };
+                //ELIMINO L'ESERCIZIO
+                const deletedExercise = await ProgramDao.deleteExercise(deleteExerciseDto.exerciseID);
+                if(deletedExercise) {
+                    if(await ProgramDao.isWorkoutComplete(deleteExerciseDto.workoutID)) {
+                        //SE ORA L'ALLENAMENTO E' COMPLETO, LO COMPLETO
+                        await ProgramDao.updateWorkout({programID: deleteExerciseDto.programID, workoutID: deleteExerciseDto.workoutID});
+                        if (await ProgramDao.isProgramComplete(deleteExerciseDto.programID)) {
+                            //SE ORA LA SCHEDA E' COMPLETA, FACCIO REFRESH DELLA SCHEDA
+                            await ProgramDao.refreshProgram(deleteExerciseDto.programID);
+                        }
+                    }
+                    return {
+                        data: deletedExercise,
+                        status: ServiceStatusEnum.SUCCESS,
+                        message: 'Workout deleted'
+                    };
+                } else {
+                    return {
+                        status: ServiceStatusEnum.ERROR,
+                        message: 'User can\'t delete the requested exercise'
+                    };
+                }
             }
         } catch {
             return {
