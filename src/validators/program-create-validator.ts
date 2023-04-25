@@ -1,6 +1,7 @@
 const yup = require('yup');
 
 let exerciseType = yup.object().shape({
+    exerciseID: yup.number().required().min(0),
     set: yup.number().required().min(0),
     rep: yup.number().required().min(0),
     weight: yup.number().required().min(0),
