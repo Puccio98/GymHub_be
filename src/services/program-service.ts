@@ -362,8 +362,9 @@ export class ProgramService {
                         await ProgramDao.refresh(workoutDto.programID);
                         refreshProgram = true;
                     }
+                    const res: DeleteWorkoutResponse = {workoutID: deletedWorkout, refreshProgram: refreshProgram}
                     return {
-                        data: {workoutID: deletedWorkout, refreshProgram: refreshProgram},
+                        data: res,
                         status: ServiceStatusEnum.SUCCESS,
                         message: 'Workout deleted'
                     };
