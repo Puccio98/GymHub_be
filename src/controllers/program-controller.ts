@@ -13,6 +13,8 @@ import {WorkoutAddDTO} from "../dto/programDto/add-workout.dto";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
 import {DeleteExerciseDto} from "../dto/programDto/delete-exercise.dto";
+import {DeleteWorkoutResponse} from "../types/delete-workout-response";
+import {DeleteExerciseResponse} from "../types/delete-exercise-response";
 
 export class ProgramController {
     static getStandardExercises = async (req: Request, res: Response) => {
@@ -125,10 +127,10 @@ export class ProgramController {
         const userJWT = req.AccessPayloadJWT;
         const workoutDto: UpdateWorkoutDto = req.body;
 
-        const deleteWorkoutResponse: ServiceResponse<number> = await ProgramService.deleteWorkout(workoutDto, userJWT.UserID);
+        const deleteWorkoutResponse: ServiceResponse<DeleteWorkoutResponse> = await ProgramService.deleteWorkout(workoutDto, userJWT.UserID);
         switch (deleteWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.status(200).send(deleteWorkoutResponse.data!.toString());
+                return res.status(200).send(deleteWorkoutResponse.data);
             case ServiceStatusEnum.ERROR:
                 return res.status(400).send({error: deleteWorkoutResponse.message});
             default:
@@ -155,10 +157,10 @@ export class ProgramController {
         const userJWT = req.AccessPayloadJWT;
         const deleteExerciseDto: DeleteExerciseDto = req.body;
         
-        const deleteExerciseResponse: ServiceResponse<number> = await ProgramService.deleteExercise(deleteExerciseDto, userJWT.UserID);
+        const deleteExerciseResponse: ServiceResponse<DeleteExerciseResponse> = await ProgramService.deleteExercise(deleteExerciseDto, userJWT.UserID);
         switch (deleteExerciseResponse.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.status(200).send(deleteExerciseResponse.data!.toString());
+                return res.status(200).send(deleteExerciseResponse.data);
             case ServiceStatusEnum.ERROR:
                 return res.status(400).send({error: deleteExerciseResponse.message});
             default:
