@@ -1,6 +1,6 @@
-const yup = require('yup');
+import * as yup from "yup";
 
-module.exports = yup.object().shape({
+export const refreshTokenType = yup.object().shape({
     refreshToken: yup.string().required()
 });
 
