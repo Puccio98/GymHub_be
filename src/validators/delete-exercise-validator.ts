@@ -1,9 +1,8 @@
-const yup = require('yup');
+import * as yup from "yup";
 
-module.exports = yup.object().shape({
+export const deleteExerciseType = yup.object().shape({
     exerciseID: yup.number().required(),
     workoutID: yup.number().required(),
     programID: yup.number().required()
 });
 
-export {};

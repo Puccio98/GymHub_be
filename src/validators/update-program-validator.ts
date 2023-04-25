@@ -1,6 +1,6 @@
-const yup = require('yup');
+import * as yup from "yup";
 
-module.exports = yup.object().shape({
+export const updateProgramType = yup.object().shape({
     programID: yup.number().required(),
 });
 
