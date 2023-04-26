@@ -6,5 +6,4 @@ export class ExerciseDao {
         return db('Exercise AS e')
             .select('*');
     }
-
 }

@@ -1,7 +1,7 @@
-import {ProgramItem} from "./program";
-import {WorkoutItem} from "./workout";
-import {ExerciseWorkoutItem} from "./exercise_workout";
-import {ExerciseItem} from "./exercise";
+import {ProgramItem} from "../models/program";
+import {WorkoutItem} from "../models/workout";
+import {ExerciseWorkoutItem} from "../models/exercise_workout";
+import {ExerciseItem} from "../models/exercise";
 
 export interface PlainProgramItem {
     //  Program Properties
