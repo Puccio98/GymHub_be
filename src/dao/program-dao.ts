@@ -1,5 +1,5 @@
 import {db} from "../database";
-import {PlainProgramItem} from "../models/plainProgram";
+import {PlainProgramItem} from "../dto/plainProgram";
 import {ProgramItem} from "../models/program";
 import {WorkoutItem} from "../models/workout";
 import {ProgramStateEnum} from "../enums/program-state-enum";
@@ -130,7 +130,6 @@ export class ProgramDao {
 
         return uncompletedWorkouts.length <= 0;
     }
-
 
     //endregion
 }

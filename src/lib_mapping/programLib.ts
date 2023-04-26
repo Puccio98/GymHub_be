@@ -1,4 +1,4 @@
-import {PlainProgramItem} from "../models/plainProgram";
+import {PlainProgramItem} from "../dto/plainProgram";
 import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramItem} from "../models/program";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
@@ -9,7 +9,7 @@ import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
 import {ExerciseCreateDTO, ProgramCreateDTO, WorkoutCreateDTO} from "../dto/programDto/program-create-dto";
 import {ProgramStateEnum} from "../enums/program-state-enum";
-import {PlainWorkoutItem} from "../models/plainWorkout";
+import {PlainWorkoutItem} from "../dto/plainWorkout";
 
 export class ProgramLib {
     static ProgramItemToProgramDto(programItem: ProgramItem): ProgramDto {

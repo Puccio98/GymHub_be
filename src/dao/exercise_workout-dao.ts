@@ -1,6 +1,6 @@
 import {db} from "../database";
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
-import {PlainExerciseItem} from "../models/plainExercise";
+import {PlainExerciseItem} from "../dto/plainExercise";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
 
 export class Exercise_WorkoutDao {
@@ -74,5 +74,4 @@ export class Exercise_WorkoutDao {
 
         return exercises.length < 2;
     }
-
 }

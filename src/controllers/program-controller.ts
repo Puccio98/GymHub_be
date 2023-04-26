@@ -13,12 +13,15 @@ import {WorkoutAddDTO} from "../dto/programDto/add-workout.dto";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
 import {DeleteExerciseDto} from "../dto/programDto/delete-exercise.dto";
-import {DeleteWorkoutResponse} from "../types/delete-workout-response";
-import {DeleteExerciseResponse} from "../types/delete-exercise-response";
+import {DeleteWorkoutResponse} from "../dto/delete-workout-response";
+import {DeleteExerciseResponse} from "../dto/delete-exercise-response";
+import {ExerciseService} from "../services/exercise-service";
+import {ExerciseWorkoutService} from "../services/exercise-workout-service";
+import {WorkoutService} from "../services/workout-service";
 
 export class ProgramController {
     static getStandardExercises = async (req: Request, res: Response) => {
-        const exerciseList: ServiceResponse<ExerciseDto[]> = await ProgramService.getStandardExercises();
+        const exerciseList: ServiceResponse<ExerciseDto[]> = await ExerciseService.getList();
         switch (exerciseList.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(exerciseList.data);
@@ -31,7 +34,7 @@ export class ProgramController {
 
     static getProgramListByUserID = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const userJWT = req.AccessPayloadJWT;
-        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.getProgramListByUserID(userJWT.UserID);
+        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.getListByUserID(userJWT.UserID);
 
         switch (programList.status) {
             case ServiceStatusEnum.SUCCESS:
@@ -45,7 +48,7 @@ export class ProgramController {
 
     static create = async (req: Request, res: Response) => {
         const program: ProgramCreateDTO = req.body;
-        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.createProgram(program);
+        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.create(program);
 
         switch (programList.status) {
             case ServiceStatusEnum.SUCCESS:
@@ -84,7 +87,7 @@ export class ProgramController {
     static updateExercise = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const exercise: UpdateExerciseDto = req.body;
         const userJWT = req.AccessPayloadJWT;
-        const completeExerciseResponse: ServiceResponse<ExerciseWorkoutDto> = await ProgramService.updateExercise(exercise, userJWT.UserID);
+        const completeExerciseResponse: ServiceResponse<ExerciseWorkoutDto> = await ExerciseWorkoutService.update(exercise, userJWT.UserID);
         switch (completeExerciseResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(completeExerciseResponse.data);
@@ -98,7 +101,7 @@ export class ProgramController {
     static updateWorkout = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const workoutDto: UpdateWorkoutDto = req.body;
         const userJWT = req.AccessPayloadJWT;
-        const completeWorkoutResponse: ServiceResponse<CompleteWorkoutDto> = await ProgramService.updateWorkout(workoutDto, userJWT.UserID);
+        const completeWorkoutResponse: ServiceResponse<CompleteWorkoutDto> = await WorkoutService.update(workoutDto, userJWT.UserID);
         switch (completeWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(completeWorkoutResponse.data);
@@ -112,7 +115,7 @@ export class ProgramController {
     static refreshProgram = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const programID: number = req.body.programID;
         const userJWT = req.AccessPayloadJWT;
-        const refreshProgramResponse: ServiceResponse<ProgramDto> = await ProgramService.refreshProgram(userJWT.UserID, programID);
+        const refreshProgramResponse: ServiceResponse<ProgramDto> = await ProgramService.refresh(userJWT.UserID, programID);
         switch (refreshProgramResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(refreshProgramResponse.data);
@@ -127,7 +130,7 @@ export class ProgramController {
         const userJWT = req.AccessPayloadJWT;
         const workoutDto: UpdateWorkoutDto = req.body;
 
-        const deleteWorkoutResponse: ServiceResponse<DeleteWorkoutResponse> = await ProgramService.deleteWorkout(workoutDto, userJWT.UserID);
+        const deleteWorkoutResponse: ServiceResponse<DeleteWorkoutResponse> = await WorkoutService.delete(workoutDto, userJWT.UserID);
         switch (deleteWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(deleteWorkoutResponse.data);
@@ -142,7 +145,7 @@ export class ProgramController {
         const userJWT = req.AccessPayloadJWT;
         const workoutDto: WorkoutAddDTO = req.body;
 
-        const addWorkoutResponse: ServiceResponse<WorkoutDto> = await ProgramService.addWorkout(workoutDto, userJWT.UserID);
+        const addWorkoutResponse: ServiceResponse<WorkoutDto> = await WorkoutService.create(workoutDto, userJWT.UserID);
         switch (addWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(addWorkoutResponse.data);
@@ -157,7 +160,7 @@ export class ProgramController {
         const userJWT = req.AccessPayloadJWT;
         const deleteExerciseDto: DeleteExerciseDto = req.body;
         
-        const deleteExerciseResponse: ServiceResponse<DeleteExerciseResponse> = await ProgramService.deleteExercise(deleteExerciseDto, userJWT.UserID);
+        const deleteExerciseResponse: ServiceResponse<DeleteExerciseResponse> = await ExerciseWorkoutService.delete(deleteExerciseDto, userJWT.UserID);
         switch (deleteExerciseResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(deleteExerciseResponse.data);
@@ -172,7 +175,7 @@ export class ProgramController {
         const userJWT = req.AccessPayloadJWT;
         const exerciseDto: AddExerciseDto = req.body;
 
-        const addWorkoutResponse: ServiceResponse<ExerciseWorkoutDto> = await ProgramService.addExercise(exerciseDto, userJWT.UserID);
+        const addWorkoutResponse: ServiceResponse<ExerciseWorkoutDto> = await ExerciseWorkoutService.create(exerciseDto, userJWT.UserID);
         switch (addWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(addWorkoutResponse.data);
