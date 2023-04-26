@@ -1,4 +1,4 @@
-import {PlainWorkoutItem} from "../dto/plainWorkout";
+import {PlainWorkoutItem} from "../dto/programDto/plainWorkout";
 import {db} from "../database";
 import {WorkoutItem} from "../models/workout";
 import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
