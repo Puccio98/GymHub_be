@@ -4,6 +4,7 @@ import {ProgramService} from "../services/program-service";
 import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {EditProgramDto} from "../dto/programDto/edit-program.dto";
 
 export class ProgramController {
     static getListByUserID = async (req: IGetUserAuthInfoRequest, res: Response) => {
@@ -67,6 +68,21 @@ export class ProgramController {
                 return res.status(200).send(refreshProgramResponse.data);
             case ServiceStatusEnum.ERROR:
                 return res.status(400).send({error: refreshProgramResponse.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
+    }
+
+    static edit = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const editProgramDto = req.body;
+        const userJWT = req.AccessPayloadJWT;
+
+        const editProgramResponse: ServiceResponse<EditProgramDto> = await ProgramService.edit(userJWT.UserID, editProgramDto);
+        switch (editProgramResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(editProgramResponse.data);
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: editProgramResponse.message});
             default:
                 return res.status(500).send({error: "Internal server error"});
         }

@@ -4,6 +4,7 @@ import {ProgramItem} from "../models/program";
 import {WorkoutItem} from "../models/workout";
 import {ProgramStateEnum} from "../enums/program-state-enum";
 import {ExerciseStatus} from "../enums/exercise-status.enum";
+import {EditProgramItem} from "../models/edit-program-item";
 
 export class ProgramDao {
     // region Public Methods
@@ -129,6 +130,18 @@ export class ProgramDao {
             .where({'ProgramID': programID, 'StatusID': ExerciseStatus.INCOMPLETE});
 
         return uncompletedWorkouts.length <= 0;
+    }
+
+    static async edit(editProgramItem: EditProgramItem): Promise<boolean> {
+        console.log(editProgramItem);
+        await db('Program')
+            .where({'ProgramID': editProgramItem.programID})
+            .update({
+                'ProgramStateID': editProgramItem.programStateID,
+                'Title': editProgramItem.programTitle
+            });
+
+        return true;
     }
 
     //endregion
