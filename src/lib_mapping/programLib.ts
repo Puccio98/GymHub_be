@@ -160,7 +160,7 @@ export class ProgramLib {
     static editProgramDtoToEditProgramItem(epDto: EditProgramDto): EditProgramItem {
         return {
             programID: epDto.programID,
-            programStateID: epDto.programState? ProgramStateEnum.ACTIVE : ProgramStateEnum.INACTIVE,
+            programStateID: epDto.programState,
             programTitle: epDto.programTitle
         } as EditProgramItem
     }
