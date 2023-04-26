@@ -1,4 +1,4 @@
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramDao} from "../dao/program-dao";
 import {ProgramLib} from "../lib_mapping/programLib";
@@ -6,29 +6,24 @@ import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {WorkoutDao} from "../dao/workout-dao";
 import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
 
+const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
+let message: string; // messaggio specifico
+
 export class ProgramService {
 
     static async getListByUserID(userID: number): Promise<ServiceResponse<ProgramDto[]>> {
         try {
             const programList = await ProgramDao.getPlainList(userID);
             if (programList.length) {
-                return {
-                    data: ProgramLib.PlainProgramItemListToProgramDtoList(programList),
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Program found and returned'
-                };
+                message = 'Program found and returned';
+                const data = ProgramLib.PlainProgramItemListToProgramDtoList(programList);
+                return response(ServiceStatusEnum.SUCCESS, message, data);
             } else {
-                return {
-                    data: [],
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'You have 0 programs apparently'
-                };
+                message = 'You have 0 programs apparently';
+                return response(ServiceStatusEnum.SUCCESS, message, []);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
@@ -60,90 +55,61 @@ export class ProgramService {
             // Recupero la lista di tutti i programmi dell'utente
             return await this.getListByUserID(program.userID);
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
     static async delete(programID: number, userID: number): Promise<ServiceResponse<boolean>> {
         try {
             if (!await ProgramDao.belongsToUser(userID, programID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Program does not belong to user'
-                };
+                message = 'Program does not belong to user';
+                return response(ServiceStatusEnum.ERROR, message);
             }
             const isActive = await ProgramDao.isActive(userID, programID);
             if (await ProgramDao.delete(programID)) {
                 if (isActive) {
                     await ProgramDao.setActiveProgram(userID);
                 }
-                return {
-                    data: true,
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Program deleted'
-                };
+                message = 'Program deleted';
+                return response(ServiceStatusEnum.SUCCESS, message, true);
             } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'User can\'t delete the requested program'
-                };
+                message = 'User can\'t delete the requested program';
+                return response(ServiceStatusEnum.ERROR, message);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
     static async refresh(userID: number, programID: number): Promise<ServiceResponse<ProgramDto>> {
         try {
             if (!await ProgramDao.belongsToUser(userID, programID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Program does not belong to user'
-                };
+                message = 'Program does not belong to user';
+                return response(ServiceStatusEnum.ERROR, message);
             }
             if (!await ProgramDao.isComplete(programID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Program is not complete'
-                }
+                message = 'Program is not complete';
+                return response(ServiceStatusEnum.ERROR, message);
             }
             if (!await ProgramDao.refresh(programID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Db esplode'
-                }
+                return response(ServiceStatusEnum.ERROR, defaultMessage);
             }
             const ppList = await ProgramDao.getPlainByProgramID(userID, programID);
             if (!ppList.length) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Impossibile recuperare scheda'
-                }
+                message = 'Impossibile recuperare scheda';
+                return response(ServiceStatusEnum.ERROR, message);
             }
             const refreshedProgram = ProgramLib.PlainProgramItemListToProgramDtoList(ppList);
             if (refreshedProgram.length === 1) {
-                return {
-                    data: refreshedProgram[0],
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Program completed'
-                };
+                message = 'Program completed';
+                const data = refreshedProgram[0];
+                return response(ServiceStatusEnum.SUCCESS, message, data);
             } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Multiple programs found'
-                };
+                message = 'Multiple programs found';
+                return response(ServiceStatusEnum.ERROR, message);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, message);
         }
     }
 }

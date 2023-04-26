@@ -1,30 +1,26 @@
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
 import {ExerciseItem} from "../models/exercise";
 import {ExerciseDao} from "../dao/exercise-dao";
 import {ProgramLib} from "../lib_mapping/programLib";
+
+const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
+let message: string; // messaggio specifico
 
 export class ExerciseService {
     static async getList(): Promise<ServiceResponse<ExerciseDto[]>> {
         try {
             const exerciseList: ExerciseItem[] = await ExerciseDao.getList();
             if (exerciseList.length) {
-                return {
-                    data: ProgramLib.ExerciseItemListToExerciseDtoList(exerciseList),
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'User found'
-                }
+                message = 'User found';
+                const data = ProgramLib.ExerciseItemListToExerciseDtoList(exerciseList);
+                return response(ServiceStatusEnum.SUCCESS, message, data);
             } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'No exercises found'
-                };
+                message = 'No exercises found';
+                return response(ServiceStatusEnum.ERROR, message);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 }

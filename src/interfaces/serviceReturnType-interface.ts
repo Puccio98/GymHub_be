@@ -16,5 +16,4 @@ export function response<T>(status: ServiceStatusEnum, message?: string, data?: 
         data: data,
         status: status
     }
-
 }

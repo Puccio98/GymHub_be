@@ -1,5 +1,5 @@
 import {db} from "../database";
-import {PlainProgramItem} from "../dto/plainProgram";
+import {PlainProgramItem} from "../dto/programDto/plainProgram";
 import {ProgramItem} from "../models/program";
 import {WorkoutItem} from "../models/workout";
 import {ProgramStateEnum} from "../enums/program-state-enum";

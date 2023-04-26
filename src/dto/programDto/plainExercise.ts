@@ -1,5 +1,5 @@
-import {ExerciseWorkoutItem} from "../models/exercise_workout";
-import {ExerciseItem} from "../models/exercise";
+import {ExerciseWorkoutItem} from "../../models/exercise_workout";
+import {ExerciseItem} from "../../models/exercise";
 
 export interface PlainExerciseItem {
     // Exercise_Workout Properties
