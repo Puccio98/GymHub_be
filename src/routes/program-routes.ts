@@ -2,6 +2,7 @@ import {ProgramController} from "../controllers/program-controller";
 import {createProgramType} from "../validators/program-create-validator";
 import {refreshTokenType} from "../validators/refresh-token.validator";
 import {validateDto} from "../middlewares/validateDto";
+import {editProgramType} from "../validators/edit-program-validator";
 
 module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
     const router = require("express").Router();
@@ -14,6 +15,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.post('/program_refresh_program', validateDto(refreshTokenType), ProgramController.refresh);
 
+    router.post('/program_edit_program', validateDto(editProgramType), ProgramController.edit)
 
     app.use('/program', router);
 };

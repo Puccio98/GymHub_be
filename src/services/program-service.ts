@@ -5,6 +5,7 @@ import {ProgramLib} from "../lib_mapping/programLib";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {WorkoutDao} from "../dao/workout-dao";
 import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
+import {EditProgramDto} from "../dto/programDto/edit-program.dto";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string; // messaggio specifico
@@ -109,7 +110,41 @@ export class ProgramService {
                 return response(ServiceStatusEnum.ERROR, message);
             }
         } catch {
-            return response(ServiceStatusEnum.ERROR, message);
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
+        }
+    }
+
+    static async edit(userID: number, editProgramDto: EditProgramDto):Promise<ServiceResponse<EditProgramDto>> {
+        try {
+            //controllo che la scheda appartenga all'utente
+            if(!await ProgramDao.belongsToUser(userID, editProgramDto.programID)) {
+                message = 'Program does not belong to user';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+            //controllo se la scheda è attiva
+            if(await ProgramDao.isActive(userID, editProgramDto.programID)) {
+                //se la scheda è attiva e io voglio renderla inattiva --> errore
+                if (!editProgramDto.programState) {
+                    message = 'You need at least one active program';
+                    return response(ServiceStatusEnum.ERROR, message);
+                }
+            } else {
+                //se la scheda è inattiva e io voglio renderla attiva, prima rendo inattive quelle altre (così da averne
+                //solo una attiva per volta
+                if (editProgramDto.programState) {
+                    await ProgramDao.setProgramsInactive(userID);
+                }
+            }
+            //edit
+            if (await ProgramDao.edit(ProgramLib.editProgramDtoToEditProgramItem(editProgramDto))) {
+                message = 'Progam edited';
+                return response(ServiceStatusEnum.SUCCESS, message, editProgramDto);
+            } else {
+                message = 'Edit failed';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+        } catch {
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 }
