@@ -68,17 +68,7 @@ export class ProgramDao {
             });
     }
 
-    static async delete(programID: number, userID: number): Promise<boolean> {
-        // Verifico che l'utente possieda la scheda che vuole eliminare
-        const schedaList: ProgramItem[] = await db('Program as p')
-            .where({'p.UserID': userID, 'p.ProgramID': programID})
-            .select()
-
-        // Se non ho trovato la scheda da eliminare dall'utente che l'ha richiesta non elimino nulla.
-        if (schedaList.length !== 1) {
-            return false;
-        }
-
+    static async delete(programID: number): Promise<boolean> {
         // Elimino esercizi degli allenamenti della scheda richiesta se l'utente coincide
         await db('Exercises_Workout')
             .join('Workout AS w', 'w.WorkoutID', 'Exercises_Workout.WorkoutID')
@@ -95,16 +85,22 @@ export class ProgramDao {
         await db('Program')
             .where('ProgramID', programID)
             .delete();
-
-        if (schedaList[0].ProgramStateID === ProgramStateEnum.ACTIVE) {
-            //Se la scheda era una scheda attiva, devo poi settare la vecchia scheda più recente come nuova scheda attiva
-            await db('Program')
-                .where('userID', userID)
-                .orderBy('ProgramID', 'desc')
-                .limit(1)
-                .update('ProgramStateID', ProgramStateEnum.ACTIVE);
-        }
         return true;
+    }
+
+    static async isActive(userID: number, programID: number) {
+        const program = await db('Program')
+            .where({'UserID': userID, 'ProgramID': programID});
+
+        return program[0].ProgramStateID === ProgramStateEnum.ACTIVE;
+    }
+
+    static async setActiveProgram(userID: number) {
+        await db('Program')
+            .where('userID', userID)
+            .orderBy('ProgramID', 'desc')
+            .limit(1)
+            .update('ProgramStateID', ProgramStateEnum.ACTIVE);
     }
 
     static async refresh(programID: number): Promise<boolean> {
@@ -121,7 +117,6 @@ export class ProgramDao {
     static async belongsToUser(userID: number, programID: number): Promise<boolean> {
         const userProgram: any[] = await db('Program')
             .where({
-                'ProgramStateID': ProgramStateEnum.ACTIVE,
                 'UserID': userID, 'ProgramID': programID
             })
             .select();

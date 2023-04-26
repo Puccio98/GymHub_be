@@ -105,7 +105,17 @@ export class ProgramService {
 
     static async delete(programID: number, userID: number): Promise<ServiceResponse<boolean>> {
         try {
-            if (await ProgramDao.delete(programID, userID)) {
+            if (!await ProgramDao.belongsToUser(userID, programID)) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Program does not belong to user'
+                };
+            }
+            const isActive = await ProgramDao.isActive(userID, programID);
+            if (await ProgramDao.delete(programID)) {
+                if (isActive) {
+                    await ProgramDao.setActiveProgram(userID);
+                }
                 return {
                     data: true,
                     status: ServiceStatusEnum.SUCCESS,
@@ -197,6 +207,12 @@ export class ProgramService {
                 return {
                     status: ServiceStatusEnum.ERROR,
                     message: 'Program has reached maximum number of workouts'
+                }
+            }
+            if (!await ProgramDao.isActive(userID, workoutDto.programID)) {
+                return {
+                    status: ServiceStatusEnum.ERROR,
+                    message: 'Program is not active'
                 }
             }
             if (!await ProgramDao.belongsToUser(userID, workoutDto.programID)) {
@@ -341,7 +357,7 @@ export class ProgramService {
             }
             // controllo che l'allenamento non sia l'ultimo della scheda, in caso delete della scheda direttamente
             if (await WorkoutDao.isLast(workoutDto.programID)) {
-                if (await ProgramDao.delete(workoutDto.programID, userID)) {
+                if (await ProgramDao.delete(workoutDto.programID)) {
                     return {
                         data: {workoutID: workoutDto.workoutID, refreshProgram: false},
                         status: ServiceStatusEnum.SUCCESS,
@@ -402,7 +418,7 @@ export class ProgramService {
             if (await Exercise_WorkoutDao.isLast(deleteExerciseDto.workoutID)) {
                 //controllo che l'allenamento non sia l'ultimo rimasto della scheda, e in caso delete scheda
                 if (await WorkoutDao.isLast(deleteExerciseDto.programID)) {
-                    if (await ProgramDao.delete(deleteExerciseDto.programID, userID)) {
+                    if (await ProgramDao.delete(deleteExerciseDto.programID)) {
                         //ELIMINO SCHEDA
                         return {
                             data: {
