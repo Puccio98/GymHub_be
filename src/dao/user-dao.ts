@@ -10,6 +10,13 @@ export class UserDao {
         return res[0];
     }
 
+    static async findUserByUserName(userName: string): Promise<UserItem> {
+        const res: UserItem[] = await db('User')
+            .where({userName: userName})
+            .select('*');
+        return res[0];
+    }
+
     static async createUser(userItem: UserItem): Promise<UserItem> {
         await db('User').insert(userItem);
         // Ritorno il record appena creato
