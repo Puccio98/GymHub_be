@@ -8,14 +8,9 @@ export class AuthLib {
             userID: userItem.UserID,
             name: userItem.Name,
             lastName: userItem.LastName,
+            userName: userItem.UserName,
             email: userItem.Email,
             password: userItem.Password,
-            phoneNumber: userItem.PhoneNumber,
-            country: userItem.Country,
-            region: userItem.Region,
-            city: userItem.City,
-            address: userItem.Address,
-            CAP: userItem.CAP,
             profilePicture: userItem.ProfilePicture
         } as UserDto;
     }
@@ -24,14 +19,9 @@ export class AuthLib {
         return {
             Name: signupDto.name,
             LastName: signupDto.lastName,
+            UserName: signupDto.userName,
             Email: signupDto.email,
             Password: signupDto.password,
-            PhoneNumber: signupDto.phoneNumber,
-            Country: signupDto.country,
-            Region: signupDto.region,
-            City: signupDto.city,
-            Address: signupDto.address,
-            CAP: signupDto.cap,
             createdAt: signupDto.createdAt,
             updatedAt: signupDto.updatedAt
         } as UserItem;

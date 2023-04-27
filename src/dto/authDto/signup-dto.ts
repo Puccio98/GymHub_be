@@ -1,14 +1,10 @@
 import {LoginDto} from "./login-dto";
 
 export interface SignupDto extends LoginDto {
+    confirmPassword: string;
     name: string;
     lastName: string;
-    phoneNumber: string | null;
-    country: string;
-    region: string;
-    city: string;
-    address: string;
-    cap: string | null;
+    userName: string;
     createdAt?: Date;
     updatedAt?: Date;
 }

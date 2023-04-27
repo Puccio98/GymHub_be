@@ -133,8 +133,6 @@ export class ProgramDao {
     }
 
     static async edit(editProgramItem: EditProgramItem): Promise<boolean> {
-        // nel BE meglio non tenere i console.log quindi ricordati di toglierlo quando non lo usi
-        //console.log(editProgramItem);
         await db('Program')
             .where({'ProgramID': editProgramItem.programID})
             .update({

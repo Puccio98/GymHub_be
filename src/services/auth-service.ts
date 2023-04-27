@@ -46,11 +46,17 @@ export class AuthService {
 
     static async signup(signupDto: SignupDto): Promise<ServiceResponse<AuthDto>> {
         try {
-            const userExists = await UserDao.findUserByEmail(signupDto.email);
+            let userExists = await UserDao.findUserByEmail(signupDto.email);
             if (userExists) {
                 const message = 'User exists already!';
                 return response(ServiceStatusEnum.ERROR, message);
             } else {
+                //check se l'username è già preso
+                userExists = await UserDao.findUserByUserName(signupDto.userName);
+                if (userExists) {
+                    const message = 'Username is already taken!';
+                    return response(ServiceStatusEnum.ERROR, message);
+                }
                 signupDto.password = await bcrypt.hash(signupDto.password, 12);
                 const user = await UserDao.createUser(AuthLib.SignupDtoToUserItem(signupDto));
                 if (user.UserID) {
