@@ -11,4 +11,3 @@ export const signupType = yup.object().shape({
     updatedAt: yup.date().default(() => new Date())
 });
 
-export {};
