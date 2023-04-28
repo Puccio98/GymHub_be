@@ -1,30 +1,26 @@
 import {WeightDto} from "../dto/weightDto/weight-dto";
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {WeightDao} from "../dao/weight-dao";
 import {WeightLib} from "../lib_mapping/weightLib";
 import {PlainWeightDto} from "../dto/weightDto/plain-weight-dto";
+
+const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
+let message: string; // messaggio specifico
 
 export class WeightService {
     static async getWeights(userID: number): Promise<ServiceResponse<PlainWeightDto>> {
         try {
             const weightList = await WeightDao.findAllWeights(userID);
             if (!weightList) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'No weights found'
-                }
+                message = 'No weights found';
+                return response(ServiceStatusEnum.ERROR, message);
             } else {
-                return {
-                    data: WeightLib.ChartItemListToPlainWeightDto(weightList),
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Data returned'
-                }
+                message = 'Weights returned';
+                const data = WeightLib.ChartItemListToPlainWeightDto(weightList);
+                return response(ServiceStatusEnum.SUCCESS, message, data);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
@@ -35,38 +31,27 @@ export class WeightService {
                 const result = await WeightDao.updateWeight(existingWeight, weightDto.weight);
                 if (result) {
                     const d = await WeightDao.findAllWeights(weightDto.userID);
-                    return {
-                        data: WeightLib.ChartItemListToPlainWeightDto(d),
-                        status: ServiceStatusEnum.SUCCESS,
-                        message: 'Peso aggiornato con successo!'
-                    }
+                    message = 'Peso aggiornato con successo!';
+                    const data = WeightLib.ChartItemListToPlainWeightDto(d);
+                    return response(ServiceStatusEnum.SUCCESS, message, data);
                 } else {
-                    return {
-                        status: ServiceStatusEnum.ERROR,
-                        message: 'Peso non creato'
-                    }
+                    message = 'Peso non creato';
+                    return response(ServiceStatusEnum.ERROR, message);
                 }
             } else {
                 const result = await WeightDao.createNewWeight(WeightLib.WeightDtoToWeightItem(weightDto));
                 if (result) {
                     const d = await WeightDao.findAllWeights(weightDto.userID);
-                    return {
-                        data: WeightLib.ChartItemListToPlainWeightDto(d),
-                        status: ServiceStatusEnum.SUCCESS,
-                        message: 'Peso creato con successo!'
-                    }
+                    message = 'Peso creato con successo!';
+                    const data = WeightLib.ChartItemListToPlainWeightDto(d);
+                    return response(ServiceStatusEnum.SUCCESS, message, data);
                 } else {
-                    return {
-                        status: ServiceStatusEnum.ERROR,
-                        message: 'Peso non creato'
-                    }
+                    message = 'Peso non creato';
+                    return response(ServiceStatusEnum.ERROR, message);
                 }
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Db esplode'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 }

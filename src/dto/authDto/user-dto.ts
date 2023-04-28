@@ -5,13 +5,8 @@ export interface UserDto {
     userID?: number,
     name: string,
     lastName: string,
+    userName: string,
     email: string,
     password: string,
-    phoneNumber: string,
-    country: string,
-    region: string,
-    city: string,
-    address: string,
-    CAP: string,
     profilePicture?: string
 }

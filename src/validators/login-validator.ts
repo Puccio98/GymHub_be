@@ -1,8 +1,6 @@
-const yup = require('yup');
+import * as yup from "yup";
 
-module.exports = yup.object().shape({
+export const loginType = yup.object().shape({
     email: yup.string().required().email(),
     password: yup.string().required().min(8)
 });
-
-export {};

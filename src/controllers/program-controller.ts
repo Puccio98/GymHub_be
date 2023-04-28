@@ -2,30 +2,14 @@ import {Request, Response} from "express";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {ProgramService} from "../services/program-service";
 import {ProgramDto} from "../dto/programDto/program-dto";
-import {ExerciseDto} from "../dto/programDto/exercise-dto";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
-import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
-import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
-import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
-import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
+import {EditProgramDto} from "../dto/programDto/edit-program.dto";
 
 export class ProgramController {
-    static getStandardExercises = async (req: Request, res: Response) => {
-        const exerciseList: ServiceResponse<ExerciseDto[]> = await ProgramService.getStandardExercises();
-        switch (exerciseList.status) {
-            case ServiceStatusEnum.SUCCESS:
-                return res.status(200).send(exerciseList.data);
-            case ServiceStatusEnum.ERROR:
-                return res.status(400).send({error: exerciseList.message});
-            default:
-                return res.status(500).send({error: "Internal server error"});
-        }
-    }
-
-    static getProgramListByUserID = async (req: IGetUserAuthInfoRequest, res: Response) => {
+    static getListByUserID = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const userJWT = req.AccessPayloadJWT;
-        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.getProgramListByUserID(userJWT.UserID);
+        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.getListByUserID(userJWT.UserID);
 
         switch (programList.status) {
             case ServiceStatusEnum.SUCCESS:
@@ -39,7 +23,7 @@ export class ProgramController {
 
     static create = async (req: Request, res: Response) => {
         const program: ProgramCreateDTO = req.body;
-        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.createProgram(program);
+        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.create(program);
 
         switch (programList.status) {
             case ServiceStatusEnum.SUCCESS:
@@ -75,38 +59,10 @@ export class ProgramController {
         }
     }
 
-    static updateExercise = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const exercise: UpdateExerciseDto = req.body;
-        const userJWT = req.AccessPayloadJWT;
-        const completeExerciseResponse: ServiceResponse<ExerciseWorkoutDto> = await ProgramService.updateExercise(exercise, userJWT.UserID);
-        switch (completeExerciseResponse.status) {
-            case ServiceStatusEnum.SUCCESS:
-                return res.status(200).send(completeExerciseResponse.data);
-            case ServiceStatusEnum.ERROR:
-                return res.status(400).send({error: completeExerciseResponse.message});
-            default:
-                return res.status(500).send({error: "Internal server error"});
-        }
-    }
-
-    static updateWorkout = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const workoutDto: UpdateWorkoutDto = req.body;
-        const userJWT = req.AccessPayloadJWT;
-        const completeWorkoutResponse: ServiceResponse<CompleteWorkoutDto> = await ProgramService.updateWorkout(workoutDto, userJWT.UserID);
-        switch (completeWorkoutResponse.status) {
-            case ServiceStatusEnum.SUCCESS:
-                return res.status(200).send(completeWorkoutResponse.data);
-            case ServiceStatusEnum.ERROR:
-                return res.status(400).send({error: completeWorkoutResponse.message});
-            default:
-                return res.status(500).send({error: "Internal server error"});
-        }
-    }
-
-    static refreshProgram = async (req: IGetUserAuthInfoRequest, res: Response) => {
+    static refresh = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const programID: number = req.body.programID;
         const userJWT = req.AccessPayloadJWT;
-        const refreshProgramResponse: ServiceResponse<ProgramDto> = await ProgramService.refreshProgram(userJWT.UserID, programID);
+        const refreshProgramResponse: ServiceResponse<ProgramDto> = await ProgramService.refresh(userJWT.UserID, programID);
         switch (refreshProgramResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(refreshProgramResponse.data);
@@ -117,16 +73,16 @@ export class ProgramController {
         }
     }
 
-    static deleteWorkout = async (req: IGetUserAuthInfoRequest, res: Response) => {
+    static edit = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const editProgramDto = req.body;
         const userJWT = req.AccessPayloadJWT;
-        const workoutDto: UpdateWorkoutDto = req.body;
 
-        const deleteWorkoutResponse: ServiceResponse<number> = await ProgramService.deleteWorkout(workoutDto, userJWT.UserID);
-        switch (deleteWorkoutResponse.status) {
+        const editProgramResponse: ServiceResponse<EditProgramDto> = await ProgramService.edit(userJWT.UserID, editProgramDto);
+        switch (editProgramResponse.status) {
             case ServiceStatusEnum.SUCCESS:
-                return res.status(200).send(deleteWorkoutResponse.data!.toString());
+                return res.status(200).send(editProgramResponse.data);
             case ServiceStatusEnum.ERROR:
-                return res.status(400).send({error: deleteWorkoutResponse.message});
+                return res.status(400).send({error: editProgramResponse.message});
             default:
                 return res.status(500).send({error: "Internal server error"});
         }

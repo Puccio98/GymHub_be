@@ -1,7 +1,7 @@
 import {LoginDto} from "../dto/authDto/login-dto";
 import {UserDao} from "../dao/user-dao";
 import {AuthLib} from "../lib_mapping/authLib";
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {SignupDto} from "../dto/authDto/signup-dto";
 import {AuthHelper} from "../helpers/AuthHelper";
 import {AuthDto} from "../dto/authDto/auth-dto";
@@ -12,6 +12,9 @@ import {PayloadJWT} from "../interfaces/payloadJWT";
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
+let message: string; // messaggio specifico
 
 export class AuthService {
     static async login(loginDto: LoginDto): Promise<ServiceResponse<AuthDto>> {
@@ -24,40 +27,36 @@ export class AuthService {
                     // Genera nuova coppia di Access e Refresh token
                     const tokenDto = await AuthHelper.createTokenDto(user.Email, user.UserID);
                     const userDto = AuthLib.UserItemToUserDto(user);
-                    return {
-                        data: {userDto: userDto, tokenDto: tokenDto} as AuthDto,
-                        status: ServiceStatusEnum.SUCCESS,
-                        message: 'User found'
-                    }
+
+                    message = 'User found';
+                    const data = {userDto: userDto, tokenDto: tokenDto} as AuthDto;
+                    return response(ServiceStatusEnum.SUCCESS, message, data);
                 } else {
-                    return {
-                        status: ServiceStatusEnum.ERROR,
-                        message: 'Wrong Password'
-                    };
+                    message = 'Wrong Password';
+                    return response(ServiceStatusEnum.ERROR, message);
                 }
             } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'User not found'
-                };
+                message = 'User not found';
+                return response(ServiceStatusEnum.ERROR, message);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'DB esplode'
-            };
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
     static async signup(signupDto: SignupDto): Promise<ServiceResponse<AuthDto>> {
         try {
-            const userExists = await UserDao.findUserByEmail(signupDto.email);
+            let userExists = await UserDao.findUserByEmail(signupDto.email);
             if (userExists) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'User exists already!'
-                }
+                const message = 'User exists already!';
+                return response(ServiceStatusEnum.ERROR, message);
             } else {
+                //check se l'username è già preso
+                userExists = await UserDao.findUserByUserName(signupDto.userName);
+                if (userExists) {
+                    const message = 'Username is already taken!';
+                    return response(ServiceStatusEnum.ERROR, message);
+                }
                 signupDto.password = await bcrypt.hash(signupDto.password, 12);
                 const user = await UserDao.createUser(AuthLib.SignupDtoToUserItem(signupDto));
                 if (user.UserID) {
@@ -66,45 +65,31 @@ export class AuthService {
                     // Genera nuova coppia di Access e Refresh token
                     const tokenDto = await AuthHelper.createTokenDto(user.Email, user.UserID);
                     const userDto = AuthLib.UserItemToUserDto(user);
-                    return {
-                        data: {userDto: userDto, tokenDto: tokenDto} as AuthDto,
-                        status: ServiceStatusEnum.SUCCESS,
-                        message: 'User found'
-                    }
+
+                    const data = {userDto: userDto, tokenDto: tokenDto} as AuthDto;
+                    message = 'User found'
+                    return response(ServiceStatusEnum.SUCCESS, message, data);
                 } else {
-                    return {
-                        status: ServiceStatusEnum.ERROR,
-                        message: 'User creation failed :\'c'
-                    };
+                    message = 'User creation failed :\'c'
+                    return response(ServiceStatusEnum.ERROR, message);
                 }
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'DB esplode'
-            };
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
     static async logout(userID: number): Promise<ServiceResponse<boolean>> {
         try {
             if (await TokenDao.delete(userID)) {
-                return {
-                    data: true,
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'User logged out!'
-                }
+                message = 'User logged out!';
+                return response(ServiceStatusEnum.SUCCESS, message, true);
             } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Errors :\'c'
-                }
+                message = 'Errors in logout';
+                return response(ServiceStatusEnum.ERROR, message);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'DB esplode'
-            };
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
@@ -115,41 +100,29 @@ export class AuthService {
             if (refreshToken !== dbToken.Token) {
                 //res.sendStatus(403);
                 // Refresh token non presente tra quelli validi in DB
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Refresh token non presente tra quelli validi in DB'
-                }
+                message = 'Refresh token non presente tra quelli validi in DB';
+                return response(ServiceStatusEnum.ERROR, message);
             }
             let tokenDto: TokenDto | null = null;
             await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err: any, userJWT: PayloadJWT) => {
                 if (err) {
                     //return res.sendStatus(403); // Token di refresh non più valido
-                    return {
-                        status: ServiceStatusEnum.ERROR,
-                        message: 'Refresh token non presente tra quelli validi in DB'
-                    }
+                    message = 'Refresh token non presente tra quelli validi in DB';
+                    return response(ServiceStatusEnum.ERROR, message);
                 }
                 //TODO Luca: controlla questo codice
                 await TokenDao.delete(userJWT.UserID);
                 tokenDto = await AuthHelper.createTokenDto(userJWT.Email, userJWT.UserID);
             });
             if (tokenDto) {
-                return {
-                    data: tokenDto,
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Nuova coppia di token'
-                }
+                message = 'Nuova coppia di token';
+                return response(ServiceStatusEnum.SUCCESS, message, tokenDto);
             } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Non è stato possibile generare nuova coppia di token'
-                };
+                message = 'Non è stato possibile generare nuova coppia di token';
+                return response(ServiceStatusEnum.ERROR, message);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'DB esplode'
-            };
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 }

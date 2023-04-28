@@ -4,7 +4,7 @@ import {RouteNeedsToken} from "./authenticateToken";
 
 const ApiError = require('../errors/api-error');
 
-function validateDto(schema: any) {
+export function validateDto(schema: any) {
     return async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
         try {
             if (RouteNeedsToken(req.originalUrl)) {
@@ -19,4 +19,3 @@ function validateDto(schema: any) {
     }
 }
 
-module.exports = validateDto;
