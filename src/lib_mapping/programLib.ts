@@ -1,4 +1,4 @@
-import {PlainProgramItem} from "../models/plainProgram";
+import {PlainProgramItem} from "../dto/programDto/plainProgram";
 import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramItem} from "../models/program";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
@@ -9,6 +9,9 @@ import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
 import {ExerciseCreateDTO, ProgramCreateDTO, WorkoutCreateDTO} from "../dto/programDto/program-create-dto";
 import {ProgramStateEnum} from "../enums/program-state-enum";
+import {PlainWorkoutItem} from "../dto/programDto/plainWorkout";
+import {EditProgramDto} from "../dto/programDto/edit-program.dto";
+import {EditProgramItem} from "../models/edit-program-item";
 
 export class ProgramLib {
     static ProgramItemToProgramDto(programItem: ProgramItem): ProgramDto {
@@ -139,4 +142,26 @@ export class ProgramLib {
         return programList;
     }
 
+    static PlainWorkoutItemToWorkoutDtoList(pwList: PlainWorkoutItem[]): WorkoutDto[] {
+        let old_workoutID = 0;
+        let wList: WorkoutDto[] = [];
+        for (let pw of pwList) {
+            if (pw.w.WorkoutID && old_workoutID !== pw.w.WorkoutID) {
+                // Nuovo allenamento
+                old_workoutID = pw.w.WorkoutID;
+                wList.push(this.WorkoutItemToWorkoutDto(pw.w));
+            }
+            // Nuovo esercizio
+            wList.at(-1)?.exerciseList.push(this.ExerciseWorkoutItemToExerciseWorkoutDto(pw.e_w, pw.e));
+        }
+        return wList;
+    }
+
+    static editProgramDtoToEditProgramItem(epDto: EditProgramDto): EditProgramItem {
+        return {
+            programID: epDto.programID,
+            programStateID: epDto.programState,
+            programTitle: epDto.programTitle
+        } as EditProgramItem
+    }
 }

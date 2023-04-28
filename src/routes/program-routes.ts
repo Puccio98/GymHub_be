@@ -1,28 +1,21 @@
 import {ProgramController} from "../controllers/program-controller";
+import {createProgramType} from "../validators/program-create-validator";
+import {validateDto} from "../middlewares/validateDto";
+import {editProgramType} from "../validators/edit-program-validator";
+import {updateProgramType} from "../validators/update-program-validator";
 
 module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
     const router = require("express").Router();
-    const validateDto = require('../middlewares/validateDto');
-    const programCreateValidator = require('../validators/program-create-validator');
-    const updateExerciseValidator = require('../validators/update-exercise-validator');
-    const updateWorkoutValidator = require('../validators/update-workout-validator');
-    const refreshProgramValidator = require('../validators/update-program-validator');
 
-    router.get('/program_get', ProgramController.getProgramListByUserID);
+    router.get('/program_get', ProgramController.getListByUserID);
 
-    router.get('/program_get_exercises', ProgramController.getStandardExercises);
-
-    router.post('/program_create', validateDto(programCreateValidator), ProgramController.create);
+    router.post('/program_create', validateDto(createProgramType), ProgramController.create);
 
     router.delete('/:program_id', ProgramController.delete);
 
-    router.post('/program_update_exercise', validateDto(updateExerciseValidator), ProgramController.updateExercise);
+    router.post('/program_refresh_program', validateDto(updateProgramType), ProgramController.refresh);
 
-    router.post('/program_update_workout', validateDto(updateWorkoutValidator), ProgramController.updateWorkout);
-
-    router.post('/program_refresh_program', validateDto(refreshProgramValidator), ProgramController.refreshProgram);
-
-    router.post('/program_delete_workout', validateDto(updateWorkoutValidator), ProgramController.deleteWorkout);
+    router.post('/program_edit_program', validateDto(editProgramType), ProgramController.edit)
 
     app.use('/program', router);
 };

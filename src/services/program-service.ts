@@ -1,282 +1,151 @@
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramDao} from "../dao/program-dao";
 import {ProgramLib} from "../lib_mapping/programLib";
-import {ExerciseDto} from "../dto/programDto/exercise-dto";
-import {ExerciseItem} from "../models/exercise";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
-import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
-import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
-import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
-import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
+import {WorkoutDao} from "../dao/workout-dao";
+import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
+import {EditProgramDto} from "../dto/programDto/edit-program.dto";
+import {ProgramStateEnum} from "../enums/program-state-enum";
+
+const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
+let message: string; // messaggio specifico
 
 export class ProgramService {
 
-    static async getProgramListByUserID(userID: number): Promise<ServiceResponse<ProgramDto[]>> {
+    static async getListByUserID(userID: number): Promise<ServiceResponse<ProgramDto[]>> {
         try {
-            const programList = await ProgramDao.getProgramList(userID);
+            const programList = await ProgramDao.getPlainList(userID);
             if (programList.length) {
-                return {
-                    data: ProgramLib.PlainProgramItemListToProgramDtoList(programList),
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Program found and returned'
-                };
+                message = 'Program found and returned';
+                const data = ProgramLib.PlainProgramItemListToProgramDtoList(programList);
+                return response(ServiceStatusEnum.SUCCESS, message, data);
             } else {
-                return {
-                    data: [],
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'You have 0 programs apparently'
-                };
+                message = 'You have 0 programs apparently';
+                return response(ServiceStatusEnum.SUCCESS, message, []);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
-    static async getStandardExercises(): Promise<ServiceResponse<ExerciseDto[]>> {
+    static async create(program: ProgramCreateDTO): Promise<ServiceResponse<ProgramDto[]>> {
         try {
-            const exerciseList: ExerciseItem[] = await ProgramDao.getStandardExercises();
-            if (exerciseList.length) {
-                return {
-                    data: ProgramLib.ExerciseItemListToExerciseDtoList(exerciseList),
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'User found'
-                }
-            } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'No exercises found'
-                };
-            }
-        } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
-        }
-    }
-
-    static async createProgram(program: ProgramCreateDTO): Promise<ServiceResponse<ProgramDto[]>> {
-        try {
-            //Per prima cosa, metto StatusID = 1 a tutti gli allenamenti ed esercizi della scheda attiva.
+            //Per prima cosa, metto StatusID = INCOMPLETE a tutti gli allenamenti ed esercizi della scheda attiva.
             const activeProgramID = await ProgramDao.getActiveProgram(program.userID);
-            if(activeProgramID !== -1) {
-                await ProgramDao.refreshProgram(activeProgramID);
+            if (activeProgramID !== -1) {
+                await ProgramDao.refresh(activeProgramID);
             }
 
             // Mette inattivi tutti i programmi
             await ProgramDao.setProgramsInactive(program.userID);
             const programItem = ProgramLib.ProgramCreateDtoToProgramItem(program);
             // Insert del nuovo programma
-            const programID = await ProgramDao.createProgram(programItem);
+            const programID = await ProgramDao.create(programItem);
             if (programID) {
                 const workoutItemList = ProgramLib.WorkoutCreateDtoListToWorkoutItemList(program.workoutList, programID);
                 for (let w = 0; w < program.workoutList.length; w++) {
                     // Insert degli allenamenti uno alla volta
-                    const workoutID = await ProgramDao.createWorkout(workoutItemList[w]);
+                    const workoutID = await WorkoutDao.create(workoutItemList[w]);
                     if (workoutID) {
                         const exerciseItemList = ProgramLib.ExerciseCreateDtoListToExerciseWorkoutItemList(program.workoutList[w].exerciseList, workoutID);
                         // Insert di tutti gli esercizi di un workout contemporaneamente
-                        await ProgramDao.createExerciseWorkout(exerciseItemList);
+                        await Exercise_WorkoutDao.create(exerciseItemList);
                     }
                 }
             }
             // Recupero la lista di tutti i programmi dell'utente
-            return await this.getProgramListByUserID(program.userID);
+            return await this.getListByUserID(program.userID);
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
     static async delete(programID: number, userID: number): Promise<ServiceResponse<boolean>> {
         try {
-            if (await ProgramDao.delete(programID, userID)) {
-                return {
-                    data: true,
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Program deleted'
-                };
+            if (!await ProgramDao.belongsToUser(userID, programID)) {
+                message = 'Program does not belong to user';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+            const isActive = await ProgramDao.isActive(userID, programID);
+            if (await ProgramDao.delete(programID)) {
+                if (isActive) {
+                    await ProgramDao.setActiveProgram(userID);
+                }
+                message = 'Program deleted';
+                return response(ServiceStatusEnum.SUCCESS, message, true);
             } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'User can\'t delete the requested program'
-                };
+                message = 'User can\'t delete the requested program';
+                return response(ServiceStatusEnum.ERROR, message);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
-    static async updateExercise(exercise: UpdateExerciseDto, userID: number): Promise<ServiceResponse<ExerciseWorkoutDto>> {
+    static async refresh(userID: number, programID: number): Promise<ServiceResponse<ProgramDto>> {
         try {
-            //Verifico che l'esercizio che deve essere completato appartenga all'utente
-            if(!await ProgramDao.exerciseBelongsToUser(userID, exercise.programID, exercise.workoutID, exercise.exercise_WorkoutID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Exercise does not belong to user'
-                };
+            if (!await ProgramDao.belongsToUser(userID, programID)) {
+                message = 'Program does not belong to user';
+                return response(ServiceStatusEnum.ERROR, message);
             }
-            const updatedExercise = await ProgramDao.updateExercise(exercise);
-            if (updatedExercise) {
-                return {
-                    data: ProgramLib.ExerciseWorkoutItemToExerciseWorkoutDto(updatedExercise.e_w, updatedExercise.e),
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Exercise completed'
-                };
-            } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Internal server error'
-                };
+            if (!await ProgramDao.isComplete(programID)) {
+                message = 'Program is not complete';
+                return response(ServiceStatusEnum.ERROR, message);
             }
-        } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
+            if (!await ProgramDao.refresh(programID)) {
+                return response(ServiceStatusEnum.ERROR, defaultMessage);
             }
-        }
-    }
-
-    static async updateWorkout(workoutDto: UpdateWorkoutDto, userID: number): Promise<ServiceResponse<CompleteWorkoutDto>> {
-        try {
-            if(!await ProgramDao.workoutBelongsToUser(userID, workoutDto.programID, workoutDto.workoutID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Workout does not belong to user'
-                };
-            }
-            if(!await ProgramDao.isWorkoutComplete(workoutDto.workoutID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Workout is not complete'
-                }
-            }
-            const updatedWorkout = await ProgramDao.updateWorkout(workoutDto);
-            if (updatedWorkout) {
-                return {
-                    data: updatedWorkout,
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Workout completed'
-                };
-            } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'User can\'t update the requested workout'
-                };
-            }
-        } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
-        }
-    }
-
-    static async refreshProgram(userID: number, programID: number): Promise<ServiceResponse<ProgramDto>> {
-        try {
-            if (!await ProgramDao.programBelongsToUser(userID, programID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Program does not belong to user'
-                };
-            }
-            if(!await ProgramDao.isProgramComplete(programID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Program is not complete'
-                }
-            }
-            if(!await ProgramDao.refreshProgram(programID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Db esplode'
-                }
-            }
-            const ppList = await ProgramDao.getProgramByProgramID(userID, programID);
-            if(!ppList.length) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Impossibile recuperare scheda'
-                }
+            const ppList = await ProgramDao.getPlainByProgramID(userID, programID);
+            if (!ppList.length) {
+                message = 'Impossibile recuperare scheda';
+                return response(ServiceStatusEnum.ERROR, message);
             }
             const refreshedProgram = ProgramLib.PlainProgramItemListToProgramDtoList(ppList);
             if (refreshedProgram.length === 1) {
-                return {
-                    data: refreshedProgram[0],
-                    status: ServiceStatusEnum.SUCCESS,
-                    message: 'Program completed'
-                };
+                message = 'Program completed';
+                const data = refreshedProgram[0];
+                return response(ServiceStatusEnum.SUCCESS, message, data);
             } else {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Multiple programs found'
-                };
+                message = 'Multiple programs found';
+                return response(ServiceStatusEnum.ERROR, message);
             }
         } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
-            }
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 
-    static async deleteWorkout(workoutDto: UpdateWorkoutDto, userID: number): Promise<ServiceResponse<number>> {
+    static async edit(userID: number, editProgramDto: EditProgramDto): Promise<ServiceResponse<EditProgramDto>> {
         try {
-            if(!await ProgramDao.workoutBelongsToUser(userID, workoutDto.programID, workoutDto.workoutID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Workout does not belong to user'
-                };
+            //controllo che la scheda appartenga all'utente
+            if (!await ProgramDao.belongsToUser(userID, editProgramDto.programID)) {
+                message = 'Program does not belong to user';
+                return response(ServiceStatusEnum.ERROR, message);
             }
-            if(await ProgramDao.isWorkoutComplete(workoutDto.workoutID)) {
-                return {
-                    status: ServiceStatusEnum.ERROR,
-                    message: 'Workout is complete'
-                }
-            }
-            // controllo che l'allenamento non sia l'ultimo della scheda, in caso delete della scheda direttamente
-            if(await ProgramDao.isLastWorkout(workoutDto.programID)) {
-                if (await ProgramDao.delete(workoutDto.programID, userID)) {
-                    return {
-                        data: workoutDto.workoutID,
-                        status: ServiceStatusEnum.SUCCESS,
-                        message: 'Entire program deleted'
-                    };
-                } else {
-                    return {
-                        status: ServiceStatusEnum.ERROR,
-                        message: 'User can\'t delete the requested program'
-                    };
+            //controllo se la scheda è attiva
+            if (await ProgramDao.isActive(userID, editProgramDto.programID)) {
+                //se la scheda è attiva e io voglio renderla inattiva --> errore
+                if (editProgramDto.programState === ProgramStateEnum.INACTIVE) {
+                    message = 'You need at least one active program';
+                    return response(ServiceStatusEnum.ERROR, message);
                 }
             } else {
-                const deletedWorkout = await ProgramDao.deleteWorkout(workoutDto.workoutID);
-                if (deletedWorkout) {
-                    return {
-                        data: deletedWorkout,
-                        status: ServiceStatusEnum.SUCCESS,
-                        message: 'Workout deleted'
-                    };
-                } else {
-                    return {
-                        status: ServiceStatusEnum.ERROR,
-                        message: 'User can\'t delete the requested workout'
-                    };
+                //se la scheda è inattiva e io voglio renderla attiva, prima rendo inattive quelle altre (così da averne
+                //solo una attiva per volta
+                if (editProgramDto.programState === ProgramStateEnum.ACTIVE) {
+                    await ProgramDao.setProgramsInactive(userID);
                 }
             }
-        } catch {
-            return {
-                status: ServiceStatusEnum.ERROR,
-                message: 'Something went wrong'
+            //edit
+            if (await ProgramDao.edit(ProgramLib.editProgramDtoToEditProgramItem(editProgramDto))) {
+                message = 'Program edited';
+                return response(ServiceStatusEnum.SUCCESS, message, editProgramDto);
+            } else {
+                message = 'Edit failed';
+                return response(ServiceStatusEnum.ERROR, message);
             }
+        } catch {
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
 }

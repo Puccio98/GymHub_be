@@ -1,6 +1,6 @@
-const yup = require('yup');
+import * as yup from "yup";
 
-module.exports = yup.object().shape({
+export const updateWorkoutType = yup.object().shape({
     workoutID: yup.number().required(),
     programID: yup.number().required(),
 });
