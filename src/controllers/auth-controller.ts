@@ -6,6 +6,7 @@ import {SignupDto} from "../dto/authDto/signup-dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {AuthDto} from "../dto/authDto/auth-dto";
 import {TokenDto} from "../dto/authDto/token-dto";
+import {ff} from "../dto/authDto/ff.dto";
 
 
 export class AuthController {
@@ -53,6 +54,15 @@ export class AuthController {
             default:
                 return res.status(500).send({error: "Internal server error"});
         }
+    }
+
+    static food = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const fs = require('fs');
+        const raw = fs.readFileSync('C:/Users/malte/WebstormProjects/GymHub_be/utils_txt/ff.json');
+        const ff: ff = JSON.parse(raw);
+        const f = ff.foods[96];
+
+        console.log('abba');
     }
 
     static refreshToken = async (req: IGetUserAuthInfoRequest, res: Response) => {
