@@ -15,7 +15,5 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.get('/logout', AuthController.logout);
 
-    router.get('/food', AuthController.food);
-
     app.use('/auth', router);
 };
