@@ -3,6 +3,8 @@ import {FoodItem} from "../models/food";
 import {NutrientUsdaEnum} from "../enums/nutrient-usda.enum";
 import {itemOFF} from "../dto/externalApiDto/OFF/off-dto";
 import {FoodDto} from "../dto/nutritionDto/food-dto";
+import {PlainFoodUserItem} from "../plain_item/PlainFoodUserItem";
+import {DailyFoodDto} from "../dto/nutritionDto/dailyFood-dto";
 
 export class NutritionLib {
     static USDAItemToFood(itemUSDA: itemUSDA): FoodItem {
@@ -59,6 +61,21 @@ export class NutritionLib {
             foodDtoList.push(this.FoodItemToFoodDto(food));
         }
         return foodDtoList;
+    }
+
+    static PlainFoodUserItemListToDailyFoodDto(foods: PlainFoodUserItem[]): DailyFoodDto {
+        const res: DailyFoodDto = {Colazione: [], Pranzo: [], Cena: [], Snack: []}
+        for (const food of foods) {
+            const foodQuantity = this.PlainFoodUserItemToFoodQuantityDto(food);
+            res[food.m.Description].push(foodQuantity);
+        }
+        return res;
+    }
+
+    static PlainFoodUserItemToFoodQuantityDto(plainFood: PlainFoodUserItem): any {
+        const f = plainFood.f;
+        const f_u = plainFood.f_u;
+        return {...f, quantity: f_u.Quantity};
     }
 
 
