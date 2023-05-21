@@ -3,6 +3,7 @@ import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnTyp
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {NutritionService} from "../services/nutrition-service";
 import {FoodDto} from "../dto/nutritionDto/food-dto";
+import {DailyFoodDto} from "../dto/nutritionDto/dailyFood-dto";
 
 export class NutritionController {
     static getFood = async (req: IGetUserAuthInfoRequest, res: Response) => {
@@ -40,6 +41,30 @@ export class NutritionController {
             default:
                 return res.status(500).send({error: "Internal server error"});
         }
+    }
+
+    /**
+     * Restituisce gli alimenti inseriti dall'utente nel giorno 'oggi'
+     * @param req
+     * @param res
+     */
+    static getDailyFood = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const userJWT = req.AccessPayloadJWT;
+
+        const foodResponse: ServiceResponse<DailyFoodDto> = await NutritionService.getDailyFood(userJWT.UserID);
+
+        switch (foodResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(foodResponse.data);
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: foodResponse.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
+    }
+
+    static addDailyFood() {
+
     }
 }
 

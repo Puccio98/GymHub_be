@@ -6,6 +6,9 @@ import {itemOFF} from "../dto/externalApiDto/OFF/off-dto";
 import {itemUSDA} from "../dto/externalApiDto/USDA/usda-dto";
 import {NutritionLib} from "../lib_mapping/nutritionLib";
 import {FoodDto} from "../dto/nutritionDto/food-dto";
+import {FoodUserDao} from "../dao/food-user-dao";
+import {PlainFoodUserItem} from "../plain_item/PlainFoodUserItem";
+import {DailyFoodDto} from "../dto/nutritionDto/dailyFood-dto";
 
 
 export class NutritionService {
@@ -62,6 +65,16 @@ export class NutritionService {
 
         } catch {
             return response(ServiceStatusEnum.ERROR, 'defaultMessage');
+        }
+    }
+
+    static async getDailyFood(userID: number): Promise<ServiceResponse<DailyFoodDto>> {
+        try {
+            // Restituisce i cibi dell'utente inseriti nella giornata di oggi + la quantità
+            let foods: PlainFoodUserItem[] = await FoodUserDao.get(userID);
+            return response(ServiceStatusEnum.SUCCESS, 'Lista di alimenti', NutritionLib.PlainFoodUserItemListToDailyFoodDto(foods));
+        } catch (e) {
+            return response(ServiceStatusEnum.ERROR, 'DB error');
         }
     }
 

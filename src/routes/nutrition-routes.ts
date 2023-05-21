@@ -8,5 +8,9 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.get('/food/description/:description', NutritionController.searchFoods);
 
+    router.get('daily_food', NutritionController.getDailyFood)
+
+    router.post('daily_food', NutritionController.addDailyFood)
+
     app.use('/nutrition', router);
 };
