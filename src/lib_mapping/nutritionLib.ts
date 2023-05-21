@@ -37,7 +37,7 @@ export class NutritionLib {
         } as FoodItem;
     }
 
-    static FoodItemtoFoodDto(foodItem: FoodItem): FoodDto {
+    static FoodItemToFoodDto(foodItem: FoodItem): FoodDto {
         return {
             description: foodItem.Description,
             category: foodItem.Category,
@@ -51,6 +51,14 @@ export class NutritionLib {
             fdcId: foodItem.fdcId,
             barcode: foodItem.Barcode,
         } as FoodDto;
+    }
+
+    static FoodItemListToFoodDtoList(foods: FoodItem[]): FoodDto[] {
+        const foodDtoList: FoodDto[] = [];
+        for (const food of foods) {
+            foodDtoList.push(this.FoodItemToFoodDto(food));
+        }
+        return foodDtoList;
     }
 
 

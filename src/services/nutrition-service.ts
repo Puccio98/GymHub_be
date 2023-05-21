@@ -5,15 +5,27 @@ import {FoodItem} from "../models/food";
 import {itemOFF} from "../dto/externalApiDto/OFF/off-dto";
 import {itemUSDA} from "../dto/externalApiDto/USDA/usda-dto";
 import {NutritionLib} from "../lib_mapping/nutritionLib";
+import {FoodDto} from "../dto/nutritionDto/food-dto";
 
 
 export class NutritionService {
-    static async getFood(barcode: string): Promise<ServiceResponse<any>> {
+
+    static async searchFoods(description: string): Promise<ServiceResponse<FoodDto[]>> {
+        try {
+            let foods: FoodItem[] = await FoodDao.search(description);
+            // Restituisce i cibi in base alla descrizione o array vuoto
+            return response(ServiceStatusEnum.SUCCESS, 'Lista di alimenti', NutritionLib.FoodItemListToFoodDtoList(foods));
+        } catch (e) {
+            return response(ServiceStatusEnum.ERROR, 'DB error');
+        }
+    }
+
+    static async getFood(barcode: string): Promise<ServiceResponse<FoodDto>> {
         try {
             let food: FoodItem = await FoodDao.get(barcode);
             // Se lo trova in database lo restituisce
             if (food) {
-                return response(ServiceStatusEnum.SUCCESS, '', NutritionLib.FoodItemtoFoodDto(food));
+                return response(ServiceStatusEnum.SUCCESS, '', NutritionLib.FoodItemToFoodDto(food));
             }
 
             // Lo cerco su Open food facts
@@ -46,7 +58,7 @@ export class NutritionService {
             food.FoodID = foodID;
 
             let message = 'Nuovo alimento inserito';
-            return response(ServiceStatusEnum.SUCCESS, message, NutritionLib.FoodItemtoFoodDto(food));
+            return response(ServiceStatusEnum.SUCCESS, message, NutritionLib.FoodItemToFoodDto(food));
 
         } catch {
             return response(ServiceStatusEnum.ERROR, 'defaultMessage');
