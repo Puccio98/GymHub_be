@@ -19,7 +19,7 @@ let message: string; // messaggio specifico
 export class AuthService {
     static async login(loginDto: LoginDto): Promise<ServiceResponse<AuthDto>> {
         try {
-            const user = await UserDao.findUserByEmail(loginDto.email);
+            const user = await UserDao.findByEmail(loginDto.email);
             if (user && user.UserID) {
                 if (await bcrypt.compare(loginDto.password, user.Password)) {
                     // Cancella tutti i token dell'utente
@@ -46,19 +46,19 @@ export class AuthService {
 
     static async signup(signupDto: SignupDto): Promise<ServiceResponse<AuthDto>> {
         try {
-            let userExists = await UserDao.findUserByEmail(signupDto.email);
+            let userExists = await UserDao.findByEmail(signupDto.email);
             if (userExists) {
                 const message = 'User exists already!';
                 return response(ServiceStatusEnum.ERROR, message);
             } else {
                 //check se l'username è già preso
-                userExists = await UserDao.findUserByUserName(signupDto.userName);
+                userExists = await UserDao.findByUserName(signupDto.userName);
                 if (userExists) {
                     const message = 'Username is already taken!';
                     return response(ServiceStatusEnum.ERROR, message);
                 }
                 signupDto.password = await bcrypt.hash(signupDto.password, 12);
-                const user = await UserDao.createUser(AuthLib.SignupDtoToUserItem(signupDto));
+                const user = await UserDao.create(AuthLib.SignupDtoToUserItem(signupDto));
                 if (user.UserID) {
                     // Cancella tutti i token dell'utente
                     await TokenDao.delete(user.UserID);
