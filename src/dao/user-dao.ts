@@ -3,24 +3,24 @@ import {UserItem} from "../models/user";
 
 export class UserDao {
     // region Public Methods
-    static async findUserByEmail(email: string): Promise<UserItem> {
+    static async findByEmail(email: string): Promise<UserItem> {
         const res: UserItem[] = await db('User')
-            .where({email: email})
+            .where({Email: email})
             .select('*');
         return res[0];
     }
 
-    static async findUserByUserName(userName: string): Promise<UserItem> {
+    static async findByUserName(userName: string): Promise<UserItem> {
         const res: UserItem[] = await db('User')
-            .where({userName: userName})
+            .where({UserName: userName})
             .select('*');
         return res[0];
     }
 
-    static async createUser(userItem: UserItem): Promise<UserItem> {
+    static async create(userItem: UserItem): Promise<UserItem> {
         await db('User').insert(userItem);
         // Ritorno il record appena creato
-        return await this.findUserByEmail(userItem.Email);
+        return await this.findByEmail(userItem.Email);
     }
 
     //endregion

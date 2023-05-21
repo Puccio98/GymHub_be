@@ -42,7 +42,7 @@ export class ProgramDao {
 
     static async getActiveProgram(userID: number): Promise<number> {
         const res: any[] = await db('Program')
-            .where({'UserID': userID, 'ProgramStateID': ProgramStateEnum.ACTIVE})
+            .where({UserID: userID, 'ProgramStateID': ProgramStateEnum.ACTIVE})
             .select();
 
         if (res.length) {
@@ -63,7 +63,7 @@ export class ProgramDao {
 
 
     static async setProgramsInactive(userID: number): Promise<void> {
-        await db('Program').where({'UserID': userID})
+        await db('Program').where({UserID: userID})
             .update({
                 ProgramStateID: ProgramStateEnum.INACTIVE,
             });
@@ -98,7 +98,7 @@ export class ProgramDao {
 
     static async setActiveProgram(userID: number) {
         await db('Program')
-            .where('userID', userID)
+            .where('UserID', userID)
             .orderBy('ProgramID', 'desc')
             .limit(1)
             .update('ProgramStateID', ProgramStateEnum.ACTIVE);
@@ -127,14 +127,14 @@ export class ProgramDao {
 
     static async isComplete(programID: number): Promise<boolean> {
         const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
-            .where({'ProgramID': programID, 'StatusID': ExerciseStatus.INCOMPLETE});
+            .where({ProgramID: programID, StatusID: ExerciseStatus.INCOMPLETE});
 
         return uncompletedWorkouts.length <= 0;
     }
 
     static async edit(editProgramItem: EditProgramItem): Promise<boolean> {
         await db('Program')
-            .where({'ProgramID': editProgramItem.programID})
+            .where({ProgramID: editProgramItem.programID})
             .update({
                 'ProgramStateID': editProgramItem.programStateID,
                 'Title': editProgramItem.programTitle
