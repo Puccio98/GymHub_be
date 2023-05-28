@@ -24,7 +24,7 @@ export class WeightService {
         }
     }
 
-    static async postNewWeight(weightDto: WeightDto): Promise<ServiceResponse<any>> {
+    static async postNewWeight(weightDto: WeightDto): Promise<ServiceResponse<PlainWeightDto>> {
         try {
             const existingWeight = await WeightDao.findIfWeightExists(weightDto.date, weightDto.userID);
             if (existingWeight) {
