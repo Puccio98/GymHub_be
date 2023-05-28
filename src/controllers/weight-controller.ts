@@ -22,7 +22,7 @@ export class WeightController {
 
     static postNewWeight = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const weightDto: WeightDto = req.body;
-        const postNewWeightResult: ServiceResponse<any> = await WeightService.postNewWeight(weightDto);
+        const postNewWeightResult: ServiceResponse<PlainWeightDto> = await WeightService.postNewWeight(weightDto);
 
         switch (postNewWeightResult.status) {
             case ServiceStatusEnum.SUCCESS:

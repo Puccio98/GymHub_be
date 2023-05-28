@@ -38,12 +38,12 @@ export class Exercise_WorkoutDao {
         return res[0];
     }
 
-    static async delete(exerciseID: number): Promise<number> {
+    static async delete(exercise_workoutID: number): Promise<number> {
         await db('Exercises_Workout')
-            .where({Exercise_WorkoutID: exerciseID})
+            .where({Exercise_WorkoutID: exercise_workoutID})
             .delete();
 
-        return exerciseID;
+        return exercise_workoutID;
     }
 
     static async belongsToUser(userID: number, programID: number, workoutID: number, exercise_WorkoutID: number): Promise<boolean> {

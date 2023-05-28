@@ -9,6 +9,9 @@ import {FoodDto} from "../dto/nutritionDto/food-dto";
 import {FoodUserDao} from "../dao/food-user-dao";
 import {PlainFoodUserItem} from "../plain_item/PlainFoodUserItem";
 import {DailyFoodDto} from "../dto/nutritionDto/dailyFood-dto";
+import {AddFoodDto} from "../dto/nutritionDto/addFood-dto";
+import {BaseFood_UserItem, Food_UserItem} from "../models/food_user";
+import {BaseFoodDto} from "../dto/nutritionDto/base-food-dto";
 
 
 export class NutritionService {
@@ -75,6 +78,60 @@ export class NutritionService {
             return response(ServiceStatusEnum.SUCCESS, 'Lista di alimenti', NutritionLib.PlainFoodUserItemListToDailyFoodDto(foods));
         } catch (e) {
             return response(ServiceStatusEnum.ERROR, 'DB error');
+        }
+    }
+
+    static async addDailyFood(userID: number, addFood: AddFoodDto): Promise<ServiceResponse<boolean>> {
+        try {
+            let food: Food_UserItem = NutritionLib.AddFoodDtoToFood_UserItem(userID, addFood);
+            // Verifica se l'alimento è già stato inserito nella giornata di oggi e nel meal indicato
+            let foodDB: Food_UserItem = await FoodUserDao.exist(food);
+            let foodUserID: number
+            if (foodDB) {
+                // Modifica il record già presente
+                foodDB.Quantity += food.Quantity;
+                foodUserID = await FoodUserDao.update(foodDB);
+            } else {
+                // Se non lo trova lo inserisce
+                foodUserID = await FoodUserDao.create(food);
+            }
+            if (foodUserID) {
+                return response(ServiceStatusEnum.SUCCESS, 'Alimento salvato', true);
+            } else {
+                return response(ServiceStatusEnum.ERROR, 'Non è stato possibile inserire l\'alimento', false);
+            }
+        } catch (e) {
+            return response(ServiceStatusEnum.ERROR, 'DB error', false);
+        }
+    }
+
+    static async updateDailyFood(userID: number, food: BaseFoodDto): Promise<ServiceResponse<boolean>> {
+        try {
+            let foodDB: Food_UserItem = await FoodUserDao.exist(NutritionLib.BaseFoodDtoToBaseFood_UserItem(food));
+            if (!foodDB) {
+                return response(ServiceStatusEnum.ERROR, 'Alimento non trovato', false);
+            }
+            let res: number = await FoodUserDao.update(foodDB);
+            if (res) {
+                return response(ServiceStatusEnum.SUCCESS, 'Alimento modificato correttamente', true);
+            } else {
+                return response(ServiceStatusEnum.ERROR, 'Non è stato possibile modificare l\'alimento', false);
+            }
+        } catch (e) {
+            return response(ServiceStatusEnum.ERROR, 'DB error', false);
+        }
+    }
+    
+    static async deleteDailyFood(userID: number, food: BaseFood_UserItem): Promise<ServiceResponse<boolean>> {
+        try {
+            let res: boolean = await FoodUserDao.delete(userID, food);
+            if (res) {
+                return response(ServiceStatusEnum.SUCCESS, 'Alimento eliminato correttamente', true);
+            } else {
+                return response(ServiceStatusEnum.ERROR, 'Non è stato possibile eliminare l\'alimento', false);
+            }
+        } catch (e) {
+            return response(ServiceStatusEnum.ERROR, 'DB error', false);
         }
     }
 
