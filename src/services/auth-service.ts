@@ -25,7 +25,7 @@ export class AuthService {
                     // Cancella tutti i token dell'utente
                     await TokenDao.delete(user.UserID);
                     // Genera nuova coppia di Access e Refresh token
-                    const tokenDto = await AuthHelper.createTokenDto(user.Email, user.UserID);
+                    const tokenDto = await AuthHelper.createTokenDto(user);
                     const userDto = AuthLib.UserItemToUserDto(user);
 
                     message = 'User found';
@@ -46,34 +46,35 @@ export class AuthService {
 
     static async signup(signupDto: SignupDto): Promise<ServiceResponse<AuthDto>> {
         try {
+            // check Email
             let userExists = await UserDao.findByEmail(signupDto.email);
             if (userExists) {
                 const message = 'User exists already!';
                 return response(ServiceStatusEnum.ERROR, message);
-            } else {
-                //check se l'username è già preso
-                userExists = await UserDao.findByUserName(signupDto.userName);
-                if (userExists) {
-                    const message = 'Username is already taken!';
-                    return response(ServiceStatusEnum.ERROR, message);
-                }
-                signupDto.password = await bcrypt.hash(signupDto.password, 12);
-                const user = await UserDao.create(AuthLib.SignupDtoToUserItem(signupDto));
-                if (user.UserID) {
-                    // Cancella tutti i token dell'utente
-                    await TokenDao.delete(user.UserID);
-                    // Genera nuova coppia di Access e Refresh token
-                    const tokenDto = await AuthHelper.createTokenDto(user.Email, user.UserID);
-                    const userDto = AuthLib.UserItemToUserDto(user);
-
-                    const data = {userDto: userDto, tokenDto: tokenDto} as AuthDto;
-                    message = 'User found'
-                    return response(ServiceStatusEnum.SUCCESS, message, data);
-                } else {
-                    message = 'User creation failed :\'c'
-                    return response(ServiceStatusEnum.ERROR, message);
-                }
             }
+            // check Username
+            userExists = await UserDao.findByUserName(signupDto.userName);
+            if (userExists) {
+                const message = 'Username is already taken!';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+            // crypta password
+            signupDto.password = await bcrypt.hash(signupDto.password, 12);
+            const user = await UserDao.create(AuthLib.SignupDtoToUserItem(signupDto));
+
+            if (!user.UserID) {
+                message = 'User creation failed :\'c'
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+
+            // Cancella tutti i token dell'utente
+            await TokenDao.delete(user.UserID);
+            // Genera nuova coppia di Access e Refresh token
+            const tokenDto = await AuthHelper.createTokenDto(user);
+            const userDto = AuthLib.UserItemToUserDto(user);
+
+            const data = {userDto: userDto, tokenDto: tokenDto} as AuthDto;
+            return response(ServiceStatusEnum.SUCCESS, 'User found', data);
         } catch {
             return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
@@ -98,21 +99,18 @@ export class AuthService {
             const payload: PayloadJWT = jwt.decode(refreshToken);
             const dbToken: TokenItem = await TokenDao.getValidToken(payload.UserID);
             if (refreshToken !== dbToken.Token) {
-                //res.sendStatus(403);
-                // Refresh token non presente tra quelli validi in DB
                 message = 'Refresh token non presente tra quelli validi in DB';
                 return response(ServiceStatusEnum.ERROR, message);
             }
             let tokenDto: TokenDto | null = null;
             await jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err: any, userJWT: PayloadJWT) => {
                 if (err) {
-                    //return res.sendStatus(403); // Token di refresh non più valido
                     message = 'Refresh token non presente tra quelli validi in DB';
                     return response(ServiceStatusEnum.ERROR, message);
                 }
                 //TODO Luca: controlla questo codice
                 await TokenDao.delete(userJWT.UserID);
-                tokenDto = await AuthHelper.createTokenDto(userJWT.Email, userJWT.UserID);
+                tokenDto = await AuthHelper.createTokenDto(userJWT);
             });
             if (tokenDto) {
                 message = 'Nuova coppia di token';
