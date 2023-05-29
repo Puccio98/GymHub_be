@@ -8,5 +8,6 @@ export interface UserDto {
     userName: string,
     email: string,
     password: string,
-    profilePicture?: string
+    profilePicture?: string,
+    userTypeID: number
 }
