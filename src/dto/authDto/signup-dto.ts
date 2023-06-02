@@ -5,6 +5,7 @@ export interface SignupDto extends LoginDto {
     name: string;
     lastName: string;
     userName: string;
+    userTypeID: number
     createdAt?: Date;
     updatedAt?: Date;
 }
