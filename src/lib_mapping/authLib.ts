@@ -6,6 +6,7 @@ export class AuthLib {
     static UserItemToUserDto(userItem: UserItem): UserDto {
         return {
             userID: userItem.UserID,
+            userTypeID: userItem.UserTypeID,
             name: userItem.Name,
             lastName: userItem.LastName,
             userName: userItem.UserName,
@@ -20,6 +21,7 @@ export class AuthLib {
             Name: signupDto.name,
             LastName: signupDto.lastName,
             UserName: signupDto.userName,
+            UserTypeID: signupDto.userTypeID,
             Email: signupDto.email,
             Password: signupDto.password,
             createdAt: signupDto.createdAt,

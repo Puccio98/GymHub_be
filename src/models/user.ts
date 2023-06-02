@@ -3,6 +3,7 @@ export interface UserItem {
      * Id in inserimento è un campo nullo.
      */
     UserID?: number,
+    UserTypeID: number,
     Name: string,
     LastName: string,
     UserName: string,
