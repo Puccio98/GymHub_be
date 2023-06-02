@@ -85,12 +85,12 @@ export class NutritionService {
         try {
             let food: Food_UserItem = NutritionLib.AddFoodDtoToFood_UserItem(userID, addFood);
             // Verifica se l'alimento è già stato inserito nella giornata di oggi e nel meal indicato
-            let foodDB: Food_UserItem = await FoodUserDao.exist(food);
-            let foodUserID: number
-            if (foodDB) {
+            let foodDB: Food_UserItem[] = await FoodUserDao.exist(food);
+            let foodUserID: number;
+            if (foodDB.length) {
                 // Modifica il record già presente
-                foodDB.Quantity += food.Quantity;
-                foodUserID = await FoodUserDao.update(foodDB);
+                foodDB[0].Quantity += food.Quantity;
+                foodUserID = await FoodUserDao.update(foodDB[0]);
             } else {
                 // Se non lo trova lo inserisce
                 foodUserID = await FoodUserDao.create(food);
@@ -107,11 +107,11 @@ export class NutritionService {
 
     static async updateDailyFood(userID: number, food: BaseFoodDto): Promise<ServiceResponse<boolean>> {
         try {
-            let foodDB: Food_UserItem = await FoodUserDao.exist(NutritionLib.BaseFoodDtoToBaseFood_UserItem(food));
-            if (!foodDB) {
+            let foodDB: Food_UserItem[] = await FoodUserDao.exist(NutritionLib.BaseFoodDtoToBaseFood_UserItem(food));
+            if (!foodDB.length) {
                 return response(ServiceStatusEnum.ERROR, 'Alimento non trovato', false);
             }
-            let res: number = await FoodUserDao.update(foodDB);
+            let res: number = await FoodUserDao.update(foodDB[0]);
             if (res) {
                 return response(ServiceStatusEnum.SUCCESS, 'Alimento modificato correttamente', true);
             } else {

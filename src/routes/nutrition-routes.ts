@@ -10,13 +10,13 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.get('/food/description/:description', NutritionController.searchFoods);
 
-    router.get('daily_food', NutritionController.getDailyFood);
+    router.get('/daily_food', NutritionController.getDailyFood);
 
-    router.post('daily_food', validateDto(addDailyFoodType), NutritionController.addDailyFood);
+    router.post('/daily_food', validateDto(addDailyFoodType), NutritionController.addDailyFood);
 
-    router.patch('daily_food', validateDto(baseDailyFoodType), NutritionController.updateDailyFood);
+    router.patch('/daily_food', validateDto(baseDailyFoodType), NutritionController.updateDailyFood);
 
-    router.delete('daily_food/:food_id/meal/:meal_id', NutritionController.deleteDailyFood);
+    router.delete('/daily_food/:food_id/meal/:meal_id', NutritionController.deleteDailyFood);
 
     app.use('/nutrition', router);
 };

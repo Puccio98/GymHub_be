@@ -1,4 +1,5 @@
 export interface BaseFoodDto {
     foodID: number,
-    mealID: number
+    mealID: number,
+    userID: number
 }
