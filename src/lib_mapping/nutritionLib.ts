@@ -29,7 +29,7 @@ export class NutritionLib {
 
     static OFFItemToFood(itemOFF: itemOFF): FoodItem {
         return {
-            Description: itemOFF.product_name_it ?? itemOFF.product_name,
+            Description: itemOFF.product_name,//itemOFF.product_name_it ?? itemOFF.product_name,
             Category: itemOFF.categories_old,
             Protein: itemOFF.nutriments.proteins_100g,
             Carbo: itemOFF.nutriments.carbohydrates_100g,
