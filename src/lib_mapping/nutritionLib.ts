@@ -45,6 +45,7 @@ export class NutritionLib {
 
     static FoodItemToFoodDto(foodItem: FoodItem): FoodDto {
         return {
+            foodID: foodItem.FoodID,
             description: foodItem.Description,
             category: foodItem.Category,
             protein: foodItem.Protein,
@@ -105,13 +106,13 @@ export class NutritionLib {
             createdAt: food.createdAt,
             updatedAt: food.updatedAt
         }
-
     }
 
     static BaseFoodDtoToBaseFood_UserItem(food: BaseFoodDto): BaseFood_UserItem {
         return {
             FoodID: food.foodID,
-            MealID: food.mealID
+            MealID: food.mealID,
+            UserID: food.userID
         };
     }
 

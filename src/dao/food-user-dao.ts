@@ -21,10 +21,10 @@ export class FoodUserDao {
      * Cerca un alimento alla data di oggi e al pasto indicato per l'utente che fa la richiesta, se lo trova lo restituisce.
      * @param food
      */
-    static async exist(food: BaseFood_UserItem): Promise<Food_UserItem> {
-        return db('Food_User as f_u')
-            .where({UserID: food, Date: DateHelper.today_string(), MealID: food.MealID})
-            .select()[0];
+    static async exist(food: BaseFood_UserItem): Promise<Food_UserItem[]> {
+        return db('Food_User')
+            .where({UserID: food.UserID, FoodID: food.FoodID, Date: DateHelper.today_string(), MealID: food.MealID})
+            .select();
     }
 
     /***
