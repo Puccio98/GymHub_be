@@ -28,7 +28,6 @@ export const createWorkoutGroupType = yup.object().shape({
 export const createProgramType = yup.object().shape({
     userID: yup.number().required(),
     title: yup.string().required().min(1),
-    numberOfWorkout: yup.number().required().min(1).max(7),
     programTypeID: yup.number().required(),
     createdAt: yup.date().default(() => new Date()),
     updatedAt: yup.date().default(() => new Date()),
