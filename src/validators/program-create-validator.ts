@@ -19,15 +19,20 @@ export const createWorkoutType = yup.object().shape({
         createExerciseType
     ).required().min(1)
 })
+export const createWorkoutGroupType = yup.object().shape({
+    workoutList: yup.array().of(
+        createWorkoutType
+    ).required().min(1)
+})
 
 export const createProgramType = yup.object().shape({
     userID: yup.number().required(),
     title: yup.string().required().min(1),
     numberOfWorkout: yup.number().required().min(1).max(7),
-    programType: yup.number().required(),
+    programTypeID: yup.number().required(),
     createdAt: yup.date().default(() => new Date()),
     updatedAt: yup.date().default(() => new Date()),
-    workoutList: yup.array().of(createWorkoutType).required().min(1)
+    workoutGroupList: yup.array().of(createWorkoutGroupType).required().min(1)
 });
 
 export {};

@@ -1,5 +1,5 @@
 import {ProgramStateEnum} from "../../enums/program-state-enum";
-import {WorkoutDto} from "./workout-dto";
+import {WorkoutGroupDto} from "./workoutGroupDto";
 
 export interface ProgramDto {
     programID?: number,
@@ -8,7 +8,7 @@ export interface ProgramDto {
     description?: string,
     programStateID: ProgramStateEnum,
     numberOfWorkout?: number
-    workoutList: WorkoutDto[],
+    workoutGroupList: WorkoutGroupDto[],
 }
 
 export {}
