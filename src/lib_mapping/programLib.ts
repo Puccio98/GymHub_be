@@ -22,13 +22,14 @@ export class ProgramLib {
             description: programItem.Description,
             programStateID: programItem.ProgramStateID,
             numberOfWorkout: programItem.NumberOfWorkout,
-            workoutList: [],
+            workoutGroupList: [],
         } as ProgramDto
     }
 
     static ProgramCreateDtoToProgramItem(p: ProgramCreateDTO): ProgramItem {
         return {
             UserID: p.userID,
+            ProgramTypeID: p.programTypeID,
             Title: p.title,
             ProgramStateID: ProgramStateEnum.ACTIVE,
             NumberOfWorkout: p.numberOfWorkout,
@@ -46,10 +47,10 @@ export class ProgramLib {
         } as WorkoutDto
     }
 
-    static WorkoutCreateDtoListToWorkoutItemList(wList: WorkoutCreateDTO[], programID: number): WorkoutItem[] {
+    static WorkoutCreateDtoListToWorkoutItemList(wList: WorkoutCreateDTO[], groupID: number, programID: number): WorkoutItem[] {
         let workoutItemList: WorkoutItem[] = [];
         for (let w of wList) {
-            workoutItemList.push(ProgramLib.WorkoutCreateDtoToWorkoutItem(w, programID));
+            workoutItemList.push(ProgramLib.WorkoutCreateDtoToWorkoutItem(w, groupID, programID));
         }
         return workoutItemList;
 
@@ -63,9 +64,10 @@ export class ProgramLib {
         return exerciseWorkoutList;
     }
 
-    static WorkoutCreateDtoToWorkoutItem(w: WorkoutCreateDTO, programID: number): WorkoutItem {
+    static WorkoutCreateDtoToWorkoutItem(w: WorkoutCreateDTO, groupID: number, programID: number): WorkoutItem {
         return {
             ProgramID: programID,
+            GroupID: groupID,
             createdAt: w.createdAt,
             updatedAt: w.updatedAt,
         }
@@ -123,21 +125,28 @@ export class ProgramLib {
 
     static PlainProgramItemListToProgramDtoList(ppList: PlainProgramItem[]): ProgramDto[] {
         let programList: ProgramDto[] = [];
-        let old_programID = 0;
-        let old_workoutID = 0;
+        let old_programID = -1;
+        let old_groupID = -1; // può essere zero
+        let old_workoutID = -1;
         for (let pp of ppList) {
-            if (pp.p.ProgramID && old_programID !== pp.p.ProgramID) {
+            if (pp.p.ProgramID != null && old_programID !== pp.p.ProgramID) {
                 // Nuovo Programma
                 old_programID = pp.p.ProgramID;
+                old_groupID = -1; // Per ogni programma resetto la variabile che indica il gruppo
                 programList.push(this.ProgramItemToProgramDto(pp.p));
             }
-            if (pp.w.WorkoutID && old_workoutID !== pp.w.WorkoutID) {
+            if (pp.w.GroupID != null && old_groupID !== pp.w.GroupID) {
+                // Nuovo Gruppo di allenamenti
+                old_groupID = pp.w.GroupID;
+                programList.at(-1)?.workoutGroupList.push({workoutList: []});
+            }
+            if (pp.w.WorkoutID != null && old_workoutID !== pp.w.WorkoutID) {
                 // Nuovo allenamento
                 old_workoutID = pp.w.WorkoutID;
-                programList.at(-1)?.workoutList.push(this.WorkoutItemToWorkoutDto(pp.w));
+                programList.at(-1)?.workoutGroupList.at(-1)?.workoutList.push(this.WorkoutItemToWorkoutDto(pp.w));
             }
             // Nuovo esercizio
-            programList.at(-1)?.workoutList.at(-1)?.exerciseList.push(this.ExerciseWorkoutItemToExerciseWorkoutDto(pp.e_w, pp.e));
+            programList.at(-1)?.workoutGroupList.at(-1)?.workoutList.at(-1)?.exerciseList.push(this.ExerciseWorkoutItemToExerciseWorkoutDto(pp.e_w, pp.e));
         }
         return programList;
     }

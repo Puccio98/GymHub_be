@@ -9,4 +9,3 @@ export interface WorkoutDto {
 }
 
 
-export {}

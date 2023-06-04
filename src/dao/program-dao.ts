@@ -40,6 +40,12 @@ export class ProgramDao {
         return res;
     }
 
+    static async get(programID: number): Promise<ProgramItem[]> {
+        return db('Program AS p')
+            .where({'p.ProgramID': programID})
+            .select()
+    }
+
     static async getActiveProgram(userID: number): Promise<number> {
         const res: any[] = await db('Program')
             .where({UserID: userID, 'ProgramStateID': ProgramStateEnum.ACTIVE})
