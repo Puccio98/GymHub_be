@@ -112,7 +112,8 @@ export class NutritionLib {
         return {
             FoodID: food.foodID,
             MealID: food.mealID,
-            UserID: food.userID
+            UserID: food.userID,
+            Quantity: food.quantity
         };
     }
 

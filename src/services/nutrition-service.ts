@@ -111,7 +111,10 @@ export class NutritionService {
             if (!foodDB.length) {
                 return response(ServiceStatusEnum.ERROR, 'Alimento non trovato', false);
             }
-            let res: number = await FoodUserDao.update(foodDB[0]);
+            //Aggiorno la quantità
+            const updateFood = foodDB[0];
+            updateFood.Quantity = food.quantity;
+            let res: number = await FoodUserDao.update(updateFood);
             if (res) {
                 return response(ServiceStatusEnum.SUCCESS, 'Alimento modificato correttamente', true);
             } else {

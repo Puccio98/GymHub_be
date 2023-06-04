@@ -92,7 +92,8 @@ export class NutritionController {
         const foodResponse: ServiceResponse<boolean> = await NutritionService.deleteDailyFood(userJWT.UserID, {
             FoodID: foodID,
             MealID: mealID,
-            UserID: userJWT.UserID
+            UserID: userJWT.UserID,
+            Quantity: 0
         });
 
         switch (foodResponse.status) {
