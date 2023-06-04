@@ -7,7 +7,6 @@ export interface ProgramDto {
     title: string,
     description?: string,
     programStateID: ProgramStateEnum,
-    numberOfWorkout?: number
     workoutGroupList: WorkoutGroupDto[],
 }
 

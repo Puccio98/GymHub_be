@@ -3,7 +3,6 @@ import {ProgramType} from "../../enums/program-type.enum";
 export interface ProgramCreateDTO {
     userID: number,
     title: string,
-    numberOfWorkout: number,
     programTypeID: ProgramType,
     workoutGroupList: WorkoutGroupCreateDto[],
     createdAt?: Date,

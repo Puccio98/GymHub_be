@@ -8,7 +8,6 @@ export interface ProgramItem {
     Title: string,
     Description?: string,
     ProgramStateID: ProgramStateEnum,
-    NumberOfWorkout?: number,
     createdAt?: Date,
     updatedAt?: Date
 }
