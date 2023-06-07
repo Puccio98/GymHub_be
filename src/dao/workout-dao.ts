@@ -30,7 +30,7 @@ export class WorkoutDao {
 
     static async update(workoutDto: UpdateWorkoutDto): Promise<CompleteWorkoutDto> {
         await db('Workout')
-            .where({'WorkoutID': workoutDto.workoutID})
+            .where({WorkoutID: workoutDto.workoutID})
             .update({
                 StatusID: ExerciseStatus.COMPLETE
             });
@@ -39,7 +39,7 @@ export class WorkoutDao {
 
     static async get(workoutID: number): Promise<CompleteWorkoutDto> {
         const workout = await db('Workout')
-            .where({'WorkoutID': workoutID})
+            .where({WorkoutID: workoutID})
             .select();
         return workout[0]
     }
@@ -75,14 +75,14 @@ export class WorkoutDao {
 
     static async isComplete(workoutID: number) {
         const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
-            .where({'WorkoutID': workoutID, 'StatusID': ExerciseStatus.INCOMPLETE});
+            .where({WorkoutID: workoutID, StatusID: ExerciseStatus.INCOMPLETE});
 
         return uncompletedExercises.length <= 0;
     }
 
     static async isLast(programID: number): Promise<boolean> {
         const workouts: WorkoutItem[] = await db('Workout')
-            .where({'ProgramID': programID});
+            .where({ProgramID: programID});
 
         return workouts.length < 2;
     }
@@ -93,7 +93,7 @@ export class WorkoutDao {
      */
     static async programWorkoutNumber(programID: number): Promise<number> {
         const workouts: WorkoutItem[] = await db('Workout')
-            .where({'ProgramID': programID});
+            .where({ProgramID: programID});
 
         return workouts.length;
     }

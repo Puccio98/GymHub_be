@@ -5,21 +5,27 @@ import {TokenType} from "../enums/token-type.enum";
 import {ExpirationTime} from "../enums/expiration-time.enum";
 import {TokenItem} from "../interfaces/tokenItem-interface";
 import {TokenDao} from "../dao/token-dao";
+import {UserItem} from "../models/user";
+import {UserType} from "../enums/user-type.enum";
 
 const jwt = require('jsonwebtoken');
-
-
-interface userGenerationToken {
-    name: string;
-}
 
 export interface IGetUserAuthInfoRequest extends Request {
     AccessPayloadJWT: PayloadJWT
 }
 
 export class AuthHelper {
-    static async generateToken(email: string, userID: number, tokenType: TokenType = TokenType.ACCESS): Promise<string> {
-        const payloadJWT: PayloadJWT = {Email: email, UserID: userID, TokenType: tokenType};
+    static async generateToken(user: UserItem | PayloadJWT, tokenType: TokenType = TokenType.ACCESS): Promise<string> {
+        if (!user.UserID) {
+            throw new Error(`Impossibile creare il token - UserID non valido: ${user.UserID}.`);
+        }
+        const payloadJWT: PayloadJWT = {
+            Email: user.Email,
+            UserID: user.UserID,
+            UserTypeID: user.UserTypeID,
+            TokenType: tokenType
+        };
+
         if (tokenType === TokenType.ACCESS) {
             return jwt.sign(payloadJWT, process.env.ACCESS_TOKEN_SECRET, {expiresIn: ExpirationTime.ACCESS});
         } else {
@@ -35,10 +41,10 @@ export class AuthHelper {
         }
     }
 
-    static async createTokenDto(email: string, userID: number): Promise<TokenDto> {
+    static async createTokenDto(user: UserItem | PayloadJWT): Promise<TokenDto> {
         return {
-            accessToken: await AuthHelper.generateToken(email, userID, TokenType.ACCESS),
-            refreshToken: await AuthHelper.generateToken(email, userID, TokenType.REFRESH)
+            accessToken: await AuthHelper.generateToken(user, TokenType.ACCESS),
+            refreshToken: await AuthHelper.generateToken(user, TokenType.REFRESH)
         }
     }
 
@@ -55,5 +61,13 @@ export class AuthHelper {
             createdAt: new Date(),
             updatedAt: new Date()
         } as TokenItem;
+    }
+
+    /**
+     * Restituisce true se il numero passato in input è contenuto tra i tipi di utenti possibili, altrimenti false,
+     * @param userType
+     */
+    static isUserTypeValid(userType: number | undefined): boolean {
+        return !userType ? false : userType in UserType
     }
 }

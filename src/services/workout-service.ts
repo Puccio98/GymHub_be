@@ -8,6 +8,9 @@ import {ProgramDao} from "../dao/program-dao";
 import {ProgramLib} from "../lib_mapping/programLib";
 import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
 import {DeleteWorkoutResponse} from "../dto/programDto/delete-workout-response";
+import {ProgramItem} from "../models/program";
+import {ProgramType} from "../enums/program-type.enum";
+import {ProgramStateEnum} from "../enums/program-state-enum";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string; // messaggio specifico
@@ -39,19 +42,25 @@ export class WorkoutService {
     static async create(workoutDto: WorkoutAddDTO, userID: number): Promise<ServiceResponse<WorkoutDto>> {
         try {
             const maxNumberOfWorkouts = 7;
-            if (await WorkoutDao.programWorkoutNumber(workoutDto.programID) >= maxNumberOfWorkouts) {
+            const programs: ProgramItem[] = await ProgramDao.get(workoutDto.programID);
+            if (!programs.length) {
+                return response(ServiceStatusEnum.ERROR, 'ProgramID inesistente');
+            }
+            const programDB: ProgramItem = programs[0];
+
+            if (programDB.ProgramTypeID === ProgramType.BASIC && await WorkoutDao.programWorkoutNumber(workoutDto.programID) > maxNumberOfWorkouts) {
                 message = 'Program has reached maximum number of workouts';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            if (!await ProgramDao.isActive(userID, workoutDto.programID)) {
+            if (programDB.ProgramStateID === ProgramStateEnum.INACTIVE) {
                 message = 'Program is not active';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            if (!await ProgramDao.belongsToUser(userID, workoutDto.programID)) {
+            if (programDB.UserID !== userID) {
                 message = 'Program does not belong to user';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            const workoutItem = ProgramLib.WorkoutCreateDtoToWorkoutItem(workoutDto, workoutDto.programID);
+            const workoutItem = ProgramLib.WorkoutCreateDtoToWorkoutItem(workoutDto, workoutDto.groupID, workoutDto.programID);
             const workoutID = await WorkoutDao.create(workoutItem);
             if (workoutID) {
                 const exerciseItemList = ProgramLib.ExerciseCreateDtoListToExerciseWorkoutItemList(workoutDto.exerciseList, workoutID);
@@ -105,7 +114,10 @@ export class WorkoutService {
                         await ProgramDao.refresh(workoutDto.programID);
                         refreshProgram = true;
                     }
-                    const deleteWorkoutResponse: DeleteWorkoutResponse = {workoutID: deletedWorkout, refreshProgram: refreshProgram}
+                    const deleteWorkoutResponse: DeleteWorkoutResponse = {
+                        workoutID: deletedWorkout,
+                        refreshProgram: refreshProgram
+                    }
                     message = 'Workout deleted';
                     return response(ServiceStatusEnum.SUCCESS, message, deleteWorkoutResponse);
                 } else {
