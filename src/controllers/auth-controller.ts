@@ -55,6 +55,7 @@ export class AuthController {
         }
     }
 
+
     static refreshToken = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const refreshToken: string = req.body.refreshToken;
         const refreshTokenResult: ServiceResponse<TokenDto> = await AuthService.refreshToken(refreshToken);

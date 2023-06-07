@@ -43,14 +43,16 @@ export class ProgramService {
             // Insert del nuovo programma
             const programID = await ProgramDao.create(programItem);
             if (programID) {
-                const workoutItemList = ProgramLib.WorkoutCreateDtoListToWorkoutItemList(program.workoutList, programID);
-                for (let w = 0; w < program.workoutList.length; w++) {
-                    // Insert degli allenamenti uno alla volta
-                    const workoutID = await WorkoutDao.create(workoutItemList[w]);
-                    if (workoutID) {
-                        const exerciseItemList = ProgramLib.ExerciseCreateDtoListToExerciseWorkoutItemList(program.workoutList[w].exerciseList, workoutID);
-                        // Insert di tutti gli esercizi di un workout contemporaneamente
-                        await Exercise_WorkoutDao.create(exerciseItemList);
+                for (let [i, workoutGroup] of program.workoutGroupList.entries()) {
+                    const workoutItemList = ProgramLib.WorkoutCreateDtoListToWorkoutItemList(workoutGroup.workoutList, i, programID);
+                    for (let w = 0; w < workoutGroup.workoutList.length; w++) {
+                        // Insert degli allenamenti uno alla volta
+                        const workoutID = await WorkoutDao.create(workoutItemList[w]);
+                        if (workoutID) {
+                            const exerciseItemList = ProgramLib.ExerciseCreateDtoListToExerciseWorkoutItemList(workoutGroup.workoutList[w].exerciseList, workoutID);
+                            // Insert di tutti gli esercizi di un workout contemporaneamente
+                            await Exercise_WorkoutDao.create(exerciseItemList);
+                        }
                     }
                 }
             }

@@ -6,7 +6,7 @@ import {ExerciseWorkoutItem} from "../models/exercise_workout";
 export class Exercise_WorkoutDao {
     static async update(exercise: UpdateExerciseDto): Promise<PlainExerciseItem> {
         await db('Exercises_Workout')
-            .where({'Exercise_WorkoutID': exercise.exercise_WorkoutID})
+            .where({Exercise_WorkoutID: exercise.exercise_WorkoutID})
             .update({
                 set: exercise.set,
                 rep: exercise.rep,
@@ -23,7 +23,7 @@ export class Exercise_WorkoutDao {
     static async get(exercise_WorkoutID: number): Promise<PlainExerciseItem> {
         const exercise = await db('Exercises_Workout as e_w')
             .join('Exercise as e', 'e.ExerciseID', 'e_w.ExerciseID')
-            .where({'Exercise_WorkoutID': exercise_WorkoutID})
+            .where({Exercise_WorkoutID: exercise_WorkoutID})
             .select(['e_w.*', 'e.*'])
             .options({nestTables: true});
         return exercise[0];
@@ -38,12 +38,12 @@ export class Exercise_WorkoutDao {
         return res[0];
     }
 
-    static async delete(exerciseID: number): Promise<number> {
+    static async delete(exercise_workoutID: number): Promise<number> {
         await db('Exercises_Workout')
-            .where({'Exercise_WorkoutID': exerciseID})
+            .where({Exercise_WorkoutID: exercise_workoutID})
             .delete();
 
-        return exerciseID;
+        return exercise_workoutID;
     }
 
     static async belongsToUser(userID: number, programID: number, workoutID: number, exercise_WorkoutID: number): Promise<boolean> {
@@ -64,13 +64,13 @@ export class Exercise_WorkoutDao {
 
     static async isUncompleted(exerciseID: number) {
         const exerciseWorkout: ExerciseWorkoutItem[] = await db('Exercises_Workout')
-            .where({'Exercise_WorkoutID': exerciseID});
+            .where({Exercise_WorkoutID: exerciseID});
         return exerciseWorkout[0].StatusID === 1;
     }
 
     static async isLast(workoutID: number): Promise<boolean> {
         const exercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
-            .where({'WorkoutID': workoutID});
+            .where({WorkoutID: workoutID});
 
         return exercises.length < 2;
     }

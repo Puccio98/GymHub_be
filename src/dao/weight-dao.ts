@@ -6,13 +6,13 @@ export class WeightDao {
     // region Public Methods
     static async findAllWeights(userID: number): Promise<ChartItem[]> {
         return db('Weight')
-            .where({userID: userID})
+            .where({UserID: userID})
             .select('date AS x', 'weight AS y')
             .orderBy(['X']);
     }
 
     static async findIfWeightExists(date: Date, userID: number): Promise<WeightItem> {
-        date.setHours(0,0,0,0);
+        date.setHours(0, 0, 0, 0);
         const exWeight = await db('Weight').where({date: date, userID: userID}).select('*');
         return exWeight[0];
     }
