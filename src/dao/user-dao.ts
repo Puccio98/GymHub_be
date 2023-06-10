@@ -23,5 +23,9 @@ export class UserDao {
         return await this.findByEmail(userItem.Email);
     }
 
+    static async getAll(): Promise<UserItem[]> {
+        return db('User').select('*');
+    }
+
     //endregion
 }
