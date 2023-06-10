@@ -5,6 +5,7 @@ import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {EditProgramDto} from "../dto/programDto/edit-program.dto";
+import {PayloadJWT} from "../interfaces/payloadJWT";
 
 export class ProgramController {
     static getListByUserID = async (req: IGetUserAuthInfoRequest, res: Response) => {
@@ -89,9 +90,9 @@ export class ProgramController {
     }
     static share = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const shareProgramDto = req.body;
-        const userJWT = req.AccessPayloadJWT;
+        const userJWT: PayloadJWT = req.AccessPayloadJWT;
 
-        const editProgramResponse: ServiceResponse<EditProgramDto> = await ProgramService.share(userJWT.UserID, shareProgramDto);
+        const editProgramResponse: ServiceResponse<EditProgramDto> = await ProgramService.share(userJWT, shareProgramDto);
         switch (editProgramResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(editProgramResponse.data);

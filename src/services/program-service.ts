@@ -10,6 +10,8 @@ import {ProgramStateEnum} from "../enums/program-state-enum";
 import {ShareProgramDto} from "../dto/programDto/share-program.dto";
 import {ShareProgramDao} from "../dao/share-program-dao";
 import {ShareProgram} from "../models/shareProgram";
+import {PayloadJWT} from "../interfaces/payloadJWT";
+import {UserType} from "../enums/user-type.enum";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string; // messaggio specifico
@@ -141,10 +143,18 @@ export class ProgramService {
         }
     }
 
-    static async share(userID: number, shareProgramDto: ShareProgramDto): Promise<ServiceResponse<EditProgramDto>> {
+    static async share(user: PayloadJWT, shareProgramDto: ShareProgramDto): Promise<ServiceResponse<EditProgramDto>> {
         try {
+
+            // Solo utenti manager e sadmin possono condividere schede
+            if (user.UserTypeID !== UserType.MANAGER && user.UserTypeID !== UserType.SADMIN) {
+                message = 'Utente non abilitato alla condivisione di schede';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+
+
             // Recupero scheda da clonare
-            const ppList = await ProgramDao.getPlainByProgramID(userID, shareProgramDto.originalProgramID);
+            const ppList = await ProgramDao.getPlainByProgramID(user.UserID, shareProgramDto.originalProgramID);
             if (!ppList.length) {
                 message = 'Impossibile recuperare scheda';
                 return response(ServiceStatusEnum.ERROR, message);
@@ -168,7 +178,7 @@ export class ProgramService {
             }
 
             // Creo record da salvare inserire
-            let shareProgramItem: ShareProgram = ProgramLib.shareProgramDtoToShareProgramItem(userID, clonedProgramID, shareProgramDto)
+            let shareProgramItem: ShareProgram = ProgramLib.shareProgramDtoToShareProgramItem(user.UserID, clonedProgramID, shareProgramDto)
             // Inserisco record del programma condiviso
             let shareProgramID: number = await ShareProgramDao.create(shareProgramItem)
             if (!shareProgramID) {
