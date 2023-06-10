@@ -21,6 +21,20 @@ export class ProgramController {
                 return res.status(500).send({error: "Internal server error"});
         }
     }
+    static getShared = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const userJWT = req.AccessPayloadJWT;
+        const toUserID: number = Number(req.params['user_id']);
+        const programList: ServiceResponse<ProgramDto[]> = await ProgramService.getSharedListByUserID(userJWT.UserID, toUserID);
+
+        switch (programList.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(programList.data);
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: programList.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
+    }
 
     static create = async (req: Request, res: Response) => {
         const program: ProgramCreateDTO = req.body;
