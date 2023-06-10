@@ -7,16 +7,26 @@ import {ExerciseWorkoutItem} from "../models/exercise_workout";
 import {ExerciseItem} from "../models/exercise";
 import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 import {ExerciseDto} from "../dto/programDto/exercise-dto";
-import {ExerciseCreateDTO, ProgramCreateDTO, WorkoutCreateDTO} from "../dto/programDto/program-create-dto";
+import {
+    ExerciseCreateDTO,
+    ProgramCreateDTO,
+    WorkoutCreateDTO,
+    WorkoutGroupCreateDto
+} from "../dto/programDto/program-create-dto";
 import {ProgramStateEnum} from "../enums/program-state-enum";
 import {PlainWorkoutItem} from "../dto/programDto/plainWorkout";
 import {EditProgramDto} from "../dto/programDto/edit-program.dto";
 import {EditProgramItem} from "../models/edit-program-item";
+import {ShareProgramDto} from "../dto/programDto/share-program.dto";
+import {ShareProgram} from "../models/shareProgram";
+import {DateDB} from "../interfaces/dateDB";
+import {WorkoutGroupDto} from "../dto/programDto/workoutGroupDto";
 
 export class ProgramLib {
     static ProgramItemToProgramDto(programItem: ProgramItem): ProgramDto {
         return {
             programID: programItem.ProgramID,
+            programTypeID: programItem.ProgramTypeID,
             userID: programItem.UserID,
             title: programItem.Title,
             description: programItem.Description,
@@ -24,6 +34,94 @@ export class ProgramLib {
             workoutGroupList: [],
         } as ProgramDto
     }
+
+    static ProgramItemToProgramCreateDto(programItem: ProgramItem, userID: number = 0, dateDB: DateDB | null = null): ProgramCreateDTO {
+        let _dateDB: DateDB = dateDB ?? {createdAt: new Date(), updatedAt: new Date()};
+
+        return {
+            programTypeID: programItem.ProgramTypeID,
+            userID: userID ? userID : programItem.UserID,
+            title: programItem.Title,
+            workoutGroupList: [],
+            createdAt: _dateDB.createdAt,
+            updatedAt: _dateDB.updatedAt
+        }
+    }
+
+    // region From ProgramDto to ProgramCreateDto
+    /**
+     * A partire da un ProgramDto restituisce un ProgramCreateDto necessario a creare una nuova scheda.
+     * Questo metodo è utile per clonare una scheda già esistente.
+     * @param programDto
+     * @param userID
+     * @param dateDB
+     * @constructor
+     */
+    static ProgramDtoToProgramCreateDto(programDto: ProgramDto, userID: number = 0, dateDB: DateDB | null = null): ProgramCreateDTO {
+        let _dateDB: DateDB = dateDB ?? {createdAt: new Date(), updatedAt: new Date()};
+
+        return {
+            userID: userID ? userID : programDto.userID,
+            title: programDto.title,
+            programTypeID: programDto.programTypeID,
+            workoutGroupList: this.WorkoutGroupListDtoToWorkoutGroupCreateDto(programDto.workoutGroupList, _dateDB),
+            createdAt: _dateDB.createdAt,
+            updatedAt: _dateDB.updatedAt
+        } as ProgramCreateDTO;
+    }
+
+    static WorkoutGroupListDtoToWorkoutGroupCreateDto(wgList: WorkoutGroupDto[], dateDB: DateDB): WorkoutGroupCreateDto[] {
+        let res: WorkoutGroupCreateDto[] = [];
+        for (const w of wgList) {
+            res.push(this.WorkoutGroupDtoToWorkoutGroupCreateDto(w, dateDB));
+        }
+        return res;
+    }
+
+    static WorkoutGroupDtoToWorkoutGroupCreateDto(wgDto: WorkoutGroupDto, dateDB: DateDB): WorkoutGroupCreateDto {
+        return {
+            workoutList: this.WorkoutDtoListToWorkoutCreateDtoList(wgDto.workoutList, dateDB)
+        } as WorkoutGroupCreateDto;
+    }
+
+    static WorkoutDtoListToWorkoutCreateDtoList(wList: WorkoutDto[], dateDB: DateDB): WorkoutCreateDTO[] {
+        let res: WorkoutCreateDTO[] = [];
+        for (const w of wList) {
+            res.push(this.WorkoutDtoToWorkoutCreateDto(w, dateDB));
+        }
+        return res;
+    }
+
+    static WorkoutDtoToWorkoutCreateDto(w: WorkoutDto, dateDB: DateDB): WorkoutCreateDTO {
+        return {
+            exerciseList: this.ExerciseWorkoutDtoListToExerciseWorkoutCreateDtoList(w.exerciseList, dateDB),
+            createdAt: dateDB.createdAt,
+            updatedAt: dateDB.updatedAt,
+        } as WorkoutCreateDTO
+    }
+
+    static ExerciseWorkoutDtoListToExerciseWorkoutCreateDtoList(eList: ExerciseWorkoutDto[], dateDB: DateDB): ExerciseCreateDTO[] {
+        let res: ExerciseCreateDTO[] = [];
+        for (const e of eList) {
+            res.push(this.ExerciseWorkoutDtoToExerciseCreateDto(e, dateDB))
+        }
+        return res;
+    }
+
+    static ExerciseWorkoutDtoToExerciseCreateDto(e: ExerciseWorkoutDto, dateDB: DateDB): ExerciseCreateDTO {
+        return {
+            exerciseID: e.exerciseID,
+            description: e.description,
+            set: e.set,
+            rep: e.rep,
+            weight: e.weight,
+            RPE: e.RPE,
+            createdAt: dateDB.createdAt,
+            updatedAt: dateDB.updatedAt,
+        } as ExerciseCreateDTO
+    }
+
+    // endregion
 
     static ProgramCreateDtoToProgramItem(p: ProgramCreateDTO): ProgramItem {
         return {
@@ -43,6 +141,16 @@ export class ProgramLib {
             exerciseList: [],
             statusID: workoutItem.StatusID
         } as WorkoutDto
+    }
+
+    static WorkoutItemToWorkoutCreateDto(workoutItem: WorkoutItem, dateDB: DateDB | null = null): WorkoutCreateDTO {
+        let _dateDB: DateDB = dateDB ?? {createdAt: new Date(), updatedAt: new Date()};
+
+        return {
+            exerciseList: [],
+            createdAt: _dateDB.createdAt,
+            updatedAt: _dateDB.updatedAt
+        }
     }
 
     static WorkoutCreateDtoListToWorkoutItemList(wList: WorkoutCreateDTO[], groupID: number, programID: number): WorkoutItem[] {
@@ -105,6 +213,20 @@ export class ProgramLib {
         } as ExerciseWorkoutDto
     }
 
+    static ExerciseWorkoutItemToExerciseWorkoutCreateDto(ew: ExerciseWorkoutItem, e: ExerciseItem, dateDB: DateDB | null = null): ExerciseCreateDTO {
+        let _dateDB: DateDB = dateDB ?? {createdAt: new Date(), updatedAt: new Date()};
+        return {
+            exerciseID: e.ExerciseID ?? 0,
+            description: ew.Description,
+            set: ew.Set,
+            rep: ew.Rep,
+            weight: ew.Weight,
+            RPE: ew.RPE,
+            createdAt: _dateDB.createdAt,
+            updatedAt: _dateDB.updatedAt
+        }
+    }
+
     static ExerciseItemToExerciseDto(e: ExerciseItem): ExerciseDto {
         return {
             // ExerciseItem
@@ -149,6 +271,35 @@ export class ProgramLib {
         return programList;
     }
 
+
+    static PlainProgramItemListToProgramCreateDtoList(ppList: PlainProgramItem[], UserID: number = 0): ProgramCreateDTO[] {
+        let programList: ProgramCreateDTO[] = [];
+        let old_programID = -1;
+        let old_groupID = -1; // può essere zero
+        let old_workoutID = -1;
+        for (let pp of ppList) {
+            if (pp.p.ProgramID != null && old_programID !== pp.p.ProgramID) {
+                // Nuovo Programma
+                old_programID = pp.p.ProgramID;
+                old_groupID = -1; // Per ogni programma resetto la variabile che indica il gruppo
+                programList.push(this.ProgramItemToProgramCreateDto(pp.p, UserID));
+            }
+            if (pp.w.GroupID != null && old_groupID !== pp.w.GroupID) {
+                // Nuovo Gruppo di allenamenti
+                old_groupID = pp.w.GroupID;
+                programList.at(-1)?.workoutGroupList.push({workoutList: []});
+            }
+            if (pp.w.WorkoutID != null && old_workoutID !== pp.w.WorkoutID) {
+                // Nuovo allenamento
+                old_workoutID = pp.w.WorkoutID;
+                programList.at(-1)?.workoutGroupList.at(-1)?.workoutList.push(this.WorkoutItemToWorkoutCreateDto(pp.w));
+            }
+            // Nuovo esercizio
+            programList.at(-1)?.workoutGroupList.at(-1)?.workoutList.at(-1)?.exerciseList.push(this.ExerciseWorkoutItemToExerciseWorkoutCreateDto(pp.e_w, pp.e));
+        }
+        return programList;
+    }
+
     static PlainWorkoutItemToWorkoutDtoList(pwList: PlainWorkoutItem[]): WorkoutDto[] {
         let old_workoutID = 0;
         let wList: WorkoutDto[] = [];
@@ -170,5 +321,16 @@ export class ProgramLib {
             programStateID: epDto.programState,
             programTitle: epDto.programTitle
         } as EditProgramItem
+    }
+
+    static shareProgramDtoToShareProgramItem(userID: number, clonedProgramID: number, dto: ShareProgramDto): ShareProgram {
+        return {
+            FromUserID: userID,
+            ToUserID: dto.toUserID,
+            OriginalProgramID: dto.originalProgramID,
+            ClonedProgramID: clonedProgramID,
+            createdAt: dto.createdAt,
+            updatedAt: dto.updatedAt
+        } as ShareProgram
     }
 }
