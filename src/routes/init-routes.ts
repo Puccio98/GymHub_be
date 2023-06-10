@@ -8,4 +8,5 @@ export function initRoutes(app: Express) {
     require("./workout-routes")(app);
     require("./exercise-routes")(app);
     require("./exercise-workout-routes")(app);
+    require("./user-routes")(app);
 }
