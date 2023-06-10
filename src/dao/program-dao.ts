@@ -24,6 +24,22 @@ export class ProgramDao {
         return res;
     }
 
+    static async getSharedPlainList(fromUserID: number, toUserID: number): Promise<PlainProgramItem[]> {
+        let res: PlainProgramItem[];
+        res = await db('ShareProgram AS sp')
+            .join('Program AS p', 'sp.ClonedProgramID', 'p.ProgramID')
+            .join('Workout AS w', 'p.ProgramID', 'w.ProgramID')
+            .join('Exercises_Workout AS e_w', 'w.WorkoutID', 'e_w.WorkoutID')
+            .join('Exercise AS e', 'e_w.ExerciseID', 'e.ExerciseID')
+            .where({'sp.ToUserID': toUserID, 'sp.FromUserID': fromUserID, 'p.UserID': toUserID})
+            .select(['p.*', 'w.*', 'e_w.*', 'e.*'])
+            .orderBy([{column: 'p.ProgramID', order: 'desc'},
+                {column: 'w.WorkoutID', order: 'asc'},
+                {column: 'e_w.Exercise_WorkoutID', order: 'asc'}])
+            .options({nestTables: true});
+        return res;
+    }
+
     static async getPlainByProgramID(userID: number, programID: number): Promise<PlainProgramItem[]> {
         let res: PlainProgramItem[];
         res = await db('User AS u')

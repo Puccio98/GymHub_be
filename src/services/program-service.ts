@@ -34,6 +34,23 @@ export class ProgramService {
         }
     }
 
+    static async getSharedListByUserID(fromUserID: number, toUserID: number): Promise<ServiceResponse<ProgramDto[]>> {
+        try {
+            const programList = await ProgramDao.getSharedPlainList(fromUserID, toUserID);
+
+            if (programList.length) {
+                message = 'Program found and returned';
+                const data = ProgramLib.PlainProgramItemListToProgramDtoList(programList);
+                return response(ServiceStatusEnum.SUCCESS, message, data);
+            } else {
+                message = 'You have 0 programs apparently';
+                return response(ServiceStatusEnum.SUCCESS, message, []);
+            }
+        } catch {
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
+        }
+    }
+
     static async create(program: ProgramCreateDTO): Promise<ServiceResponse<ProgramDto[]>> {
         try {
             //Per prima cosa, metto StatusID = INCOMPLETE a tutti gli allenamenti ed esercizi della scheda attiva.
