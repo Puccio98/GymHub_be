@@ -87,5 +87,19 @@ export class ProgramController {
                 return res.status(500).send({error: "Internal server error"});
         }
     }
+    static share = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const shareProgramDto = req.body;
+        const userJWT = req.AccessPayloadJWT;
+
+        const editProgramResponse: ServiceResponse<EditProgramDto> = await ProgramService.share(userJWT.UserID, shareProgramDto);
+        switch (editProgramResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(editProgramResponse.data);
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: editProgramResponse.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
+    }
 }
 

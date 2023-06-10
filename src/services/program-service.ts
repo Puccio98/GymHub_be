@@ -7,6 +7,9 @@ import {WorkoutDao} from "../dao/workout-dao";
 import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
 import {EditProgramDto} from "../dto/programDto/edit-program.dto";
 import {ProgramStateEnum} from "../enums/program-state-enum";
+import {ShareProgramDto} from "../dto/programDto/share-program.dto";
+import {ShareProgramDao} from "../dao/share-program-dao";
+import {ShareProgram} from "../models/shareProgram";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string; // messaggio specifico
@@ -39,23 +42,10 @@ export class ProgramService {
 
             // Mette inattivi tutti i programmi
             await ProgramDao.setProgramsInactive(program.userID);
-            const programItem = ProgramLib.ProgramCreateDtoToProgramItem(program);
-            // Insert del nuovo programma
-            const programID = await ProgramDao.create(programItem);
-            if (programID) {
-                for (let [i, workoutGroup] of program.workoutGroupList.entries()) {
-                    const workoutItemList = ProgramLib.WorkoutCreateDtoListToWorkoutItemList(workoutGroup.workoutList, i, programID);
-                    for (let w = 0; w < workoutGroup.workoutList.length; w++) {
-                        // Insert degli allenamenti uno alla volta
-                        const workoutID = await WorkoutDao.create(workoutItemList[w]);
-                        if (workoutID) {
-                            const exerciseItemList = ProgramLib.ExerciseCreateDtoListToExerciseWorkoutItemList(workoutGroup.workoutList[w].exerciseList, workoutID);
-                            // Insert di tutti gli esercizi di un workout contemporaneamente
-                            await Exercise_WorkoutDao.create(exerciseItemList);
-                        }
-                    }
-                }
-            }
+
+            // Creo Programma
+            await this._create(program);
+
             // Recupero la lista di tutti i programmi dell'utente
             return await this.getListByUserID(program.userID);
         } catch {
@@ -150,4 +140,68 @@ export class ProgramService {
             return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
+
+    static async share(userID: number, shareProgramDto: ShareProgramDto): Promise<ServiceResponse<EditProgramDto>> {
+        try {
+            // Recupero scheda da clonare
+            const ppList = await ProgramDao.getPlainByProgramID(userID, shareProgramDto.originalProgramID);
+            if (!ppList.length) {
+                message = 'Impossibile recuperare scheda';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+
+            // Creo Dto per inserire il programma clonato
+            const cloneProgram: ProgramCreateDTO = ProgramLib.PlainProgramItemListToProgramCreateDtoList(ppList, shareProgramDto.toUserID)[0];
+            if (!cloneProgram) {
+                message = 'Impossibile recuperare scheda';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+
+            // Mette inattivi tutti i programmi
+            await ProgramDao.setProgramsInactive(shareProgramDto.toUserID);
+
+            // Creo Programma (attivo)
+            let clonedProgramID: number = await this._create(cloneProgram);
+            if (!clonedProgramID) {
+                message = 'Errore durante la creazione della scheda clonata';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+
+            // Creo record da salvare inserire
+            let shareProgramItem: ShareProgram = ProgramLib.shareProgramDtoToShareProgramItem(userID, clonedProgramID, shareProgramDto)
+            // Inserisco record del programma condiviso
+            let shareProgramID: number = await ShareProgramDao.create(shareProgramItem)
+            if (!shareProgramID) {
+                message = 'Errore durante la condivisione della scheda clonata';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+
+            return response(ServiceStatusEnum.SUCCESS, 'Programma condiviso');
+        } catch {
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
+        }
+    }
+
+    private static async _create(program: ProgramCreateDTO): Promise<number> {
+        const programItem = ProgramLib.ProgramCreateDtoToProgramItem(program);
+
+        // Insert del nuovo programma
+        const programID = await ProgramDao.create(programItem);
+        if (programID) {
+            for (let [i, workoutGroup] of program.workoutGroupList.entries()) {
+                const workoutItemList = ProgramLib.WorkoutCreateDtoListToWorkoutItemList(workoutGroup.workoutList, i, programID);
+                for (let w = 0; w < workoutGroup.workoutList.length; w++) {
+                    // Insert degli allenamenti uno alla volta
+                    const workoutID = await WorkoutDao.create(workoutItemList[w]);
+                    if (workoutID) {
+                        const exerciseItemList = ProgramLib.ExerciseCreateDtoListToExerciseWorkoutItemList(workoutGroup.workoutList[w].exerciseList, workoutID);
+                        // Insert di tutti gli esercizi di un workout contemporaneamente
+                        await Exercise_WorkoutDao.create(exerciseItemList);
+                    }
+                }
+            }
+        }
+        return programID;
+    }
+
 }
