@@ -31,6 +31,7 @@ export class ProgramLib {
             title: programItem.Title,
             description: programItem.Description,
             programStateID: programItem.ProgramStateID,
+            programTypeID: programItem.ProgramTypeID,
             workoutGroupList: [],
         } as ProgramDto
     }
