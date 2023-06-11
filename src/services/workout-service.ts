@@ -111,7 +111,7 @@ export class WorkoutService {
                     //CHECK CHE LA SCHEDA SIA COMPLETATA
                     let refreshProgram = false;
                     if (await ProgramDao.isComplete(workoutDto.programID)) {
-                        await ProgramDao.refresh(workoutDto.programID);
+                        await ProgramDao.reset(workoutDto.programID);
                         refreshProgram = true;
                     }
                     const deleteWorkoutResponse: DeleteWorkoutResponse = {

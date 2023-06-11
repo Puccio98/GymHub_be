@@ -74,10 +74,10 @@ export class ProgramController {
         }
     }
 
-    static refresh = async (req: IGetUserAuthInfoRequest, res: Response) => {
+    static reset = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const programID: number = req.body.programID;
         const userJWT = req.AccessPayloadJWT;
-        const refreshProgramResponse: ServiceResponse<ProgramDto> = await ProgramService.refresh(userJWT.UserID, programID);
+        const refreshProgramResponse: ServiceResponse<ProgramDto> = await ProgramService.reset(userJWT.UserID, programID);
         switch (refreshProgramResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(refreshProgramResponse.data);

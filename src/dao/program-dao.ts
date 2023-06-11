@@ -161,18 +161,18 @@ export class ProgramDao {
     }
 
     /**
-     * Esegue il refresh della scheda solamente se scheda di tipo Base
+     * Esegue il reset della scheda solamente se scheda di tipo Base
      * @param programID
      */
-    static async refresh(programID: number): Promise<boolean> {
+    static async reset(programID: number): Promise<boolean> {
         if (await ProgramDao.getType(programID) === ProgramType.PRO) {
             return false;
         }
 
-        return await ProgramDao._refresh(programID);
+        return await ProgramDao._reset(programID);
     }
 
-    private static async _refresh(programID: number): Promise<boolean> {
+    private static async _reset(programID: number): Promise<boolean> {
         await db('Workout as w')
             .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({'w.ProgramID': programID})
