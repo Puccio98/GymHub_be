@@ -5,6 +5,7 @@ import {WorkoutItem} from "../models/workout";
 import {ProgramStateEnum} from "../enums/program-state-enum";
 import {ExerciseStatus} from "../enums/exercise-status.enum";
 import {EditProgramItem} from "../models/edit-program-item";
+import {ProgramType} from "../enums/program-type.enum";
 
 export class ProgramDao {
     // region Public Methods
@@ -126,15 +127,9 @@ export class ProgramDao {
             .update('ProgramStateID', ProgramStateEnum.ACTIVE);
     }
 
-    static async refresh(programID: number): Promise<boolean> {
-        await db('Workout as w')
-            .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
-            .where({'w.ProgramID': programID})
-            .update({
-                'w.StatusID': ExerciseStatus.INCOMPLETE,
-                'ew.StatusID': ExerciseStatus.INCOMPLETE
-            });
-        return true;
+    static async getType(programID: number): Promise<ProgramType> {
+        const pList: ProgramItem[] = await this.get(programID);
+        return pList[0].ProgramTypeID;
     }
 
     static async belongsToUser(userID: number, programID: number): Promise<boolean> {
@@ -162,6 +157,29 @@ export class ProgramDao {
                 'Title': editProgramItem.programTitle
             });
 
+        return true;
+    }
+
+    /**
+     * Esegue il refresh della scheda solamente se scheda di tipo Base
+     * @param programID
+     */
+    static async refresh(programID: number): Promise<boolean> {
+        if (await ProgramDao.getType(programID) === ProgramType.PRO) {
+            return false;
+        }
+
+        return await ProgramDao._refresh(programID);
+    }
+
+    private static async _refresh(programID: number): Promise<boolean> {
+        await db('Workout as w')
+            .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
+            .where({'w.ProgramID': programID})
+            .update({
+                'w.StatusID': ExerciseStatus.INCOMPLETE,
+                'ew.StatusID': ExerciseStatus.INCOMPLETE
+            });
         return true;
     }
 
