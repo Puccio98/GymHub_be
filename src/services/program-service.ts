@@ -105,7 +105,7 @@ export class ProgramService {
                 return response(ServiceStatusEnum.ERROR, message);
             }
             if (!await ProgramDao.reset(programID)) {
-                return response(ServiceStatusEnum.ERROR, defaultMessage);
+                return response(ServiceStatusEnum.ERROR, 'Non è stato possibile resettare la scheda');
             }
             const ppList = await ProgramDao.getPlainByProgramID(userID, programID);
             if (!ppList.length) {
