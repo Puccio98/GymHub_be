@@ -14,7 +14,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.delete('/:program_id', ProgramController.delete);
 
-    router.post('/program_refresh_program', validateDto(updateProgramType), ProgramController.refresh);
+    router.post('/reset', validateDto(updateProgramType), ProgramController.reset);
 
     router.post('/program_edit_program', validateDto(editProgramType), ProgramController.edit);
 

@@ -95,7 +95,7 @@ export class ExerciseWorkoutService {
                     if (deletedWorkout) {
                         //CHECK CHE LA SCHEDA SIA COMPLETATA
                         if (await ProgramDao.isComplete(deleteExerciseDto.programID)) {
-                            await ProgramDao.refresh(deleteExerciseDto.programID);
+                            await ProgramDao.reset(deleteExerciseDto.programID);
                         }
                         message = 'Workout deleted';
                         const data = {exerciseID: deletedWorkout, completedWorkout: false, refreshProgram: true};
@@ -120,7 +120,7 @@ export class ExerciseWorkoutService {
                         completedWorkout = true;
                         if (await ProgramDao.isComplete(deleteExerciseDto.programID)) {
                             //SE ORA LA SCHEDA E' COMPLETA, FACCIO REFRESH DELLA SCHEDA
-                            await ProgramDao.refresh(deleteExerciseDto.programID);
+                            await ProgramDao.reset(deleteExerciseDto.programID);
                             completedWorkout = false;
                             refreshProgram = true;
                         }

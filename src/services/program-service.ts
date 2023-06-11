@@ -56,7 +56,7 @@ export class ProgramService {
             //Per prima cosa, metto StatusID = INCOMPLETE a tutti gli allenamenti ed esercizi della scheda attiva.
             const activeProgramID = await ProgramDao.getActiveProgram(program.userID);
             if (activeProgramID !== -1) {
-                await ProgramDao.refresh(activeProgramID);
+                await ProgramDao.reset(activeProgramID);
             }
 
             // Mette inattivi tutti i programmi
@@ -94,7 +94,7 @@ export class ProgramService {
         }
     }
 
-    static async refresh(userID: number, programID: number): Promise<ServiceResponse<ProgramDto>> {
+    static async reset(userID: number, programID: number): Promise<ServiceResponse<ProgramDto>> {
         try {
             if (!await ProgramDao.belongsToUser(userID, programID)) {
                 message = 'Program does not belong to user';
@@ -104,7 +104,7 @@ export class ProgramService {
                 message = 'Program is not complete';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            if (!await ProgramDao.refresh(programID)) {
+            if (!await ProgramDao.reset(programID)) {
                 return response(ServiceStatusEnum.ERROR, defaultMessage);
             }
             const ppList = await ProgramDao.getPlainByProgramID(userID, programID);
