@@ -1,4 +1,4 @@
-import {ExerciseStatus} from "../enums/exercise-status.enum";
+import {Status} from "../enums/status.enum";
 
 export interface ExerciseWorkoutItem {
     Exercise_WorkoutID?: number,
@@ -13,7 +13,7 @@ export interface ExerciseWorkoutItem {
     Percentage?: number,
     createdAt?: Date,
     updatedAt?: Date,
-    StatusID?: ExerciseStatus
+    StatusID?: Status
 }
 
 

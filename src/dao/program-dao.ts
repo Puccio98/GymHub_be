@@ -3,7 +3,7 @@ import {PlainProgramItem} from "../dto/programDto/plainProgram";
 import {ProgramItem} from "../models/program";
 import {WorkoutItem} from "../models/workout";
 import {ProgramStateEnum} from "../enums/program-state-enum";
-import {ExerciseStatus} from "../enums/exercise-status.enum";
+import {Status} from "../enums/status.enum";
 import {EditProgramItem} from "../models/edit-program-item";
 import {ProgramType} from "../enums/program-type.enum";
 
@@ -144,7 +144,7 @@ export class ProgramDao {
 
     static async isComplete(programID: number): Promise<boolean> {
         const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
-            .where({ProgramID: programID, StatusID: ExerciseStatus.INCOMPLETE});
+            .where({ProgramID: programID, StatusID: Status.INCOMPLETE});
 
         return uncompletedWorkouts.length <= 0;
     }
@@ -177,8 +177,8 @@ export class ProgramDao {
             .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({'w.ProgramID': programID})
             .update({
-                'w.StatusID': ExerciseStatus.INCOMPLETE,
-                'ew.StatusID': ExerciseStatus.INCOMPLETE
+                'w.StatusID': Status.INCOMPLETE,
+                'ew.StatusID': Status.INCOMPLETE
             });
         return true;
     }

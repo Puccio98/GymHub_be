@@ -1,9 +1,9 @@
-import {ExerciseStatus} from "../../enums/exercise-status.enum";
+import {Status} from "../../enums/status.enum";
 
 export interface CompleteWorkoutDto {
     WorkoutID: number,
     ProgramID: number,
     createdAt: Date,
     updatedAt: Date,
-    StatusID: ExerciseStatus
+    StatusID: Status
 }
