@@ -75,7 +75,7 @@ export class ProgramController {
     }
 
     static reset = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const programID: number = req.body.programID;
+        const programID: number = Number(req.params['program_id']);
         const userJWT = req.AccessPayloadJWT;
         const refreshProgramResponse: ServiceResponse<ProgramDto> = await ProgramService.reset(userJWT.UserID, programID);
         switch (refreshProgramResponse.status) {

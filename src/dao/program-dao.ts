@@ -151,12 +151,12 @@ export class ProgramDao {
 
     static async edit(editProgramItem: EditProgramItem): Promise<boolean> {
         await db('Program')
-            .where({ProgramID: editProgramItem.programID})
+            .where({ProgramID: editProgramItem.ProgramID})
             .update({
-                'ProgramStateID': editProgramItem.programStateID,
-                'Title': editProgramItem.programTitle
+                'ProgramStateID': editProgramItem.ProgramStateID,
+                'Title': editProgramItem.ProgramTitle,
+                'StatusID': editProgramItem.StatusID
             });
-
         return true;
     }
 
@@ -173,10 +173,12 @@ export class ProgramDao {
     }
 
     private static async _reset(programID: number): Promise<boolean> {
-        await db('Workout as w')
+        await db('Program as p')
+            .join('Workout as w', 'p.ProgramID', 'w.WorkoutID')
             .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({'w.ProgramID': programID})
             .update({
+                'p.StatusID': Status.INCOMPLETE,
                 'w.StatusID': Status.INCOMPLETE,
                 'ew.StatusID': Status.INCOMPLETE
             });
