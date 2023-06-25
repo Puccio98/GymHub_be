@@ -27,7 +27,7 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
     // Shared Program
     router.post('/share', validateDto(shareProgramType), ProgramController.share);
 
-    router.get('/shared/user/:user_id', ProgramController.getShared);
+    router.get('/share/user/:user_id', ProgramController.getShared);
 
     // Workout
     router.post('/:program_id/workout', validateDto(addWorkoutType), WorkoutController.create);
