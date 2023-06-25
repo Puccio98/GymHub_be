@@ -7,6 +7,7 @@ export interface ProgramItem {
     UserID: number,
     Title: string,
     Description?: string,
+    StatusID: number,
     ProgramStateID: ProgramStateEnum,
     createdAt?: Date,
     updatedAt?: Date
