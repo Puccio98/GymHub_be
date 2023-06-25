@@ -174,7 +174,7 @@ export class ProgramDao {
 
     private static async _reset(programID: number): Promise<boolean> {
         await db('Program as p')
-            .join('Workout as w', 'p.ProgramID', 'w.WorkoutID')
+            .join('Workout as w', 'p.ProgramID', 'w.ProgramID')
             .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({'w.ProgramID': programID})
             .update({
