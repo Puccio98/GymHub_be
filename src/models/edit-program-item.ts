@@ -1,7 +1,9 @@
 import {ProgramStateEnum} from "../enums/program-state-enum";
+import {Status} from "../enums/status.enum";
 
 export interface EditProgramItem {
-    programID: number;
-    programTitle: string;
-    programStateID: ProgramStateEnum;
+    ProgramID: number,
+    ProgramTitle: string,
+    ProgramStateID: ProgramStateEnum,
+    StatusID: Status
 }
