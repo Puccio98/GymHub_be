@@ -3,7 +3,7 @@ import {db} from "../database";
 import {WorkoutItem} from "../models/workout";
 import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
 import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
-import {ExerciseStatus} from "../enums/exercise-status.enum";
+import {Status} from "../enums/status.enum";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
 
 export class WorkoutDao {
@@ -32,7 +32,7 @@ export class WorkoutDao {
         await db('Workout')
             .where({WorkoutID: workoutDto.workoutID})
             .update({
-                StatusID: ExerciseStatus.COMPLETE
+                StatusID: Status.COMPLETE
             });
         return WorkoutDao.get(workoutDto.workoutID);
     }
@@ -75,7 +75,7 @@ export class WorkoutDao {
 
     static async isComplete(workoutID: number) {
         const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
-            .where({WorkoutID: workoutID, StatusID: ExerciseStatus.INCOMPLETE});
+            .where({WorkoutID: workoutID, StatusID: Status.INCOMPLETE});
 
         return uncompletedExercises.length <= 0;
     }

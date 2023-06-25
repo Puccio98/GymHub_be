@@ -21,6 +21,7 @@ import {ShareProgramDto} from "../dto/programDto/share-program.dto";
 import {ShareProgram} from "../models/shareProgram";
 import {DateDB} from "../interfaces/dateDB";
 import {WorkoutGroupDto} from "../dto/programDto/workoutGroupDto";
+import {Status} from "../enums/status.enum";
 
 export class ProgramLib {
     static ProgramItemToProgramDto(programItem: ProgramItem): ProgramDto {
@@ -32,6 +33,7 @@ export class ProgramLib {
             title: programItem.Title,
             description: programItem.Description,
             programStateID: programItem.ProgramStateID,
+            statusID: programItem.StatusID,
             workoutGroupList: [],
         } as ProgramDto
     }
@@ -132,6 +134,7 @@ export class ProgramLib {
             Title: p.title,
             StatusID: p.statusID,
             ProgramStateID: ProgramStateEnum.ACTIVE,
+            StatusID: Status.INCOMPLETE,
             createdAt: p.createdAt,
             updatedAt: p.updatedAt,
         }
@@ -320,9 +323,10 @@ export class ProgramLib {
 
     static editProgramDtoToEditProgramItem(epDto: EditProgramDto): EditProgramItem {
         return {
-            programID: epDto.programID,
-            programStateID: epDto.programState,
-            programTitle: epDto.programTitle
+            ProgramID: epDto.programID,
+            ProgramStateID: epDto.programState,
+            ProgramTitle: epDto.programTitle,
+            StatusID: epDto.statusID
         } as EditProgramItem
     }
 
