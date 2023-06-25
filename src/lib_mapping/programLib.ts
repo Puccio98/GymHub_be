@@ -33,7 +33,6 @@ export class ProgramLib {
             title: programItem.Title,
             description: programItem.Description,
             programStateID: programItem.ProgramStateID,
-            statusID: programItem.StatusID,
             workoutGroupList: [],
         } as ProgramDto
     }
@@ -132,7 +131,6 @@ export class ProgramLib {
             UserID: p.userID,
             ProgramTypeID: p.programTypeID,
             Title: p.title,
-            StatusID: p.statusID,
             ProgramStateID: ProgramStateEnum.ACTIVE,
             StatusID: Status.INCOMPLETE,
             createdAt: p.createdAt,
