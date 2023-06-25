@@ -1,5 +1,5 @@
 import {Request} from "express";
-import {PayloadJWT} from "../interfaces/payloadJWT";
+import {PayloadJWT} from "../interfaces/payloadJWT-interface";
 import {TokenDto} from "../dto/authDto/token-dto";
 import {TokenType} from "../enums/token-type.enum";
 import {ExpirationTime} from "../enums/expiration-time.enum";

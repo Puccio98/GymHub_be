@@ -5,9 +5,10 @@ import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
 import {ProgramLib} from "../lib_mapping/programLib";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
 import {WorkoutDao} from "../dao/workout-dao";
-import {DeleteExerciseDto} from "../dto/programDto/delete-exercise.dto";
 import {DeleteExerciseResponse} from "../dto/programDto/delete-exercise-response";
 import {ProgramDao} from "../dao/program-dao";
+import {DeleteExerciseWorkout} from "../interfaces/DeleteExerciseWorkout-interface";
+import {Status} from "../enums/status.enum";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string; // messaggio specifico
@@ -61,26 +62,26 @@ export class ExerciseWorkoutService {
         }
     }
 
-    static async delete(deleteExerciseDto: DeleteExerciseDto, userID: number): Promise<ServiceResponse<DeleteExerciseResponse>> {
+    static async delete(deleteExercise: DeleteExerciseWorkout, userID: number): Promise<ServiceResponse<DeleteExerciseResponse>> {
         try {
-            if (!await Exercise_WorkoutDao.belongsToUser(userID, deleteExerciseDto.programID, deleteExerciseDto.workoutID, deleteExerciseDto.exerciseID)) {
+            if (!await Exercise_WorkoutDao.belongsToUser(userID, deleteExercise.ProgramID, deleteExercise.WorkoutID, deleteExercise.ExerciseID)) {
                 message = 'Exercise does not belong to user';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            if (!await Exercise_WorkoutDao.isUncompleted(deleteExerciseDto.exerciseID)) {
+            if (!await Exercise_WorkoutDao.isUncompleted(deleteExercise.ExerciseID)) {
                 message = 'Exercise is either completed or skipped';
                 return response(ServiceStatusEnum.ERROR, message);
             }
 
             // controllo che l'esercizio non sia l'ultimo dell'allenamento, in caso delete dell'allenamento direttamente
-            if (await Exercise_WorkoutDao.isLast(deleteExerciseDto.workoutID)) {
+            if (await Exercise_WorkoutDao.isLast(deleteExercise.WorkoutID)) {
                 //controllo che l'allenamento non sia l'ultimo rimasto della scheda, e in caso delete scheda
-                if (await WorkoutDao.isLast(deleteExerciseDto.programID)) {
-                    if (await ProgramDao.delete(deleteExerciseDto.programID)) {
+                if (await WorkoutDao.isLast(deleteExercise.ProgramID)) {
+                    if (await ProgramDao.delete(deleteExercise.ProgramID)) {
                         //ELIMINO SCHEDA
                         message = 'Entire program deleted';
                         const data = {
-                            exerciseID: deleteExerciseDto.workoutID,
+                            exerciseID: deleteExercise.WorkoutID,
                             completedWorkout: false,
                             refreshProgram: false
                         };
@@ -91,11 +92,11 @@ export class ExerciseWorkoutService {
                     }
                 } else {
                     //ELIMINO ALLENAMENTO
-                    const deletedWorkout = await WorkoutDao.delete(deleteExerciseDto.workoutID);
+                    const deletedWorkout = await WorkoutDao.delete(deleteExercise.WorkoutID);
                     if (deletedWorkout) {
                         //CHECK CHE LA SCHEDA SIA COMPLETATA
-                        if (await ProgramDao.isComplete(deleteExerciseDto.programID)) {
-                            await ProgramDao.reset(deleteExerciseDto.programID);
+                        if (await ProgramDao.isComplete(deleteExercise.ProgramID)) {
+                            await ProgramDao.reset(deleteExercise.ProgramID);
                         }
                         message = 'Workout deleted';
                         const data = {exerciseID: deletedWorkout, completedWorkout: false, refreshProgram: true};
@@ -107,20 +108,21 @@ export class ExerciseWorkoutService {
                 }
             } else {
                 //ELIMINO L'ESERCIZIO
-                const deletedExercise = await Exercise_WorkoutDao.delete(deleteExerciseDto.exerciseID);
+                const deletedExercise = await Exercise_WorkoutDao.delete(deleteExercise.ExerciseID);
                 if (deletedExercise) {
                     let completedWorkout = false;
                     let refreshProgram = false;
-                    if (await WorkoutDao.isComplete(deleteExerciseDto.workoutID)) {
+                    if (await WorkoutDao.isComplete(deleteExercise.WorkoutID)) {
                         //SE ORA L'ALLENAMENTO E' COMPLETO, LO COMPLETO
                         await WorkoutDao.update({
-                            programID: deleteExerciseDto.programID,
-                            workoutID: deleteExerciseDto.workoutID
+                            ProgramID: deleteExercise.ProgramID,
+                            WorkoutID: deleteExercise.WorkoutID,
+                            StatusID: Status.COMPLETE
                         });
                         completedWorkout = true;
-                        if (await ProgramDao.isComplete(deleteExerciseDto.programID)) {
+                        if (await ProgramDao.isComplete(deleteExercise.ProgramID)) {
                             //SE ORA LA SCHEDA E' COMPLETA, FACCIO REFRESH DELLA SCHEDA
-                            await ProgramDao.reset(deleteExerciseDto.programID);
+                            await ProgramDao.reset(deleteExercise.ProgramID);
                             completedWorkout = false;
                             refreshProgram = true;
                         }

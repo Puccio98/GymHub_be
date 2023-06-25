@@ -5,7 +5,7 @@ import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {EditProgramDto} from "../dto/programDto/edit-program.dto";
-import {PayloadJWT} from "../interfaces/payloadJWT";
+import {PayloadJWT} from "../interfaces/payloadJWT-interface";
 
 export class ProgramController {
     static getListByUserID = async (req: IGetUserAuthInfoRequest, res: Response) => {
