@@ -28,6 +28,7 @@ export class ProgramLib {
             programID: programItem.ProgramID,
             programTypeID: programItem.ProgramTypeID,
             userID: programItem.UserID,
+            statusID: programItem.StatusID,
             title: programItem.Title,
             description: programItem.Description,
             programStateID: programItem.ProgramStateID,
@@ -42,6 +43,7 @@ export class ProgramLib {
             programTypeID: programItem.ProgramTypeID,
             userID: userID ? userID : programItem.UserID,
             title: programItem.Title,
+            statusID: programItem.StatusID,
             workoutGroupList: [],
             createdAt: _dateDB.createdAt,
             updatedAt: _dateDB.updatedAt
@@ -128,6 +130,7 @@ export class ProgramLib {
             UserID: p.userID,
             ProgramTypeID: p.programTypeID,
             Title: p.title,
+            StatusID: p.statusID,
             ProgramStateID: ProgramStateEnum.ACTIVE,
             createdAt: p.createdAt,
             updatedAt: p.updatedAt,
