@@ -1,10 +1,10 @@
 import {PlainWorkoutItem} from "../dto/programDto/plainWorkout";
 import {db} from "../database";
 import {WorkoutItem} from "../models/workout";
-import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
 import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
 import {Status} from "../enums/status.enum";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
+import {UpdateWorkout} from "../interfaces/updateWorkout-interface";
 
 export class WorkoutDao {
     static async getPlain(workoutID: number): Promise<PlainWorkoutItem[]> {
@@ -28,13 +28,13 @@ export class WorkoutDao {
         return res[0];
     }
 
-    static async update(workoutDto: UpdateWorkoutDto): Promise<CompleteWorkoutDto> {
+    static async update(workout: UpdateWorkout): Promise<CompleteWorkoutDto> {
         await db('Workout')
-            .where({WorkoutID: workoutDto.workoutID})
+            .where({WorkoutID: workout.WorkoutID})
             .update({
-                StatusID: Status.COMPLETE
+                StatusID: workout.StatusID
             });
-        return WorkoutDao.get(workoutDto.workoutID);
+        return WorkoutDao.get(workout.WorkoutID);
     }
 
     static async get(workoutID: number): Promise<CompleteWorkoutDto> {

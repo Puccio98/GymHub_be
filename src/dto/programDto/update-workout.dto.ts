@@ -1,4 +1,5 @@
+import {Status} from "../../enums/status.enum";
+
 export interface UpdateWorkoutDto {
-  workoutID: number
-  programID: number
+    statusID: Status
 }

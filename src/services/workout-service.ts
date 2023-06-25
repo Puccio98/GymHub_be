@@ -1,4 +1,3 @@
-import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
 import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
 import {WorkoutDao} from "../dao/workout-dao";
@@ -11,22 +10,24 @@ import {DeleteWorkoutResponse} from "../dto/programDto/delete-workout-response";
 import {ProgramItem} from "../models/program";
 import {ProgramType} from "../enums/program-type.enum";
 import {ProgramStateEnum} from "../enums/program-state-enum";
+import {UpdateWorkout} from "../interfaces/updateWorkout-interface";
+import {DeleteWorkout} from "../interfaces/deleteWorkout-interface";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string; // messaggio specifico
 
 export class WorkoutService {
-    static async update(workoutDto: UpdateWorkoutDto, userID: number): Promise<ServiceResponse<CompleteWorkoutDto>> {
+    static async update(workout: UpdateWorkout, userID: number): Promise<ServiceResponse<CompleteWorkoutDto>> {
         try {
-            if (!await WorkoutDao.belongsToUser(userID, workoutDto.programID, workoutDto.workoutID)) {
+            if (!await WorkoutDao.belongsToUser(userID, workout.ProgramID, workout.WorkoutID)) {
                 message = 'Workout does not belong to user';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            if (!await WorkoutDao.isComplete(workoutDto.workoutID)) {
+            if (!await WorkoutDao.isComplete(workout.WorkoutID)) {
                 message = 'Workout is not complete';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            const updatedWorkout = await WorkoutDao.update(workoutDto);
+            const updatedWorkout = await WorkoutDao.update(workout);
             if (updatedWorkout) {
                 message = 'Workout completed';
                 return response(ServiceStatusEnum.SUCCESS, message, updatedWorkout);
@@ -85,33 +86,33 @@ export class WorkoutService {
         }
     }
 
-    static async delete(workoutDto: UpdateWorkoutDto, userID: number): Promise<ServiceResponse<DeleteWorkoutResponse>> {
+    static async delete(workout: DeleteWorkout, userID: number): Promise<ServiceResponse<DeleteWorkoutResponse>> {
         try {
-            if (!await WorkoutDao.belongsToUser(userID, workoutDto.programID, workoutDto.workoutID)) {
+            if (!await WorkoutDao.belongsToUser(userID, workout.ProgramID, workout.WorkoutID)) {
                 message = 'Workout does not belong to user';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            if (await WorkoutDao.isComplete(workoutDto.workoutID)) {
+            if (await WorkoutDao.isComplete(workout.WorkoutID)) {
                 message = 'Workout is complete';
                 return response(ServiceStatusEnum.ERROR, message);
             }
             // controllo che l'allenamento non sia l'ultimo della scheda, in caso delete della scheda direttamente
-            if (await WorkoutDao.isLast(workoutDto.programID)) {
-                if (await ProgramDao.delete(workoutDto.programID)) {
+            if (await WorkoutDao.isLast(workout.ProgramID)) {
+                if (await ProgramDao.delete(workout.ProgramID)) {
                     message = 'Entire program deleted';
-                    const data = {workoutID: workoutDto.workoutID, refreshProgram: false};
+                    const data = {workoutID: workout.WorkoutID, refreshProgram: false};
                     return response(ServiceStatusEnum.SUCCESS, message, data);
                 } else {
                     message = 'User can\'t delete the requested program';
                     return response(ServiceStatusEnum.ERROR, message);
                 }
             } else {
-                const deletedWorkout = await WorkoutDao.delete(workoutDto.workoutID);
+                const deletedWorkout = await WorkoutDao.delete(workout.WorkoutID);
                 if (deletedWorkout) {
                     //CHECK CHE LA SCHEDA SIA COMPLETATA
                     let refreshProgram = false;
-                    if (await ProgramDao.isComplete(workoutDto.programID)) {
-                        await ProgramDao.reset(workoutDto.programID);
+                    if (await ProgramDao.isComplete(workout.ProgramID)) {
+                        await ProgramDao.reset(workout.ProgramID);
                         refreshProgram = true;
                     }
                     const deleteWorkoutResponse: DeleteWorkoutResponse = {

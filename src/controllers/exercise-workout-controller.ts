@@ -4,9 +4,9 @@ import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
 import {ExerciseWorkoutService} from "../services/exercise-workout-service";
-import {DeleteExerciseDto} from "../dto/programDto/delete-exercise.dto";
 import {DeleteExerciseResponse} from "../dto/programDto/delete-exercise-response";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
+import {DeleteExerciseWorkout} from "../interfaces/DeleteExerciseWorkout-interface";
 
 export class ExerciseWorkoutController {
     static update = async (req: IGetUserAuthInfoRequest, res: Response) => {
@@ -25,9 +25,16 @@ export class ExerciseWorkoutController {
 
     static delete = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const userJWT = req.AccessPayloadJWT;
-        const deleteExerciseDto: DeleteExerciseDto = req.body;
+        const programID: number = Number(req.params['program_id']);
+        const workoutID: number = Number(req.params['workout_id']);
+        const exerciseID: number = Number(req.params['exercise_id']);
 
-        const deleteExerciseResponse: ServiceResponse<DeleteExerciseResponse> = await ExerciseWorkoutService.delete(deleteExerciseDto, userJWT.UserID);
+        const deleteExercise: DeleteExerciseWorkout = {
+            ProgramID: programID,
+            WorkoutID: workoutID,
+            ExerciseID: exerciseID
+        }
+        const deleteExerciseResponse: ServiceResponse<DeleteExerciseResponse> = await ExerciseWorkoutService.delete(deleteExercise, userJWT.UserID);
         switch (deleteExerciseResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(deleteExerciseResponse.data);

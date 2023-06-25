@@ -7,12 +7,17 @@ import {WorkoutService} from "../services/workout-service";
 import {DeleteWorkoutResponse} from "../dto/programDto/delete-workout-response";
 import {WorkoutAddDTO} from "../dto/programDto/add-workout.dto";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
+import {UpdateWorkout} from "../interfaces/updateWorkout-interface";
+import {DeleteWorkout} from "../interfaces/deleteWorkout-interface";
 
 export class WorkoutController {
     static update = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const workoutDto: UpdateWorkoutDto = req.body;
         const userJWT = req.AccessPayloadJWT;
-        const completeWorkoutResponse: ServiceResponse<CompleteWorkoutDto> = await WorkoutService.update(workoutDto, userJWT.UserID);
+        const programID: number = Number(req.params['program_id']);
+        const workoutID: number = Number(req.params['workout_id']);
+        const updateDto: UpdateWorkoutDto = req.body;
+        const workout: UpdateWorkout = {WorkoutID: workoutID, ProgramID: programID, StatusID: updateDto.statusID};
+        const completeWorkoutResponse: ServiceResponse<CompleteWorkoutDto> = await WorkoutService.update(workout, userJWT.UserID);
         switch (completeWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(completeWorkoutResponse.data);
@@ -25,9 +30,11 @@ export class WorkoutController {
 
     static delete = async (req: IGetUserAuthInfoRequest, res: Response) => {
         const userJWT = req.AccessPayloadJWT;
-        const workoutDto: UpdateWorkoutDto = req.body;
+        const programID: number = Number(req.params['program_id']);
+        const workoutID: number = Number(req.params['workout_id']);
+        const workout: DeleteWorkout = {WorkoutID: workoutID, ProgramID: programID};
 
-        const deleteWorkoutResponse: ServiceResponse<DeleteWorkoutResponse> = await WorkoutService.delete(workoutDto, userJWT.UserID);
+        const deleteWorkoutResponse: ServiceResponse<DeleteWorkoutResponse> = await WorkoutService.delete(workout, userJWT.UserID);
         switch (deleteWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(deleteWorkoutResponse.data);

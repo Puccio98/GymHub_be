@@ -1,5 +1,5 @@
 import {NextFunction, Response} from "express";
-import {PayloadJWT} from "../interfaces/payloadJWT";
+import {PayloadJWT} from "../interfaces/payloadJWT-interface";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 
 const jwt = require('jsonwebtoken');

@@ -10,7 +10,7 @@ import {ProgramStateEnum} from "../enums/program-state-enum";
 import {ShareProgramDto} from "../dto/programDto/share-program.dto";
 import {ShareProgramDao} from "../dao/share-program-dao";
 import {ShareProgram} from "../models/shareProgram";
-import {PayloadJWT} from "../interfaces/payloadJWT";
+import {PayloadJWT} from "../interfaces/payloadJWT-interface";
 import {UserType} from "../enums/user-type.enum";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'

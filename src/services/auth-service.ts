@@ -8,7 +8,7 @@ import {AuthDto} from "../dto/authDto/auth-dto";
 import {TokenDao} from "../dao/token-dao";
 import {TokenDto} from "../dto/authDto/token-dto";
 import {TokenItem} from "../interfaces/tokenItem-interface";
-import {PayloadJWT} from "../interfaces/payloadJWT";
+import {PayloadJWT} from "../interfaces/payloadJWT-interface";
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
