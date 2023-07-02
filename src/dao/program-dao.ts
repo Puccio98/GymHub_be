@@ -3,9 +3,9 @@ import {PlainProgramItem} from "../dto/programDto/plainProgram";
 import {ProgramItem} from "../models/program";
 import {WorkoutItem} from "../models/workout";
 import {ProgramStateEnum} from "../enums/program-state-enum";
-import {Status} from "../enums/status.enum";
 import {EditProgramItem} from "../models/edit-program-item";
 import {ProgramType} from "../enums/program-type.enum";
+import {Status} from "../enums/status.enum";
 
 export class ProgramDao {
     // region Public Methods
