@@ -7,7 +7,6 @@ export interface ProgramDto {
     programID?: number,
     programTypeID: ProgramType,
     userID: number,
-    statusID: number,
     title: string,
     description?: string,
     programStateID: ProgramStateEnum,
