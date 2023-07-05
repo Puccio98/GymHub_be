@@ -4,7 +4,7 @@ import {ProgramService} from "../services/program-service";
 import {ProgramDto} from "../dto/programDto/program-dto";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
-import {EditProgramDto} from "../dto/programDto/edit-program.dto";
+import {UpdateProgramDto} from "../dto/programDto/update-program.dto";
 import {PayloadJWT} from "../interfaces/payloadJWT-interface";
 
 export class ProgramController {
@@ -88,11 +88,27 @@ export class ProgramController {
         }
     }
 
-    static edit = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const editProgramDto = req.body;
+    static update = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const editProgramDto: UpdateProgramDto = req.body;
         const userJWT = req.AccessPayloadJWT;
 
-        const editProgramResponse: ServiceResponse<EditProgramDto> = await ProgramService.edit(userJWT.UserID, editProgramDto);
+        const updateProgramResponse: ServiceResponse<UpdateProgramDto> = await ProgramService.update(userJWT.UserID, editProgramDto);
+        switch (updateProgramResponse.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(updateProgramResponse.data);
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: updateProgramResponse.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
+    }
+
+    static edit = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        const program: ProgramCreateDTO = req.body;
+        const programID: number = Number(req.params['program_id']);
+        const userJWT = req.AccessPayloadJWT;
+
+        const editProgramResponse: ServiceResponse<boolean> = await ProgramService.edit(userJWT.UserID, programID, program);
         switch (editProgramResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(editProgramResponse.data);
@@ -106,7 +122,7 @@ export class ProgramController {
         const shareProgramDto = req.body;
         const userJWT: PayloadJWT = req.AccessPayloadJWT;
 
-        const editProgramResponse: ServiceResponse<EditProgramDto> = await ProgramService.share(userJWT, shareProgramDto);
+        const editProgramResponse: ServiceResponse<UpdateProgramDto> = await ProgramService.share(userJWT, shareProgramDto);
         switch (editProgramResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(editProgramResponse.data);

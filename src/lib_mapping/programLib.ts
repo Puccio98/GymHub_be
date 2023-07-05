@@ -15,7 +15,7 @@ import {
 } from "../dto/programDto/program-create-dto";
 import {ProgramStateEnum} from "../enums/program-state-enum";
 import {PlainWorkoutItem} from "../dto/programDto/plainWorkout";
-import {EditProgramDto} from "../dto/programDto/edit-program.dto";
+import {UpdateProgramDto} from "../dto/programDto/update-program.dto";
 import {EditProgramItem} from "../models/edit-program-item";
 import {ShareProgramDto} from "../dto/programDto/share-program.dto";
 import {ShareProgram} from "../models/shareProgram";
@@ -319,7 +319,7 @@ export class ProgramLib {
         return wList;
     }
 
-    static editProgramDtoToEditProgramItem(epDto: EditProgramDto): EditProgramItem {
+    static editProgramDtoToEditProgramItem(epDto: UpdateProgramDto): EditProgramItem {
         return {
             ProgramID: epDto.programID,
             ProgramStateID: epDto.programState,

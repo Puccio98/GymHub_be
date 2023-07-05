@@ -18,7 +18,9 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
 
     router.post('', validateDto(createProgramType), ProgramController.create);
 
-    router.patch('/:program_id', validateDto(editProgramType), ProgramController.edit);
+    router.patch('/:program_id', validateDto(editProgramType), ProgramController.update);
+
+    router.put('/:program_id', validateDto(createProgramType), ProgramController.edit);
 
     router.delete('/:program_id', ProgramController.delete);
 
