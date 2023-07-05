@@ -5,7 +5,7 @@ import {ProgramLib} from "../lib_mapping/programLib";
 import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
 import {WorkoutDao} from "../dao/workout-dao";
 import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
-import {EditProgramDto} from "../dto/programDto/edit-program.dto";
+import {UpdateProgramDto} from "../dto/programDto/update-program.dto";
 import {ProgramStateEnum} from "../enums/program-state-enum";
 import {ShareProgramDto} from "../dto/programDto/share-program.dto";
 import {ShareProgramDao} from "../dao/share-program-dao";
@@ -126,7 +126,7 @@ export class ProgramService {
         }
     }
 
-    static async edit(userID: number, editProgramDto: EditProgramDto): Promise<ServiceResponse<EditProgramDto>> {
+    static async update(userID: number, editProgramDto: UpdateProgramDto): Promise<ServiceResponse<UpdateProgramDto>> {
         try {
             //controllo che la scheda appartenga all'utente
             if (!await ProgramDao.belongsToUser(userID, editProgramDto.programID)) {
@@ -148,7 +148,7 @@ export class ProgramService {
                 }
             }
             //edit
-            if (await ProgramDao.edit(ProgramLib.editProgramDtoToEditProgramItem(editProgramDto))) {
+            if (await ProgramDao.update(ProgramLib.editProgramDtoToEditProgramItem(editProgramDto))) {
                 message = 'Program edited';
                 return response(ServiceStatusEnum.SUCCESS, message, editProgramDto);
             } else {
@@ -160,7 +160,36 @@ export class ProgramService {
         }
     }
 
-    static async share(user: PayloadJWT, shareProgramDto: ShareProgramDto): Promise<ServiceResponse<EditProgramDto>> {
+    static async edit(userID: number, programID: number, program: ProgramCreateDTO): Promise<ServiceResponse<boolean>> {
+        try {
+            //controllo che la scheda appartenga all'utente
+            if (!await ProgramDao.belongsToUser(userID, programID)) {
+                message = 'Program does not belong to user';
+                return response(ServiceStatusEnum.ERROR, message);
+            }
+
+            // Controllare che il programma sia attivo o meno non serve a niente, tanto quando andiamo a creare quello nuovo si attiva di default
+
+            // Elimino scheda corrente
+            if (!await ProgramDao.delete(programID)) {
+                return response(ServiceStatusEnum.ERROR, 'Errore causato durante l\'eliminazione della scheda da modificare.');
+            }
+            // Creo scheda modificata
+            // Mette inattivi tutti i programmi
+            await ProgramDao.setProgramsInactive(program.userID);
+
+            // Creo Programma
+            if (!await this._create(program)) {
+                return response(ServiceStatusEnum.ERROR, 'Errore causato durante la creazione della scheda modificata.');
+            }
+            return response(ServiceStatusEnum.SUCCESS, 'Scheda modificata correttamente', true);
+
+        } catch {
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
+        }
+    }
+
+    static async share(user: PayloadJWT, shareProgramDto: ShareProgramDto): Promise<ServiceResponse<UpdateProgramDto>> {
         try {
 
             // Solo utenti manager e sadmin possono condividere schede
