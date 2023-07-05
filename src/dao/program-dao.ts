@@ -149,7 +149,7 @@ export class ProgramDao {
         return uncompletedWorkouts.length <= 0;
     }
 
-    static async edit(editProgramItem: EditProgramItem): Promise<boolean> {
+    static async update(editProgramItem: EditProgramItem): Promise<boolean> {
         await db('Program')
             .where({ProgramID: editProgramItem.ProgramID})
             .update({
