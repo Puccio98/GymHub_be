@@ -30,7 +30,7 @@ export class UserDao {
                 if (userTypeID)
                     builder.where('UserTypeID', userTypeID);
 
-                if (userDescription != null && userDescription.length > 3)
+                if (userDescription != null && userDescription.length > 2)
                     builder.where((bd: any) =>
                         bd.whereILike('Name', `%${userDescription}%`)
                             .orWhereILike('LastName', `%${userDescription}%`)
