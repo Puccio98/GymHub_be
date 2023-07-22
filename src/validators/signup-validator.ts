@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import {AuthHelper} from "../helpers/AuthHelper";
+import {UserHelper} from "../helpers/UserHelper";
 
 export const signupType = yup.object().shape({
     name: yup.string().required(),
@@ -8,7 +8,7 @@ export const signupType = yup.object().shape({
     userTypeID: yup.number().required('UserTypeID required').test({
         name: 'isUserTypeValid',
         message: 'User Type non valido',
-        test: value => AuthHelper.isUserTypeValid(value)
+        test: value => UserHelper.isUserTypeValid(value)
     }),
     email: yup.string().required().email(),
     password: yup.string().required().min(8),

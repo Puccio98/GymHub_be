@@ -6,7 +6,6 @@ import {ExpirationTime} from "../enums/expiration-time.enum";
 import {TokenItem} from "../interfaces/tokenItem-interface";
 import {TokenDao} from "../dao/token-dao";
 import {UserItem} from "../models/user";
-import {UserType} from "../enums/user-type.enum";
 
 const jwt = require('jsonwebtoken');
 
@@ -61,13 +60,5 @@ export class AuthHelper {
             createdAt: new Date(),
             updatedAt: new Date()
         } as TokenItem;
-    }
-
-    /**
-     * Restituisce true se il numero passato in input è contenuto tra i tipi di utenti possibili, altrimenti false,
-     * @param userType
-     */
-    static isUserTypeValid(userType: number | undefined): boolean {
-        return !userType ? false : userType in UserType
     }
 }
