@@ -3,12 +3,31 @@ import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnTyp
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {UserService} from "../services/user-service";
 import {UserDto} from "../dto/authDto/user-dto";
+import {UserHelper} from "../helpers/UserHelper";
+import {UserType} from "../enums/user-type.enum";
 
 
 export class UserController {
 
-    static getAll = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const response: ServiceResponse<UserDto[]> = await UserService.getAll();
+    static get = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        // Retrieve query string
+        const userType: any = req.query.userType;
+        const userDescription: any = req.query.userDescription;
+        let userTypeParsed: UserType | null = null;
+        let userDescriptionParsed: string | null = null;
+        try {
+            userTypeParsed = Number(userType) ? Number(userType) : null;
+            userDescriptionParsed = userDescription ? userDescription.toString().trim() : null;
+
+            if (userTypeParsed && !UserHelper.isUserTypeValid(userTypeParsed)) {
+                return res.status(400).send({error: 'Invalid user type'});
+            }
+        } catch (e) {
+            return res.status(500).send({error: 'Errore durante  la deserializzazione'});
+        }
+
+
+        const response: ServiceResponse<UserDto[]> = await UserService.get(userTypeParsed, userDescriptionParsed);
 
         switch (response.status) {
             case ServiceStatusEnum.SUCCESS:
