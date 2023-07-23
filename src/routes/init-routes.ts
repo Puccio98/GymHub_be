@@ -7,4 +7,5 @@ export function initRoutes(app: Express) {
     require("./weight-routes")(app);
     require("./exercise-routes")(app);
     require("./user-routes")(app);
+    require("./request-routes")(app);
 }
