@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {ExerciseDto} from "../dto/programDto/exercise.dto";
 import {ExerciseService} from "../services/exercise-service";
 

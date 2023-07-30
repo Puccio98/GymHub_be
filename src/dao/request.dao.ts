@@ -1,7 +1,7 @@
 import {db} from "../database";
 import {RequestItem, UpdateRequestItem} from "../models/request";
-import {RequestOptions} from "../interfaces/requestOptions-interface";
-import {PlainRequest} from "../interfaces/PlainRequest-interface";
+import {RequestOptions} from "../interfaces/request-options.interface";
+import {PlainRequest} from "../interfaces/plain.request.interface";
 
 export class RequestDao {
     // region Public Methods

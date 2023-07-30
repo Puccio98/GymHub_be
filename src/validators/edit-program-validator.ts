@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import {ProgramHelper} from "../helpers/ProgramHelper";
+import {ProgramHelper} from "../helpers/program.helper";
 
 export const editProgramType = yup.object().shape({
     programID: yup.number().required(),

@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import {RequestStateEnum} from "../enums/request-state.enum";
-import {RequestHelper} from "../helpers/RequestHelper";
+import {RequestHelper} from "../helpers/request.helper";
 
 export const createRequestType = yup.object().shape({
     toUserID: yup.number().required(),

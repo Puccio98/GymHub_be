@@ -1,7 +1,7 @@
 import {UserDao} from "../dao/user.dao";
-import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {UserItem} from "../models/user";
-import {UserLib} from "../lib_mapping/userLib";
+import {UserLib} from "../lib_mapping/user.lib";
 import {UserDto, UserInfoDto} from "../dto/authDto/user.dto";
 import {UserTypeEnum} from "../enums/user-type.enum";
 

@@ -1,13 +1,13 @@
-import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 
 import {FoodDao} from "../dao/food.dao";
 import {FoodItem} from "../models/food";
 import {itemOFF} from "../dto/externalApiDto/OFF/off.dto";
 import {itemUSDA} from "../dto/externalApiDto/USDA/usda.dto";
-import {NutritionLib} from "../lib_mapping/nutritionLib";
+import {NutritionLib} from "../lib_mapping/nutrition.lib";
 import {FoodDto} from "../dto/nutritionDto/food.dto";
 import {FoodUserDao} from "../dao/food-user.dao";
-import {PlainFoodUserItem} from "../plain_item/PlainFoodUserItem";
+import {PlainFoodUserItem} from "../interfaces/plain-food-user-item";
 import {DailyFoodDto} from "../dto/nutritionDto/dailyFood.dto";
 import {AddFoodDto} from "../dto/nutritionDto/addFood.dto";
 import {BaseFood_UserItem, Food_UserItem} from "../models/food_user";

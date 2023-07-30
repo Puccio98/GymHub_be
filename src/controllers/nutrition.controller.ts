@@ -1,6 +1,6 @@
 import {Response} from "express";
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
-import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
+import {IGetUserAuthInfoRequest} from "../helpers/auth.helper";
 import {NutritionService} from "../services/nutrition-service";
 import {FoodDto} from "../dto/nutritionDto/food.dto";
 import {DailyFoodDto} from "../dto/nutritionDto/dailyFood.dto";

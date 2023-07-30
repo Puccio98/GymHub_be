@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import {UserHelper} from "../helpers/UserHelper";
+import {UserHelper} from "../helpers/user.helper";
 
 export const signupType = yup.object().shape({
     name: yup.string().required(),

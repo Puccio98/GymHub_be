@@ -1,11 +1,11 @@
 import {Request, Response} from "express";
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {ProgramService} from "../services/program-service";
 import {ProgramDto} from "../dto/programDto/program.dto";
 import {ProgramCreateDto} from "../dto/programDto/program-create.dto";
-import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {IGetUserAuthInfoRequest} from "../helpers/auth.helper";
 import {UpdateProgramDto} from "../dto/programDto/update-program.dto";
-import {PayloadJWT} from "../interfaces/payloadJWT-interface";
+import {PayloadJWT} from "../interfaces/payload-JWT.interface";
 
 export class ProgramController {
     static getListByUserID = async (req: IGetUserAuthInfoRequest, res: Response) => {

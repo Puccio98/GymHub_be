@@ -1,9 +1,9 @@
 import {Request} from "express";
-import {PayloadJWT} from "../interfaces/payloadJWT-interface";
+import {PayloadJWT} from "../interfaces/payload-JWT.interface";
 import {TokenDto} from "../dto/authDto/token.dto";
 import {TokenTypeEnum} from "../enums/token-type.enum";
 import {ExpirationTimeEnum} from "../enums/expiration-time.enum";
-import {TokenItem} from "../interfaces/tokenItem-interface";
+import {TokenItem} from "../interfaces/token-item.interface";
 import {TokenDao} from "../dao/token.dao";
 import {UserItem} from "../models/user";
 

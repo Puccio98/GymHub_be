@@ -1,8 +1,8 @@
 import {RequestItem, UpdateRequestItem} from "../models/request";
-import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {RequestDao} from "../dao/request.dao";
-import {RequestOptions} from "../interfaces/requestOptions-interface";
-import {PlainRequest} from "../interfaces/PlainRequest-interface";
+import {RequestOptions} from "../interfaces/request-options.interface";
+import {PlainRequest} from "../interfaces/plain.request.interface";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string;

@@ -1,5 +1,5 @@
 import {StatusEnum} from "../enums/status.enum";
-import {DeleteWorkout} from "./deleteWorkout-interface";
+import {DeleteWorkout} from "./delete-workout.interface";
 
 export interface UpdateWorkout extends DeleteWorkout {
     StatusID: StatusEnum

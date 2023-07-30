@@ -1,6 +1,6 @@
 import {ProgramController} from "../controllers/program.controller";
 import {createProgramType} from "../validators/program-create-validator";
-import {validateDto} from "../middlewares/validateDto";
+import {validateDtoMiddleware} from "../middlewares/validate-dto.middleware";
 import {editProgramType} from "../validators/edit-program-validator";
 import {shareProgramType} from "../validators/share-program-validator"
 import {WorkoutController} from "../controllers/workout.controller";
@@ -16,32 +16,32 @@ module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
     // Program
     router.get('', ProgramController.getListByUserID);
 
-    router.post('', validateDto(createProgramType), ProgramController.create);
+    router.post('', validateDtoMiddleware(createProgramType), ProgramController.create);
 
-    router.patch('/:program_id', validateDto(editProgramType), ProgramController.update);
+    router.patch('/:program_id', validateDtoMiddleware(editProgramType), ProgramController.update);
 
-    router.put('/:program_id', validateDto(createProgramType), ProgramController.edit);
+    router.put('/:program_id', validateDtoMiddleware(createProgramType), ProgramController.edit);
 
     router.delete('/:program_id', ProgramController.delete);
 
     router.patch('/:program_id/reset', ProgramController.reset);
 
     // Shared Program
-    router.post('/share', validateDto(shareProgramType), ProgramController.share);
+    router.post('/share', validateDtoMiddleware(shareProgramType), ProgramController.share);
 
     router.get('/share/user/:user_id', ProgramController.getShared);
 
     // Workout
-    router.post('/:program_id/workout', validateDto(addWorkoutType), WorkoutController.create);
+    router.post('/:program_id/workout', validateDtoMiddleware(addWorkoutType), WorkoutController.create);
 
-    router.patch('/:program_id/workout/:workout_id', validateDto(updateWorkoutType), WorkoutController.update);
+    router.patch('/:program_id/workout/:workout_id', validateDtoMiddleware(updateWorkoutType), WorkoutController.update);
 
     router.delete('/:program_id/workout/:workout_id', WorkoutController.delete);
 
     // Exercise_Workout
-    router.post('/:program_id/workout/:workout_id/exercise', validateDto(addExerciseType), ExerciseWorkoutController.create);
+    router.post('/:program_id/workout/:workout_id/exercise', validateDtoMiddleware(addExerciseType), ExerciseWorkoutController.create);
 
-    router.patch('/:program_id/workout/:workout_id/exercise/:exercise_id', validateDto(updateExerciseType), ExerciseWorkoutController.update);
+    router.patch('/:program_id/workout/:workout_id/exercise/:exercise_id', validateDtoMiddleware(updateExerciseType), ExerciseWorkoutController.update);
 
     router.delete('/:program_id/workout/:workout_id/exercise/:exercise_id', ExerciseWorkoutController.delete);
 

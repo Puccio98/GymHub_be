@@ -1,9 +1,9 @@
 import {Response} from "express";
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
-import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
+import {IGetUserAuthInfoRequest} from "../helpers/auth.helper";
 import {UserService} from "../services/user-service";
 import {UserDto, UserInfoDto} from "../dto/authDto/user.dto";
-import {UserHelper} from "../helpers/UserHelper";
+import {UserHelper} from "../helpers/user.helper";
 import {UserTypeEnum} from "../enums/user-type.enum";
 
 

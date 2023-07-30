@@ -1,7 +1,7 @@
-import {ChartItem} from "../models/chart-item";
+import {ChartInterface} from "./chart.interface";
 
 export interface PlainWeightItem {
-    WeightList: ChartItem[];
+    WeightList: ChartInterface[];
     MonthIndex: number;
     YearIndex: number;
 }

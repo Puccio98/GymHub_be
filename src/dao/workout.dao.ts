@@ -4,7 +4,7 @@ import {WorkoutItem} from "../models/workout";
 import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
 import {StatusEnum} from "../enums/status.enum";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
-import {UpdateWorkout} from "../interfaces/updateWorkout-interface";
+import {UpdateWorkout} from "../interfaces/update-workout.interface";
 
 export class WorkoutDao {
     static async getPlain(workoutID: number): Promise<PlainWorkoutItem[]> {

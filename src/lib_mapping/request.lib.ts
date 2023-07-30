@@ -1,8 +1,8 @@
 import {AddRequestDto} from "../dto/requestDto/add-request.dto";
 import {RequestItem, UpdateRequestItem} from "../models/request";
-import {PlainRequest} from "../interfaces/PlainRequest-interface";
+import {PlainRequest} from "../interfaces/plain.request.interface";
 import {PlainRequestDto} from "../dto/requestDto/plain-request.dto";
-import {UserLib} from "./userLib";
+import {UserLib} from "./user.lib";
 import {RequestDto} from "../dto/requestDto/request.dto";
 import {UpdateRequestDto} from "../dto/requestDto/update-request.dto";
 
