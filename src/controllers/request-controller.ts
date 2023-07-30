@@ -51,7 +51,7 @@ export class RequestController {
             return res.status(500).send({error: 'Errore durante  la deserializzazione'});
         }
         const requestOptions: RequestOptions = {
-            FromUserID: fromUserParsed !== null ? fromUserParsed : userJWT.UserID,
+            FromUserID: fromUserParsed,
             ToUserID: toUserParsed,
             RequestType: requestTypeParsed,
             RequestState: requestStateParsed

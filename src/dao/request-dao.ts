@@ -24,7 +24,10 @@ export class RequestDao {
                     builder.andWhere('r.RequestType', requestOptions.RequestType);
             })
             .select(['r.*', 'u_t.*'])
+            .toSQL()
+/*
             .options({nestTables: true});
+*/
     }
 
     static async create(requestItem: RequestItem): Promise<number> {
