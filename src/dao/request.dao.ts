@@ -5,8 +5,6 @@ import {PlainRequest} from "../interfaces/PlainRequest-interface";
 
 export class RequestDao {
     // region Public Methods
-
-
     static async get(requestOptions: RequestOptions): Promise<PlainRequest[]> {
         return db('Request AS r')
             .join('User AS u_t', 'r.ToUserID', 'u_t.UserID')

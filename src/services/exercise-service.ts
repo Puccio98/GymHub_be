@@ -1,7 +1,7 @@
 import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
-import {ExerciseDto} from "../dto/programDto/exercise-dto";
+import {ExerciseDto} from "../dto/programDto/exercise.dto";
 import {ExerciseItem} from "../models/exercise";
-import {ExerciseDao} from "../dao/exercise-dao";
+import {ExerciseDao} from "../dao/exercise.dao";
 import {ProgramLib} from "../lib_mapping/programLib";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'

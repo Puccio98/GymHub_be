@@ -1,5 +1,5 @@
-import {ExerciseDto} from "./exercise-dto";
-import {Status} from "../../enums/status.enum";
+import {ExerciseDto} from "./exercise.dto";
+import {StatusEnum} from "../../enums/status.enum";
 
 export interface ExerciseWorkoutDto extends ExerciseDto {
     exercise_WorkoutID: number,
@@ -11,7 +11,7 @@ export interface ExerciseWorkoutDto extends ExerciseDto {
     RPE?: number,
     RM?: number,
     percentage?: number,
-    statusID: Status
+    statusID: StatusEnum
 }
 
 

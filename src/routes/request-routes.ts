@@ -1,4 +1,4 @@
-import {RequestController} from "../controllers/request-controller";
+import {RequestController} from "../controllers/request.controller";
 import {validateDto} from "../middlewares/validateDto";
 import {createRequestType} from "../validators/create-request-validator";
 import {updateRequestType} from "../validators/update-request-type-validator";

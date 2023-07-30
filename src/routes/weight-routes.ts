@@ -1,4 +1,4 @@
-import {WeightController} from "../controllers/weight-controller";
+import {WeightController} from "../controllers/weight.controller";
 import {validateDto} from "../middlewares/validateDto";
 import {weightType} from "../validators/weight-validator";
 

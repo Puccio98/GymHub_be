@@ -1,4 +1,4 @@
-import {RequestState} from "../enums/request-state.enum";
+import {RequestStateEnum} from "../enums/request-state.enum";
 import {RequestType} from "../enums/request-type.enum";
 
 
@@ -9,7 +9,7 @@ export class RequestHelper {
      * @param stateID
      */
     static isRequestStateValid(stateID: number | undefined): boolean {
-        return !stateID ? false : stateID in RequestState
+        return !stateID ? false : stateID in RequestStateEnum
     }
 
     /**

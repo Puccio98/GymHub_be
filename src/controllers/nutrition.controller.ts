@@ -2,10 +2,10 @@ import {Response} from "express";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {NutritionService} from "../services/nutrition-service";
-import {FoodDto} from "../dto/nutritionDto/food-dto";
-import {DailyFoodDto} from "../dto/nutritionDto/dailyFood-dto";
-import {AddFoodDto} from "../dto/nutritionDto/addFood-dto";
-import {BaseFoodDto} from "../dto/nutritionDto/base-food-dto";
+import {FoodDto} from "../dto/nutritionDto/food.dto";
+import {DailyFoodDto} from "../dto/nutritionDto/dailyFood.dto";
+import {AddFoodDto} from "../dto/nutritionDto/addFood.dto";
+import {BaseFoodDto} from "../dto/nutritionDto/base-food.dto";
 
 export class NutritionController {
     static getFood = async (req: IGetUserAuthInfoRequest, res: Response) => {

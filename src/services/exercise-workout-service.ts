@@ -1,14 +1,14 @@
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
 import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
-import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
-import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
+import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout.dto";
+import {Exercise_workoutDao} from "../dao/exercise_workout.dao";
 import {ProgramLib} from "../lib_mapping/programLib";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
-import {WorkoutDao} from "../dao/workout-dao";
-import {DeleteExerciseResponse} from "../dto/programDto/delete-exercise-response";
-import {ProgramDao} from "../dao/program-dao";
+import {WorkoutDao} from "../dao/workout.dao";
+import {DeleteExerciseResponseDto} from "../dto/programDto/delete-exercise-response.dto";
+import {ProgramDao} from "../dao/program.dao";
 import {DeleteExerciseWorkout} from "../interfaces/DeleteExerciseWorkout-interface";
-import {Status} from "../enums/status.enum";
+import {StatusEnum} from "../enums/status.enum";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string; // messaggio specifico
@@ -17,11 +17,11 @@ export class ExerciseWorkoutService {
     static async update(exercise: UpdateExerciseDto, userID: number): Promise<ServiceResponse<ExerciseWorkoutDto>> {
         try {
             //Verifico che l'esercizio che deve essere completato appartenga all'utente
-            if (!await Exercise_WorkoutDao.belongsToUser(userID, exercise.programID, exercise.workoutID, exercise.exercise_WorkoutID)) {
+            if (!await Exercise_workoutDao.belongsToUser(userID, exercise.programID, exercise.workoutID, exercise.exercise_WorkoutID)) {
                 message = 'Exercise does not belong to user';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            const updatedExercise = await Exercise_WorkoutDao.update(exercise);
+            const updatedExercise = await Exercise_workoutDao.update(exercise);
             if (updatedExercise) {
                 message = 'Exercise completed';
                 const data = ProgramLib.ExerciseWorkoutItemToExerciseWorkoutDto(updatedExercise.e_w, updatedExercise.e);
@@ -42,9 +42,9 @@ export class ExerciseWorkoutService {
                 return response(ServiceStatusEnum.ERROR, message);
             }
             const exerciseItem = ProgramLib.ExerciseCreateDtoToExerciseWorkoutItem(exerciseDto.exercise, exerciseDto.workoutID);
-            const exercise_workoutID = await Exercise_WorkoutDao.create([exerciseItem]);
+            const exercise_workoutID = await Exercise_workoutDao.create([exerciseItem]);
             if (exercise_workoutID) {
-                const exercise = await Exercise_WorkoutDao.get(exercise_workoutID);
+                const exercise = await Exercise_workoutDao.get(exercise_workoutID);
                 if (exercise) {
                     message = 'Exercise added';
                     const data = ProgramLib.ExerciseWorkoutItemToExerciseWorkoutDto(exercise.e_w, exercise.e);
@@ -62,19 +62,19 @@ export class ExerciseWorkoutService {
         }
     }
 
-    static async delete(deleteExercise: DeleteExerciseWorkout, userID: number): Promise<ServiceResponse<DeleteExerciseResponse>> {
+    static async delete(deleteExercise: DeleteExerciseWorkout, userID: number): Promise<ServiceResponse<DeleteExerciseResponseDto>> {
         try {
-            if (!await Exercise_WorkoutDao.belongsToUser(userID, deleteExercise.ProgramID, deleteExercise.WorkoutID, deleteExercise.ExerciseID)) {
+            if (!await Exercise_workoutDao.belongsToUser(userID, deleteExercise.ProgramID, deleteExercise.WorkoutID, deleteExercise.ExerciseID)) {
                 message = 'Exercise does not belong to user';
                 return response(ServiceStatusEnum.ERROR, message);
             }
-            if (!await Exercise_WorkoutDao.isUncompleted(deleteExercise.ExerciseID)) {
+            if (!await Exercise_workoutDao.isUncompleted(deleteExercise.ExerciseID)) {
                 message = 'Exercise is either completed or skipped';
                 return response(ServiceStatusEnum.ERROR, message);
             }
 
             // controllo che l'esercizio non sia l'ultimo dell'allenamento, in caso delete dell'allenamento direttamente
-            if (await Exercise_WorkoutDao.isLast(deleteExercise.WorkoutID)) {
+            if (await Exercise_workoutDao.isLast(deleteExercise.WorkoutID)) {
                 //controllo che l'allenamento non sia l'ultimo rimasto della scheda, e in caso delete scheda
                 if (await WorkoutDao.isLast(deleteExercise.ProgramID)) {
                     if (await ProgramDao.delete(deleteExercise.ProgramID)) {
@@ -108,7 +108,7 @@ export class ExerciseWorkoutService {
                 }
             } else {
                 //ELIMINO L'ESERCIZIO
-                const deletedExercise = await Exercise_WorkoutDao.delete(deleteExercise.ExerciseID);
+                const deletedExercise = await Exercise_workoutDao.delete(deleteExercise.ExerciseID);
                 if (deletedExercise) {
                     let completedWorkout = false;
                     let refreshProgram = false;
@@ -117,7 +117,7 @@ export class ExerciseWorkoutService {
                         await WorkoutDao.update({
                             ProgramID: deleteExercise.ProgramID,
                             WorkoutID: deleteExercise.WorkoutID,
-                            StatusID: Status.COMPLETE
+                            StatusID: StatusEnum.COMPLETE
                         });
                         completedWorkout = true;
                         if (await ProgramDao.isComplete(deleteExercise.ProgramID)) {

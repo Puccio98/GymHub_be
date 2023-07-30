@@ -4,7 +4,7 @@ import {UpdateWorkoutDto} from "../dto/programDto/update-workout.dto";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
 import {WorkoutService} from "../services/workout-service";
-import {DeleteWorkoutResponse} from "../dto/programDto/delete-workout-response";
+import {DeleteWorkoutResponseDto} from "../dto/programDto/delete-workout-response.dto";
 import {WorkoutAddDTO} from "../dto/programDto/add-workout.dto";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
 import {UpdateWorkout} from "../interfaces/updateWorkout-interface";
@@ -34,7 +34,7 @@ export class WorkoutController {
         const workoutID: number = Number(req.params['workout_id']);
         const workout: DeleteWorkout = {WorkoutID: workoutID, ProgramID: programID};
 
-        const deleteWorkoutResponse: ServiceResponse<DeleteWorkoutResponse> = await WorkoutService.delete(workout, userJWT.UserID);
+        const deleteWorkoutResponse: ServiceResponse<DeleteWorkoutResponseDto> = await WorkoutService.delete(workout, userJWT.UserID);
         switch (deleteWorkoutResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(deleteWorkoutResponse.data);

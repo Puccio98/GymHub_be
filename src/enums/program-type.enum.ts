@@ -1,4 +1,4 @@
-export enum ProgramType {
+export enum ProgramTypeEnum {
     BASIC,
     PRO
 }

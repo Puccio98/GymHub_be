@@ -1,8 +1,8 @@
 import {Request, Response} from "express";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {ProgramService} from "../services/program-service";
-import {ProgramDto} from "../dto/programDto/program-dto";
-import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
+import {ProgramDto} from "../dto/programDto/program.dto";
+import {ProgramCreateDto} from "../dto/programDto/program-create.dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {UpdateProgramDto} from "../dto/programDto/update-program.dto";
 import {PayloadJWT} from "../interfaces/payloadJWT-interface";
@@ -37,7 +37,7 @@ export class ProgramController {
     }
 
     static create = async (req: Request, res: Response) => {
-        const program: ProgramCreateDTO = req.body;
+        const program: ProgramCreateDto = req.body;
         const programList: ServiceResponse<ProgramDto[]> = await ProgramService.create(program);
 
         switch (programList.status) {
@@ -104,7 +104,7 @@ export class ProgramController {
     }
 
     static edit = async (req: IGetUserAuthInfoRequest, res: Response) => {
-        const program: ProgramCreateDTO = req.body;
+        const program: ProgramCreateDto = req.body;
         const programID: number = Number(req.params['program_id']);
         const userJWT = req.AccessPayloadJWT;
 

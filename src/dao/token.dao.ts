@@ -1,6 +1,6 @@
 import {db} from "../database";
 import {TokenItem} from "../interfaces/tokenItem-interface";
-import {TokenType} from "../enums/token-type.enum";
+import {TokenTypeEnum} from "../enums/token-type.enum";
 
 export class TokenDao {
     // region Public Methods
@@ -22,7 +22,7 @@ export class TokenDao {
         }
     }
 
-    static async getValidToken(UserID: number, tokenType: TokenType = TokenType.REFRESH): Promise<TokenItem> {
+    static async getValidToken(UserID: number, tokenType: TokenTypeEnum = TokenTypeEnum.REFRESH): Promise<TokenItem> {
         const refreshToken: TokenItem[] = await db('Token')
             .where({UserID: UserID, TokenTypeID: tokenType})
             .orderBy('issuedAt', 'desc');

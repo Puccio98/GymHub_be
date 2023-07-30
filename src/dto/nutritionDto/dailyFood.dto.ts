@@ -1,4 +1,4 @@
-import {FoodQuantityDto} from "./foodQuantity-dto";
+import {FoodQuantityDto} from "./foodQuantity.dto";
 
 export interface DailyFoodDto {
     colazione: FoodQuantityDto[],

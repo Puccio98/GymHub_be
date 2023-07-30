@@ -1,17 +1,17 @@
 import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
-import {ProgramDto} from "../dto/programDto/program-dto";
-import {ProgramDao} from "../dao/program-dao";
+import {ProgramDto} from "../dto/programDto/program.dto";
+import {ProgramDao} from "../dao/program.dao";
 import {ProgramLib} from "../lib_mapping/programLib";
-import {ProgramCreateDTO} from "../dto/programDto/program-create-dto";
-import {WorkoutDao} from "../dao/workout-dao";
-import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
+import {ProgramCreateDto} from "../dto/programDto/program-create.dto";
+import {WorkoutDao} from "../dao/workout.dao";
+import {Exercise_workoutDao} from "../dao/exercise_workout.dao";
 import {UpdateProgramDto} from "../dto/programDto/update-program.dto";
-import {ProgramStateEnum} from "../enums/program-state-enum";
+import {ProgramStateEnum} from "../enums/program-state.enum";
 import {ShareProgramDto} from "../dto/programDto/share-program.dto";
-import {ShareProgramDao} from "../dao/share-program-dao";
+import {ShareProgramDao} from "../dao/share-program.dao";
 import {ShareProgram} from "../models/shareProgram";
 import {PayloadJWT} from "../interfaces/payloadJWT-interface";
-import {UserType} from "../enums/user-type.enum";
+import {UserTypeEnum} from "../enums/user-type.enum";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string; // messaggio specifico
@@ -51,7 +51,7 @@ export class ProgramService {
         }
     }
 
-    static async create(program: ProgramCreateDTO): Promise<ServiceResponse<ProgramDto[]>> {
+    static async create(program: ProgramCreateDto): Promise<ServiceResponse<ProgramDto[]>> {
         try {
             //Per prima cosa, metto StatusID = INCOMPLETE a tutti gli allenamenti ed esercizi della scheda attiva.
             const activeProgramID = await ProgramDao.getActiveProgram(program.userID);
@@ -160,7 +160,7 @@ export class ProgramService {
         }
     }
 
-    static async edit(userID: number, programID: number, program: ProgramCreateDTO): Promise<ServiceResponse<boolean>> {
+    static async edit(userID: number, programID: number, program: ProgramCreateDto): Promise<ServiceResponse<boolean>> {
         try {
             //controllo che la scheda appartenga all'utente
             if (!await ProgramDao.belongsToUser(userID, programID)) {
@@ -193,7 +193,7 @@ export class ProgramService {
         try {
 
             // Solo utenti manager e sadmin possono condividere schede
-            if (user.UserTypeID !== UserType.MANAGER && user.UserTypeID !== UserType.SADMIN) {
+            if (user.UserTypeID !== UserTypeEnum.MANAGER && user.UserTypeID !== UserTypeEnum.SADMIN) {
                 message = 'Utente non abilitato alla condivisione di schede';
                 return response(ServiceStatusEnum.ERROR, message);
             }
@@ -207,7 +207,7 @@ export class ProgramService {
             }
 
             // Creo Dto per inserire il programma clonato
-            const cloneProgram: ProgramCreateDTO = ProgramLib.PlainProgramItemListToProgramCreateDtoList(ppList, shareProgramDto.toUserID)[0];
+            const cloneProgram: ProgramCreateDto = ProgramLib.PlainProgramItemListToProgramCreateDtoList(ppList, shareProgramDto.toUserID)[0];
             if (!cloneProgram) {
                 message = 'Impossibile recuperare scheda';
                 return response(ServiceStatusEnum.ERROR, message);
@@ -238,7 +238,7 @@ export class ProgramService {
         }
     }
 
-    private static async _create(program: ProgramCreateDTO): Promise<number> {
+    private static async _create(program: ProgramCreateDto): Promise<number> {
         const programItem = ProgramLib.ProgramCreateDtoToProgramItem(program);
 
         // Insert del nuovo programma
@@ -252,7 +252,7 @@ export class ProgramService {
                     if (workoutID) {
                         const exerciseItemList = ProgramLib.ExerciseCreateDtoListToExerciseWorkoutItemList(workoutGroup.workoutList[w].exerciseList, workoutID);
                         // Insert di tutti gli esercizi di un workout contemporaneamente
-                        await Exercise_WorkoutDao.create(exerciseItemList);
+                        await Exercise_workoutDao.create(exerciseItemList);
                     }
                 }
             }

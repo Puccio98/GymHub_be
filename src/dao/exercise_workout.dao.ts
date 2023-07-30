@@ -1,9 +1,9 @@
 import {db} from "../database";
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
-import {PlainExerciseItem} from "../dto/programDto/plainExercise";
+import {PlainExerciseItem} from "../dto/programDto/plainExercise.dto";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
 
-export class Exercise_WorkoutDao {
+export class Exercise_workoutDao {
     static async update(exercise: UpdateExerciseDto): Promise<PlainExerciseItem> {
         await db('Exercises_Workout')
             .where({Exercise_WorkoutID: exercise.exercise_WorkoutID})

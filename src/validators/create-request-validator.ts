@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import {RequestState} from "../enums/request-state.enum";
+import {RequestStateEnum} from "../enums/request-state.enum";
 import {RequestHelper} from "../helpers/RequestHelper";
 
 export const createRequestType = yup.object().shape({
@@ -9,7 +9,7 @@ export const createRequestType = yup.object().shape({
         message: 'Request type non valido',
         test: value => RequestHelper.isRequestTypeValid(value)
     }),
-    requestStateID: yup.number().default(RequestState.PENDING),
+    requestStateID: yup.number().default(RequestStateEnum.PENDING),
     createdAt: yup.date().default(() => new Date()),
     updatedAt: yup.date().default(() => new Date())
 });

@@ -1,6 +1,6 @@
-import {WeightDto} from "../dto/weightDto/weight-dto";
+import {WeightDto} from "../dto/weightDto/weight.dto";
 import {WeightItem} from "../models/weight";
-import {PlainWeightDto} from "../dto/weightDto/plain-weight-dto";
+import {PlainWeightDto} from "../dto/weightDto/plain-weight.dto";
 import {PlainWeightItem} from "../interfaces/plainWeightItem-interface";
 import {ChartItem} from "../models/chart-item";
 

@@ -1,4 +1,4 @@
-import {UserController} from "../controllers/user-controller";
+import {UserController} from "../controllers/user.controller";
 
 module.exports = (app: { use: (arg0: string, arg1: any) => void; }) => {
     const router = require("express").Router();
