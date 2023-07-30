@@ -41,6 +41,7 @@ export class RequestLib {
 
     static RequestItemToRequestDto(requestItem: RequestItem): RequestDto {
         return {
+            requestID: requestItem.RequestID ?? 0,
             fromUser: requestItem.FromUserID,
             toUser: requestItem.ToUserID,
             state: requestItem.RequestStateID,

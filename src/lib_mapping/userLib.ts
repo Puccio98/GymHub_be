@@ -1,5 +1,5 @@
 import {UserItem} from "../models/user";
-import {UserDto} from "../dto/authDto/user-dto";
+import {UserDto, UserInfoDto} from "../dto/authDto/user-dto";
 
 export class UserLib {
     static UserItemToUserDto(userItem: UserItem): UserDto {
@@ -28,7 +28,17 @@ export class UserLib {
         } as UserItem
     }
 
-    static UserItemListToUserDtoList (userList: UserItem[]): UserDto[] {
+    static UserItemToUserInfoDto(userItem: UserItem): UserInfoDto {
+        return {
+            name: userItem.Name,
+            lastName: userItem.LastName,
+            userName: userItem.UserName,
+            email: userItem.Email,
+            profilePicture: userItem.ProfilePicture
+        } as UserInfoDto
+    }
+
+    static UserItemListToUserDtoList(userList: UserItem[]): UserDto[] {
         let res: UserDto[] = [];
         for (const u of userList) {
             res.push(this.UserItemToUserDto(u));
