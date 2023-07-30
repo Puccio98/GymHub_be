@@ -1,4 +1,4 @@
-import {RequestItem} from "../models/request";
+import {RequestItem, UpdateRequestItem} from "../models/request";
 import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {RequestDao} from "../dao/request-dao";
 import {RequestOptions} from "../interfaces/requestOptions-interface";
@@ -29,5 +29,18 @@ export class RequestService {
             return response(ServiceStatusEnum.ERROR, defaultMessage);
         }
     }
+
+    static async update(requestItem: UpdateRequestItem): Promise<ServiceResponse<boolean>> {
+        try {
+            const success: boolean = await RequestDao.update(requestItem);
+            if (!success)
+                return response(ServiceStatusEnum.ERROR, 'Non è stato possibile modificare la richiesta');
+
+            return response(ServiceStatusEnum.SUCCESS, 'Richiesta creata con successo', true);
+        } catch {
+            return response(ServiceStatusEnum.ERROR, defaultMessage);
+        }
+    }
+
 
 }
