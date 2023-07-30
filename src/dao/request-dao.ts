@@ -1,5 +1,5 @@
 import {db} from "../database";
-import {RequestItem} from "../models/request";
+import {RequestItem, UpdateRequestItem} from "../models/request";
 import {RequestOptions} from "../interfaces/requestOptions-interface";
 import {PlainRequest} from "../interfaces/PlainRequest-interface";
 
@@ -30,6 +30,15 @@ export class RequestDao {
     static async create(requestItem: RequestItem): Promise<number> {
         let res: any = await db('Request').insert(requestItem);
         return res[0];
+    }
+
+    static async update(requestItem: UpdateRequestItem): Promise<boolean> {
+        await db('Request')
+            .where({RequestID: requestItem.RequestID})
+            .update({
+                RequestStateID: requestItem.RequestStateID,
+            });
+        return true;
     }
 
     // endregion
