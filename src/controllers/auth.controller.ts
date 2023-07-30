@@ -1,9 +1,9 @@
 import {Request, Response} from "express";
 import {LoginDto} from "../dto/authDto/login.dto";
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {AuthService} from "../services/auth-service";
 import {SignupDto} from "../dto/authDto/signup.dto";
-import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {IGetUserAuthInfoRequest} from "../helpers/auth.helper";
 import {AuthDto} from "../dto/authDto/auth.dto";
 import {TokenDto} from "../dto/authDto/token.dto";
 

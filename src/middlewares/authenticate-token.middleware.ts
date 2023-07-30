@@ -1,13 +1,13 @@
 import {NextFunction, Response} from "express";
-import {PayloadJWT} from "../interfaces/payloadJWT-interface";
-import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {PayloadJWT} from "../interfaces/payload-JWT.interface";
+import {IGetUserAuthInfoRequest} from "../helpers/auth.helper";
 
 const jwt = require('jsonwebtoken');
 
 const protectedRoutes: string[] = ['/auth/logout'];// '/auth/refresh'
 const unprotectedRoutes: string[] = ['auth'];
 
-export function authenticateToken(req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) {
+export function authenticateTokenMiddleware(req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) {
     // Salta la verifica del token solamente se l'url completo non si trova nelle rotte protette e l'url di base è presente tra quelle non protette.
     if (!RouteNeedsToken(req.originalUrl)) {
         next();

@@ -1,12 +1,12 @@
-import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {IGetUserAuthInfoRequest} from "../helpers/auth.helper";
 import {Response} from "express";
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout.dto";
 import {ExerciseWorkoutService} from "../services/exercise-workout-service";
 import {DeleteExerciseResponseDto} from "../dto/programDto/delete-exercise-response.dto";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
-import {DeleteExerciseWorkout} from "../interfaces/DeleteExerciseWorkout-interface";
+import {DeleteExerciseWorkout} from "../interfaces/delete-exercise-workout.interface";
 
 export class ExerciseWorkoutController {
     static update = async (req: IGetUserAuthInfoRequest, res: Response) => {

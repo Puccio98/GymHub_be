@@ -1,15 +1,15 @@
 import {Response} from "express";
-import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
+import {IGetUserAuthInfoRequest} from "../helpers/auth.helper";
 import {AddRequestDto} from "../dto/requestDto/add-request.dto";
-import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {RequestService} from "../services/request-service";
 import {RequestItem, UpdateRequestItem} from "../models/request";
-import {RequestLib} from "../lib_mapping/requestLib";
+import {RequestLib} from "../lib_mapping/request.lib";
 import {RequestStateEnum} from "../enums/request-state.enum";
 import {RequestType} from "../enums/request-type.enum";
-import {RequestHelper} from "../helpers/RequestHelper";
-import {RequestOptions} from "../interfaces/requestOptions-interface";
-import {PlainRequest} from "../interfaces/PlainRequest-interface";
+import {RequestHelper} from "../helpers/request.helper";
+import {RequestOptions} from "../interfaces/request-options.interface";
+import {PlainRequest} from "../interfaces/plain.request.interface";
 import {UpdateRequestDto} from "../dto/requestDto/update-request.dto";
 
 

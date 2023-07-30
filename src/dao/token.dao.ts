@@ -1,5 +1,5 @@
 import {db} from "../database";
-import {TokenItem} from "../interfaces/tokenItem-interface";
+import {TokenItem} from "../interfaces/token-item.interface";
 import {TokenTypeEnum} from "../enums/token-type.enum";
 
 export class TokenDao {

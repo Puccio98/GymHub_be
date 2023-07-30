@@ -1,7 +1,7 @@
-import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {ProgramDto} from "../dto/programDto/program.dto";
 import {ProgramDao} from "../dao/program.dao";
-import {ProgramLib} from "../lib_mapping/programLib";
+import {ProgramLib} from "../lib_mapping/program.lib";
 import {ProgramCreateDto} from "../dto/programDto/program-create.dto";
 import {WorkoutDao} from "../dao/workout.dao";
 import {Exercise_workoutDao} from "../dao/exercise_workout.dao";
@@ -10,7 +10,7 @@ import {ProgramStateEnum} from "../enums/program-state.enum";
 import {ShareProgramDto} from "../dto/programDto/share-program.dto";
 import {ShareProgramDao} from "../dao/share-program.dao";
 import {ShareProgram} from "../models/shareProgram";
-import {PayloadJWT} from "../interfaces/payloadJWT-interface";
+import {PayloadJWT} from "../interfaces/payload-JWT.interface";
 import {UserTypeEnum} from "../enums/user-type.enum";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'

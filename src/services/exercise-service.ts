@@ -1,8 +1,8 @@
-import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {ExerciseDto} from "../dto/programDto/exercise.dto";
 import {ExerciseItem} from "../models/exercise";
 import {ExerciseDao} from "../dao/exercise.dao";
-import {ProgramLib} from "../lib_mapping/programLib";
+import {ProgramLib} from "../lib_mapping/program.lib";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
 let message: string; // messaggio specifico
