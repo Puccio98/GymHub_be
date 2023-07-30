@@ -2,7 +2,7 @@ import {Response} from "express";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {UserService} from "../services/user-service";
-import {UserDto} from "../dto/authDto/user-dto";
+import {UserDto, UserInfoDto} from "../dto/authDto/user-dto";
 import {UserHelper} from "../helpers/UserHelper";
 import {UserType} from "../enums/user-type.enum";
 
@@ -28,6 +28,25 @@ export class UserController {
 
 
         const response: ServiceResponse<UserDto[]> = await UserService.get(userTypeParsed, userDescriptionParsed);
+
+        switch (response.status) {
+            case ServiceStatusEnum.SUCCESS:
+                return res.status(200).send(response.data);
+            case ServiceStatusEnum.ERROR:
+                return res.status(400).send({error: response.message});
+            default:
+                return res.status(500).send({error: "Internal server error"});
+        }
+    }
+
+    static getUserInfo = async (req: IGetUserAuthInfoRequest, res: Response) => {
+        // Retrieve query string
+        const userID: number = Number(req.params['user_id']);
+        if (userID) {
+            return res.status(500).send({error: 'Errore durante  la deserializzazione'});
+        }
+
+        const response: ServiceResponse<UserInfoDto> = await UserService.getByUserID(userID);
 
         switch (response.status) {
             case ServiceStatusEnum.SUCCESS:

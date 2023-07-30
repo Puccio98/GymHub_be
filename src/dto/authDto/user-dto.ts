@@ -1,3 +1,12 @@
+export interface UserInfoDto {
+    name: string,
+    lastName: string,
+    userName: string,
+    email: string,
+    profilePicture?: string
+}
+
+
 export interface UserDto {
     /**
      * Id del record del DB

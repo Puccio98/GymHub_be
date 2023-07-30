@@ -39,5 +39,11 @@ export class UserDao {
             .select('*');
     }
 
+    static async getByID(id: number): Promise<UserItem[]> {
+        return db('User')
+            .where({UserID: id})
+            .select('*');
+    }
+
     //endregion
 }
