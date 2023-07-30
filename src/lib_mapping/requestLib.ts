@@ -1,9 +1,10 @@
 import {AddRequestDto} from "../dto/requestDto/add-request.dto";
-import {RequestItem} from "../models/request";
+import {RequestItem, UpdateRequestItem} from "../models/request";
 import {PlainRequest} from "../interfaces/PlainRequest-interface";
 import {PlainRequestDto} from "../dto/requestDto/plain-request.dto";
 import {UserLib} from "./userLib";
 import {RequestDto} from "../dto/requestDto/request.dto";
+import {UpdateRequestDto} from "../dto/requestDto/update-request.dto";
 
 export class RequestLib {
     static AddRequestDtoToRequestItem(fromUserID: number, requestDto: AddRequestDto): RequestItem {
@@ -15,6 +16,12 @@ export class RequestLib {
             createdAt: requestDto.createdAt,
             updatedAt: requestDto.updatedAt
         } as RequestItem
+    }
+
+    static UpdateRequestDtoToRequestItem(requestDto: UpdateRequestDto): UpdateRequestItem {
+        return {
+            RequestStateID: requestDto.requestStateID,
+        } as UpdateRequestItem
     }
 
     static PlainRequestListToPlainRequestListDto(plainRequestList: PlainRequest[]): PlainRequestDto[] {
