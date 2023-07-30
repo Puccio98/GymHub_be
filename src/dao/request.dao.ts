@@ -19,9 +19,10 @@ export class RequestDao {
                     builder.andWhere('r.RequestStateID', requestOptions.RequestState);
 
                 if (requestOptions.RequestType)
-                    builder.andWhere('r.RequestType', requestOptions.RequestType);
+                    builder.andWhere('r.RequestTypeID', requestOptions.RequestType);
             })
             .select(['r.*', 'u_t.*'])
+            //.toSQL()
             .options({nestTables: true});
     }
 
