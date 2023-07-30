@@ -1,7 +1,7 @@
 import {WeightDto} from "../dto/weightDto/weight.dto";
-import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {WeightDao} from "../dao/weight.dao";
-import {WeightLib} from "../lib_mapping/weightLib";
+import {WeightLib} from "../lib_mapping/weight.lib";
 import {PlainWeightDto} from "../dto/weightDto/plain-weight.dto";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'

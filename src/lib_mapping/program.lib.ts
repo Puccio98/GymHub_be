@@ -19,7 +19,7 @@ import {UpdateProgramDto} from "../dto/programDto/update-program.dto";
 import {EditProgramItem} from "../models/edit-program-item";
 import {ShareProgramDto} from "../dto/programDto/share-program.dto";
 import {ShareProgram} from "../models/shareProgram";
-import {DateDB} from "../interfaces/dateDB-interface";
+import {DateDB} from "../interfaces/date-DB.interface";
 import {WorkoutGroupDto} from "../dto/programDto/workout-group.dto";
 import {StatusEnum} from "../enums/status.enum";
 

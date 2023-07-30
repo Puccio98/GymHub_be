@@ -3,7 +3,7 @@ import {FoodItem} from "../models/food";
 import {NutrientUsdaEnum} from "../enums/nutrient-usda.enum";
 import {itemOFF} from "../dto/externalApiDto/OFF/off.dto";
 import {FoodDto} from "../dto/nutritionDto/food.dto";
-import {PlainFoodUserItem} from "../plain_item/PlainFoodUserItem";
+import {PlainFoodUserItem} from "../interfaces/plain-food-user-item";
 import {DailyFoodDto, id_to_meal} from "../dto/nutritionDto/dailyFood.dto";
 import {FoodQuantityDto} from "../dto/nutritionDto/foodQuantity.dto";
 import {AddFoodDto} from "../dto/nutritionDto/addFood.dto";

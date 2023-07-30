@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 
-const ApiError = require('./api-error');
+const ApiError = require('./api.error');
 
 function apiErrorHandler(err: any, req: Request, res: Response, next: NextFunction) {
     //console.error(err);

@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import {DateHelper} from "../helpers/DateHelper";
+import {DateHelper} from "../helpers/date.helper";
 
 export const addDailyFoodType = yup.object().shape({
     foodID: yup.number().required("foodID obbligatorio"),

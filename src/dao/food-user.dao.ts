@@ -1,7 +1,7 @@
 import {db} from "../database";
-import {PlainFoodUserItem} from "../plain_item/PlainFoodUserItem";
+import {PlainFoodUserItem} from "../interfaces/plain-food-user-item";
 import {BaseFood_UserItem, Food_UserItem} from "../models/food_user";
-import {DateHelper} from "../helpers/DateHelper";
+import {DateHelper} from "../helpers/date.helper";
 
 export class FoodUserDao {
 

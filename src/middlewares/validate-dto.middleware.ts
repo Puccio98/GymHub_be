@@ -1,10 +1,10 @@
 import {NextFunction, Response} from "express";
-import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
-import {RouteNeedsToken} from "./authenticateToken";
+import {IGetUserAuthInfoRequest} from "../helpers/auth.helper";
+import {RouteNeedsToken} from "./authenticate-token.middleware";
 
-const ApiError = require('../errors/api-error');
+const ApiError = require('../errors/api.error');
 
-export function validateDto(schema: any) {
+export function validateDtoMiddleware(schema: any) {
     return async (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) => {
         try {
             if (RouteNeedsToken(req.originalUrl)) {

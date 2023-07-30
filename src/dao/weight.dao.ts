@@ -1,10 +1,10 @@
 import {WeightItem} from "../models/weight";
 import {db} from "../database";
-import {ChartItem} from "../models/chart-item";
+import {ChartInterface} from "../interfaces/chart.interface";
 
 export class WeightDao {
     // region Public Methods
-    static async findAllWeights(userID: number): Promise<ChartItem[]> {
+    static async findAllWeights(userID: number): Promise<ChartInterface[]> {
         return db('Weight')
             .where({UserID: userID})
             .select('date AS x', 'weight AS y')

@@ -1,13 +1,13 @@
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
-import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
+import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/service-return-type.interface";
 import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout.dto";
 import {Exercise_workoutDao} from "../dao/exercise_workout.dao";
-import {ProgramLib} from "../lib_mapping/programLib";
+import {ProgramLib} from "../lib_mapping/program.lib";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
 import {WorkoutDao} from "../dao/workout.dao";
 import {DeleteExerciseResponseDto} from "../dto/programDto/delete-exercise-response.dto";
 import {ProgramDao} from "../dao/program.dao";
-import {DeleteExerciseWorkout} from "../interfaces/DeleteExerciseWorkout-interface";
+import {DeleteExerciseWorkout} from "../interfaces/delete-exercise-workout.interface";
 import {StatusEnum} from "../enums/status.enum";
 
 const defaultMessage = 'Db esplode'; //messaggio di quando entra in 'catch'
