@@ -2,7 +2,7 @@
 import {initRoutes} from "./routes/init-routes";
 import {authenticateToken} from "./middlewares/authenticateToken";
 
-require('dotenv').config()
+require('dotenv').config();
 
 const express = require('express');
 const path = require('path');
