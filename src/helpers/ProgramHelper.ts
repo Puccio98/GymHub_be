@@ -1,4 +1,4 @@
-import {Status} from "../enums/status.enum";
+import {StatusEnum} from "../enums/status.enum";
 
 
 export class ProgramHelper {
@@ -8,6 +8,6 @@ export class ProgramHelper {
      * @param status
      */
     static isStatusValid(status: number | undefined): boolean {
-        return !status ? false : status in Status
+        return !status ? false : status in StatusEnum
     }
 }

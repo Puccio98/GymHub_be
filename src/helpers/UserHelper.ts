@@ -1,4 +1,4 @@
-import {UserType} from "../enums/user-type.enum";
+import {UserTypeEnum} from "../enums/user-type.enum";
 
 export class UserHelper {
     /**
@@ -6,6 +6,6 @@ export class UserHelper {
      * @param userType
      */
     static isUserTypeValid(userType: number | undefined): boolean {
-        return !userType ? false : userType in UserType
+        return !userType ? false : userType in UserTypeEnum
     }
 }

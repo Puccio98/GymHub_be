@@ -1,6 +1,6 @@
 import {db} from "../database";
-import {itemOFF, OFF_Dto} from "../dto/externalApiDto/OFF/off-dto";
-import {itemUSDA, USDA_Dto} from "../dto/externalApiDto/USDA/usda-dto";
+import {itemOFF, OFF_Dto} from "../dto/externalApiDto/OFF/off.dto";
+import {itemUSDA, USDA_Dto} from "../dto/externalApiDto/USDA/usda.dto";
 import {FoodItem} from "../models/food";
 
 const usda_key: string = 'EoYBMJ5Trk0D5qe40cCewrHdeWuagtPMGg8sB3wq';

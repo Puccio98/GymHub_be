@@ -1,4 +1,4 @@
-import {ExerciseCreateDTO} from "./program-create-dto";
+import {ExerciseCreateDTO} from "./program-create.dto";
 
 export interface AddExerciseDto {
     programID: number

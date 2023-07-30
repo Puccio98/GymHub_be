@@ -2,9 +2,9 @@ import {Response} from "express";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {UserService} from "../services/user-service";
-import {UserDto, UserInfoDto} from "../dto/authDto/user-dto";
+import {UserDto, UserInfoDto} from "../dto/authDto/user.dto";
 import {UserHelper} from "../helpers/UserHelper";
-import {UserType} from "../enums/user-type.enum";
+import {UserTypeEnum} from "../enums/user-type.enum";
 
 
 export class UserController {
@@ -13,7 +13,7 @@ export class UserController {
         // Retrieve query string
         const userType: any = req.query.userType;
         const userDescription: any = req.query.userDescription;
-        let userTypeParsed: UserType | null = null;
+        let userTypeParsed: UserTypeEnum | null = null;
         let userDescriptionParsed: string | null = null;
         try {
             userTypeParsed = Number(userType) ? Number(userType) : null;

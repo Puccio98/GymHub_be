@@ -5,7 +5,7 @@ import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnTyp
 import {RequestService} from "../services/request-service";
 import {RequestItem, UpdateRequestItem} from "../models/request";
 import {RequestLib} from "../lib_mapping/requestLib";
-import {RequestState} from "../enums/request-state.enum";
+import {RequestStateEnum} from "../enums/request-state.enum";
 import {RequestType} from "../enums/request-type.enum";
 import {RequestHelper} from "../helpers/RequestHelper";
 import {RequestOptions} from "../interfaces/requestOptions-interface";
@@ -22,7 +22,7 @@ export class RequestController {
         const requestType: any = req.query.requestType;
         const toUser: any = req.query.toUser;
         const fromUser: any = req.query.fromUser;
-        let requestStateParsed: RequestState | null = null;
+        let requestStateParsed: RequestStateEnum | null = null;
         let requestTypeParsed: RequestType | null = null;
         let toUserParsed: number | null = null;
         let fromUserParsed: number | null = null;

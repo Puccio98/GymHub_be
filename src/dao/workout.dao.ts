@@ -1,8 +1,8 @@
-import {PlainWorkoutItem} from "../dto/programDto/plainWorkout";
+import {PlainWorkoutItem} from "../dto/programDto/plainWorkout.dto";
 import {db} from "../database";
 import {WorkoutItem} from "../models/workout";
 import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
-import {Status} from "../enums/status.enum";
+import {StatusEnum} from "../enums/status.enum";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
 import {UpdateWorkout} from "../interfaces/updateWorkout-interface";
 
@@ -75,7 +75,7 @@ export class WorkoutDao {
 
     static async isComplete(workoutID: number) {
         const uncompletedExercises: ExerciseWorkoutItem[] = await db('Exercises_Workout')
-            .where({WorkoutID: workoutID, StatusID: Status.INCOMPLETE});
+            .where({WorkoutID: workoutID, StatusID: StatusEnum.INCOMPLETE});
 
         return uncompletedExercises.length <= 0;
     }

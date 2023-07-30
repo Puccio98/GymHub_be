@@ -1,14 +1,14 @@
-import {itemUSDA} from "../dto/externalApiDto/USDA/usda-dto";
+import {itemUSDA} from "../dto/externalApiDto/USDA/usda.dto";
 import {FoodItem} from "../models/food";
 import {NutrientUsdaEnum} from "../enums/nutrient-usda.enum";
-import {itemOFF} from "../dto/externalApiDto/OFF/off-dto";
-import {FoodDto} from "../dto/nutritionDto/food-dto";
+import {itemOFF} from "../dto/externalApiDto/OFF/off.dto";
+import {FoodDto} from "../dto/nutritionDto/food.dto";
 import {PlainFoodUserItem} from "../plain_item/PlainFoodUserItem";
-import {DailyFoodDto, id_to_meal} from "../dto/nutritionDto/dailyFood-dto";
-import {FoodQuantityDto} from "../dto/nutritionDto/foodQuantity-dto";
-import {AddFoodDto} from "../dto/nutritionDto/addFood-dto";
+import {DailyFoodDto, id_to_meal} from "../dto/nutritionDto/dailyFood.dto";
+import {FoodQuantityDto} from "../dto/nutritionDto/foodQuantity.dto";
+import {AddFoodDto} from "../dto/nutritionDto/addFood.dto";
 import {BaseFood_UserItem} from "../models/food_user";
-import {BaseFoodDto} from "../dto/nutritionDto/base-food-dto";
+import {BaseFoodDto} from "../dto/nutritionDto/base-food.dto";
 
 export class NutritionLib {
     static USDAItemToFood(itemUSDA: itemUSDA): FoodItem {
