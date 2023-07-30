@@ -1,8 +1,0 @@
-{
-  "env": {
-    "DB_CONNECTION_NAME": "gymhub_test",
-    "DB_USER_NAME": "sxg6wxsep3t2u5afovxi",
-    "DB_PASSWORD": "pscale_pw_kb7e0pIc4beFwUJ9wMTxGMQdJNjGgUclAEBRQleF63o",
-    "DB_HOST": "aws.connect.psdb.cloud"
-  }
-}
