@@ -20,7 +20,7 @@ export const db = require('knex')({
         database: process.env.DB_CONNECTION_NAME,
         user: process.env.DB_USER_NAME,
         password: process.env.DB_PASSWORD,
-        port: 3306,
+        port: process.env.DB_PORT,
         ssl: {
             key: key,
             cert: cert,
