@@ -1,27 +1,27 @@
-import {PlainProgramItem} from "../dto/programDto/plainProgram";
-import {ProgramDto} from "../dto/programDto/program-dto";
+import {PlainProgramItem} from "../dto/programDto/plainProgram.dto";
+import {ProgramDto} from "../dto/programDto/program.dto";
 import {ProgramItem} from "../models/program";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
 import {WorkoutItem} from "../models/workout";
 import {ExerciseWorkoutItem} from "../models/exercise_workout";
 import {ExerciseItem} from "../models/exercise";
-import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
-import {ExerciseDto} from "../dto/programDto/exercise-dto";
+import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout.dto";
+import {ExerciseDto} from "../dto/programDto/exercise.dto";
 import {
     ExerciseCreateDTO,
-    ProgramCreateDTO,
+    ProgramCreateDto,
     WorkoutCreateDTO,
     WorkoutGroupCreateDto
-} from "../dto/programDto/program-create-dto";
-import {ProgramStateEnum} from "../enums/program-state-enum";
-import {PlainWorkoutItem} from "../dto/programDto/plainWorkout";
+} from "../dto/programDto/program-create.dto";
+import {ProgramStateEnum} from "../enums/program-state.enum";
+import {PlainWorkoutItem} from "../dto/programDto/plainWorkout.dto";
 import {UpdateProgramDto} from "../dto/programDto/update-program.dto";
 import {EditProgramItem} from "../models/edit-program-item";
 import {ShareProgramDto} from "../dto/programDto/share-program.dto";
 import {ShareProgram} from "../models/shareProgram";
 import {DateDB} from "../interfaces/dateDB-interface";
-import {WorkoutGroupDto} from "../dto/programDto/workoutGroupDto";
-import {Status} from "../enums/status.enum";
+import {WorkoutGroupDto} from "../dto/programDto/workout-group.dto";
+import {StatusEnum} from "../enums/status.enum";
 
 export class ProgramLib {
     static ProgramItemToProgramDto(programItem: ProgramItem): ProgramDto {
@@ -37,7 +37,7 @@ export class ProgramLib {
         } as ProgramDto
     }
 
-    static ProgramItemToProgramCreateDto(programItem: ProgramItem, userID: number = 0, dateDB: DateDB | null = null): ProgramCreateDTO {
+    static ProgramItemToProgramCreateDto(programItem: ProgramItem, userID: number = 0, dateDB: DateDB | null = null): ProgramCreateDto {
         let _dateDB: DateDB = dateDB ?? {createdAt: new Date(), updatedAt: new Date()};
 
         return {
@@ -60,7 +60,7 @@ export class ProgramLib {
      * @param dateDB
      * @constructor
      */
-    static ProgramDtoToProgramCreateDto(programDto: ProgramDto, userID: number = 0, dateDB: DateDB | null = null): ProgramCreateDTO {
+    static ProgramDtoToProgramCreateDto(programDto: ProgramDto, userID: number = 0, dateDB: DateDB | null = null): ProgramCreateDto {
         let _dateDB: DateDB = dateDB ?? {createdAt: new Date(), updatedAt: new Date()};
 
         return {
@@ -70,7 +70,7 @@ export class ProgramLib {
             workoutGroupList: this.WorkoutGroupListDtoToWorkoutGroupCreateDto(programDto.workoutGroupList, _dateDB),
             createdAt: _dateDB.createdAt,
             updatedAt: _dateDB.updatedAt
-        } as ProgramCreateDTO;
+        } as ProgramCreateDto;
     }
 
     static WorkoutGroupListDtoToWorkoutGroupCreateDto(wgList: WorkoutGroupDto[], dateDB: DateDB): WorkoutGroupCreateDto[] {
@@ -126,13 +126,13 @@ export class ProgramLib {
 
     // endregion
 
-    static ProgramCreateDtoToProgramItem(p: ProgramCreateDTO): ProgramItem {
+    static ProgramCreateDtoToProgramItem(p: ProgramCreateDto): ProgramItem {
         return {
             UserID: p.userID,
             ProgramTypeID: p.programTypeID,
             Title: p.title,
             ProgramStateID: ProgramStateEnum.ACTIVE,
-            StatusID: Status.INCOMPLETE,
+            StatusID: StatusEnum.INCOMPLETE,
             createdAt: p.createdAt,
             updatedAt: p.updatedAt,
         }
@@ -276,8 +276,8 @@ export class ProgramLib {
     }
 
 
-    static PlainProgramItemListToProgramCreateDtoList(ppList: PlainProgramItem[], UserID: number = 0): ProgramCreateDTO[] {
-        let programList: ProgramCreateDTO[] = [];
+    static PlainProgramItemListToProgramCreateDtoList(ppList: PlainProgramItem[], UserID: number = 0): ProgramCreateDto[] {
+        let programList: ProgramCreateDto[] = [];
         let old_programID = -1;
         let old_groupID = -1; // può essere zero
         let old_workoutID = -1;

@@ -1,6 +1,6 @@
 import {RequestItem, UpdateRequestItem} from "../models/request";
 import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
-import {RequestDao} from "../dao/request-dao";
+import {RequestDao} from "../dao/request.dao";
 import {RequestOptions} from "../interfaces/requestOptions-interface";
 import {PlainRequest} from "../interfaces/PlainRequest-interface";
 

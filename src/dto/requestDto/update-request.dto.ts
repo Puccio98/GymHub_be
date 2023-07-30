@@ -1,6 +1,6 @@
-import {RequestState} from "../../enums/request-state.enum";
+import {RequestStateEnum} from "../../enums/request-state.enum";
 
 export interface UpdateRequestDto {
     requestID: number,
-    requestStateID: RequestState
+    requestStateID: RequestStateEnum
 }

@@ -1,15 +1,15 @@
 import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {CompleteWorkoutDto} from "../dto/programDto/complete-workout.dto";
-import {WorkoutDao} from "../dao/workout-dao";
+import {WorkoutDao} from "../dao/workout.dao";
 import {WorkoutAddDTO} from "../dto/programDto/add-workout.dto";
 import {WorkoutDto} from "../dto/programDto/workout-dto";
-import {ProgramDao} from "../dao/program-dao";
+import {ProgramDao} from "../dao/program.dao";
 import {ProgramLib} from "../lib_mapping/programLib";
-import {Exercise_WorkoutDao} from "../dao/exercise_workout-dao";
-import {DeleteWorkoutResponse} from "../dto/programDto/delete-workout-response";
+import {Exercise_workoutDao} from "../dao/exercise_workout.dao";
+import {DeleteWorkoutResponseDto} from "../dto/programDto/delete-workout-response.dto";
 import {ProgramItem} from "../models/program";
-import {ProgramType} from "../enums/program-type.enum";
-import {ProgramStateEnum} from "../enums/program-state-enum";
+import {ProgramTypeEnum} from "../enums/program-type.enum";
+import {ProgramStateEnum} from "../enums/program-state.enum";
 import {UpdateWorkout} from "../interfaces/updateWorkout-interface";
 import {DeleteWorkout} from "../interfaces/deleteWorkout-interface";
 
@@ -49,7 +49,7 @@ export class WorkoutService {
             }
             const programDB: ProgramItem = programs[0];
 
-            if (programDB.ProgramTypeID === ProgramType.BASIC && await WorkoutDao.programWorkoutNumber(workoutDto.programID) > maxNumberOfWorkouts) {
+            if (programDB.ProgramTypeID === ProgramTypeEnum.BASIC && await WorkoutDao.programWorkoutNumber(workoutDto.programID) > maxNumberOfWorkouts) {
                 message = 'Program has reached maximum number of workouts';
                 return response(ServiceStatusEnum.ERROR, message);
             }
@@ -66,7 +66,7 @@ export class WorkoutService {
             if (workoutID) {
                 const exerciseItemList = ProgramLib.ExerciseCreateDtoListToExerciseWorkoutItemList(workoutDto.exerciseList, workoutID);
                 // Insert di tutti gli esercizi di un workout contemporaneamente
-                await Exercise_WorkoutDao.create(exerciseItemList);
+                await Exercise_workoutDao.create(exerciseItemList);
                 const addedWorkout = await WorkoutDao.getPlain(workoutID);
                 const wList: WorkoutDto[] = ProgramLib.PlainWorkoutItemToWorkoutDtoList(addedWorkout);
                 if (wList.length === 1) {
@@ -86,7 +86,7 @@ export class WorkoutService {
         }
     }
 
-    static async delete(workout: DeleteWorkout, userID: number): Promise<ServiceResponse<DeleteWorkoutResponse>> {
+    static async delete(workout: DeleteWorkout, userID: number): Promise<ServiceResponse<DeleteWorkoutResponseDto>> {
         try {
             if (!await WorkoutDao.belongsToUser(userID, workout.ProgramID, workout.WorkoutID)) {
                 message = 'Workout does not belong to user';
@@ -115,7 +115,7 @@ export class WorkoutService {
                         await ProgramDao.reset(workout.ProgramID);
                         refreshProgram = true;
                     }
-                    const deleteWorkoutResponse: DeleteWorkoutResponse = {
+                    const deleteWorkoutResponse: DeleteWorkoutResponseDto = {
                         workoutID: deletedWorkout,
                         refreshProgram: refreshProgram
                     }

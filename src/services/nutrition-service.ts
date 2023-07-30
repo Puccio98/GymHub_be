@@ -1,17 +1,17 @@
 import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 
-import {FoodDao} from "../dao/food-dao";
+import {FoodDao} from "../dao/food.dao";
 import {FoodItem} from "../models/food";
-import {itemOFF} from "../dto/externalApiDto/OFF/off-dto";
-import {itemUSDA} from "../dto/externalApiDto/USDA/usda-dto";
+import {itemOFF} from "../dto/externalApiDto/OFF/off.dto";
+import {itemUSDA} from "../dto/externalApiDto/USDA/usda.dto";
 import {NutritionLib} from "../lib_mapping/nutritionLib";
-import {FoodDto} from "../dto/nutritionDto/food-dto";
-import {FoodUserDao} from "../dao/food-user-dao";
+import {FoodDto} from "../dto/nutritionDto/food.dto";
+import {FoodUserDao} from "../dao/food-user.dao";
 import {PlainFoodUserItem} from "../plain_item/PlainFoodUserItem";
-import {DailyFoodDto} from "../dto/nutritionDto/dailyFood-dto";
-import {AddFoodDto} from "../dto/nutritionDto/addFood-dto";
+import {DailyFoodDto} from "../dto/nutritionDto/dailyFood.dto";
+import {AddFoodDto} from "../dto/nutritionDto/addFood.dto";
 import {BaseFood_UserItem, Food_UserItem} from "../models/food_user";
-import {BaseFoodDto} from "../dto/nutritionDto/base-food-dto";
+import {BaseFoodDto} from "../dto/nutritionDto/base-food.dto";
 
 
 export class NutritionService {
@@ -124,7 +124,7 @@ export class NutritionService {
             return response(ServiceStatusEnum.ERROR, 'DB error', false);
         }
     }
-    
+
     static async deleteDailyFood(userID: number, food: BaseFood_UserItem): Promise<ServiceResponse<boolean>> {
         try {
             let res: boolean = await FoodUserDao.delete(userID, food);

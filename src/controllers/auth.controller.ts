@@ -1,11 +1,11 @@
 import {Request, Response} from "express";
-import {LoginDto} from "../dto/authDto/login-dto";
+import {LoginDto} from "../dto/authDto/login.dto";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {AuthService} from "../services/auth-service";
-import {SignupDto} from "../dto/authDto/signup-dto";
+import {SignupDto} from "../dto/authDto/signup.dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
-import {AuthDto} from "../dto/authDto/auth-dto";
-import {TokenDto} from "../dto/authDto/token-dto";
+import {AuthDto} from "../dto/authDto/auth.dto";
+import {TokenDto} from "../dto/authDto/token.dto";
 
 
 export class AuthController {

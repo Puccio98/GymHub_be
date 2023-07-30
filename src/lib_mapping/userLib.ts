@@ -1,5 +1,5 @@
 import {UserItem} from "../models/user";
-import {UserDto, UserInfoDto} from "../dto/authDto/user-dto";
+import {UserDto, UserInfoDto} from "../dto/authDto/user.dto";
 
 export class UserLib {
     static UserItemToUserDto(userItem: UserItem): UserDto {

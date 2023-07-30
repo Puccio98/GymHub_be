@@ -1,4 +1,4 @@
-import {UserDto} from "../authDto/user-dto";
+import {UserDto} from "../authDto/user.dto";
 import {RequestDto} from "./request.dto";
 
 export interface PlainRequestDto {

@@ -1,4 +1,4 @@
-import {NutritionController} from "../controllers/nutrition-controller";
+import {NutritionController} from "../controllers/nutrition.controller";
 import {validateDto} from "../middlewares/validateDto";
 import {addDailyFoodType} from "../validators/add-daily-food-validator";
 import {baseDailyFoodType} from "../validators/delete-daily-food-validator";

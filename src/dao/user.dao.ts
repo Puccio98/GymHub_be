@@ -1,6 +1,6 @@
 import {db} from "../database";
 import {UserItem} from "../models/user";
-import {UserType} from "../enums/user-type.enum";
+import {UserTypeEnum} from "../enums/user-type.enum";
 
 export class UserDao {
     // region Public Methods
@@ -24,7 +24,7 @@ export class UserDao {
         return await this.findByEmail(userItem.Email);
     }
 
-    static async get(userTypeID: UserType | null, userDescription: string | null): Promise<UserItem[]> {
+    static async get(userTypeID: UserTypeEnum | null, userDescription: string | null): Promise<UserItem[]> {
         return db('User')
             .where((builder: any) => {
                 if (userTypeID)

@@ -1,11 +1,11 @@
 import {db} from "../database";
-import {PlainProgramItem} from "../dto/programDto/plainProgram";
+import {PlainProgramItem} from "../dto/programDto/plainProgram.dto";
 import {ProgramItem} from "../models/program";
 import {WorkoutItem} from "../models/workout";
-import {ProgramStateEnum} from "../enums/program-state-enum";
-import {Status} from "../enums/status.enum";
+import {ProgramStateEnum} from "../enums/program-state.enum";
+import {StatusEnum} from "../enums/status.enum";
 import {EditProgramItem} from "../models/edit-program-item";
-import {ProgramType} from "../enums/program-type.enum";
+import {ProgramTypeEnum} from "../enums/program-type.enum";
 
 export class ProgramDao {
     // region Public Methods
@@ -127,7 +127,7 @@ export class ProgramDao {
             .update('ProgramStateID', ProgramStateEnum.ACTIVE);
     }
 
-    static async getType(programID: number): Promise<ProgramType> {
+    static async getType(programID: number): Promise<ProgramTypeEnum> {
         const pList: ProgramItem[] = await this.get(programID);
         return pList[0].ProgramTypeID;
     }
@@ -144,7 +144,7 @@ export class ProgramDao {
 
     static async isComplete(programID: number): Promise<boolean> {
         const uncompletedWorkouts: WorkoutItem[] = await db('Workout')
-            .where({ProgramID: programID, StatusID: Status.INCOMPLETE});
+            .where({ProgramID: programID, StatusID: StatusEnum.INCOMPLETE});
 
         return uncompletedWorkouts.length <= 0;
     }
@@ -165,7 +165,7 @@ export class ProgramDao {
      * @param programID
      */
     static async reset(programID: number): Promise<boolean> {
-        if (await ProgramDao.getType(programID) === ProgramType.PRO) {
+        if (await ProgramDao.getType(programID) === ProgramTypeEnum.PRO) {
             return false;
         }
 
@@ -178,9 +178,9 @@ export class ProgramDao {
             .join('Exercises_Workout as ew', 'w.WorkoutID', 'ew.WorkoutID')
             .where({'w.ProgramID': programID})
             .update({
-                'p.StatusID': Status.INCOMPLETE,
-                'w.StatusID': Status.INCOMPLETE,
-                'ew.StatusID': Status.INCOMPLETE
+                'p.StatusID': StatusEnum.INCOMPLETE,
+                'w.StatusID': StatusEnum.INCOMPLETE,
+                'ew.StatusID': StatusEnum.INCOMPLETE
             });
         return true;
     }

@@ -1,4 +1,4 @@
-export interface Meal {
+export interface MealEnum {
     COLAZIONE: 1,
     PRANZO: 2,
     CENA: 3,

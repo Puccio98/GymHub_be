@@ -1,4 +1,4 @@
-import {AuthController} from "../controllers/auth-controller";
+import {AuthController} from "../controllers/auth.controller";
 import {validateDto} from "../middlewares/validateDto";
 import {loginType} from "../validators/login-validator";
 import {signupType} from "../validators/signup-validator";

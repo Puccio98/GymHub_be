@@ -1,8 +1,8 @@
 import {Response} from "express";
-import {WeightDto} from "../dto/weightDto/weight-dto";
+import {WeightDto} from "../dto/weightDto/weight.dto";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
 import {WeightService} from "../services/weight-service";
-import {PlainWeightDto} from "../dto/weightDto/plain-weight-dto";
+import {PlainWeightDto} from "../dto/weightDto/plain-weight.dto";
 import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 
 export class WeightController {

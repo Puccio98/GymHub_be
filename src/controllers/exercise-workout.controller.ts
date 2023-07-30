@@ -2,9 +2,9 @@ import {IGetUserAuthInfoRequest} from "../helpers/AuthHelper";
 import {Response} from "express";
 import {UpdateExerciseDto} from "../dto/programDto/update-exercise.dto";
 import {ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
-import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout-dto";
+import {ExerciseWorkoutDto} from "../dto/programDto/exercises_workout.dto";
 import {ExerciseWorkoutService} from "../services/exercise-workout-service";
-import {DeleteExerciseResponse} from "../dto/programDto/delete-exercise-response";
+import {DeleteExerciseResponseDto} from "../dto/programDto/delete-exercise-response.dto";
 import {AddExerciseDto} from "../dto/programDto/add-exercise.dto";
 import {DeleteExerciseWorkout} from "../interfaces/DeleteExerciseWorkout-interface";
 
@@ -34,7 +34,7 @@ export class ExerciseWorkoutController {
             WorkoutID: workoutID,
             ExerciseID: exerciseID
         }
-        const deleteExerciseResponse: ServiceResponse<DeleteExerciseResponse> = await ExerciseWorkoutService.delete(deleteExercise, userJWT.UserID);
+        const deleteExerciseResponse: ServiceResponse<DeleteExerciseResponseDto> = await ExerciseWorkoutService.delete(deleteExercise, userJWT.UserID);
         switch (deleteExerciseResponse.status) {
             case ServiceStatusEnum.SUCCESS:
                 return res.status(200).send(deleteExerciseResponse.data);

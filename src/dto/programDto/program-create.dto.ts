@@ -1,10 +1,10 @@
-import {ProgramType} from "../../enums/program-type.enum";
+import {ProgramTypeEnum} from "../../enums/program-type.enum";
 
-export interface ProgramCreateDTO {
+export interface ProgramCreateDto {
     userID: number,
     title: string,
     statusID: number,
-    programTypeID: ProgramType,
+    programTypeID: ProgramTypeEnum,
     workoutGroupList: WorkoutGroupCreateDto[],
     createdAt?: Date,
     updatedAt?: Date,

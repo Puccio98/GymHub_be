@@ -1,9 +1,9 @@
-import {TokenType} from "../enums/token-type.enum";
+import {TokenTypeEnum} from "../enums/token-type.enum";
 
 export interface PayloadJWT {
     Email: string;
     UserID: number;
     UserTypeID: number;
-    TokenType: TokenType;
+    TokenType: TokenTypeEnum;
     iat?: string;
 }

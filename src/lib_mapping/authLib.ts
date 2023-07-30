@@ -1,6 +1,6 @@
-import {UserDto} from "../dto/authDto/user-dto";
+import {UserDto} from "../dto/authDto/user.dto";
 import {UserItem} from "../models/user";
-import {SignupDto} from "../dto/authDto/signup-dto";
+import {SignupDto} from "../dto/authDto/signup.dto";
 
 export class AuthLib {
     static UserItemToUserDto(userItem: UserItem): UserDto {

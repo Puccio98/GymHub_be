@@ -1,12 +1,12 @@
-import {LoginDto} from "../dto/authDto/login-dto";
-import {UserDao} from "../dao/user-dao";
+import {LoginDto} from "../dto/authDto/login.dto";
+import {UserDao} from "../dao/user.dao";
 import {AuthLib} from "../lib_mapping/authLib";
 import {response, ServiceResponse, ServiceStatusEnum} from "../interfaces/serviceReturnType-interface";
-import {SignupDto} from "../dto/authDto/signup-dto";
+import {SignupDto} from "../dto/authDto/signup.dto";
 import {AuthHelper} from "../helpers/AuthHelper";
-import {AuthDto} from "../dto/authDto/auth-dto";
-import {TokenDao} from "../dao/token-dao";
-import {TokenDto} from "../dto/authDto/token-dto";
+import {AuthDto} from "../dto/authDto/auth.dto";
+import {TokenDao} from "../dao/token.dao";
+import {TokenDto} from "../dto/authDto/token.dto";
 import {TokenItem} from "../interfaces/tokenItem-interface";
 import {PayloadJWT} from "../interfaces/payloadJWT-interface";
 

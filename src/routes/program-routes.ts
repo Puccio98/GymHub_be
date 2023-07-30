@@ -1,12 +1,12 @@
-import {ProgramController} from "../controllers/program-controller";
+import {ProgramController} from "../controllers/program.controller";
 import {createProgramType} from "../validators/program-create-validator";
 import {validateDto} from "../middlewares/validateDto";
 import {editProgramType} from "../validators/edit-program-validator";
 import {shareProgramType} from "../validators/share-program-validator"
-import {WorkoutController} from "../controllers/workout-controller";
+import {WorkoutController} from "../controllers/workout.controller";
 import {addWorkoutType} from "../validators/add-workout-validator";
 import {updateWorkoutType} from "../validators/update-workout-validator";
-import {ExerciseWorkoutController} from "../controllers/exercise-workout-controller";
+import {ExerciseWorkoutController} from "../controllers/exercise-workout.controller";
 import {updateExerciseType} from "../validators/update-exercise-validator";
 import {addExerciseType} from "../validators/add-exercise-validator";
 
